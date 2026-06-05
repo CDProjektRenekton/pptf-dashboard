@@ -139,32 +139,6 @@ table.dtable tr:hover td{background:var(--surface2)}
 /* ── SCATTER PLACEHOLDER ── */
 .scatter-ph{position:relative;height:240px}
 
-/* ── INDIVIDUAL SCORES ─────────── */
-.ind-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-.ind-search{flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rm);font-size:12px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);transition:all .18s}
-.ind-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,90,158,.1)}
-.ind-search::placeholder{color:var(--text3)}
-.ind-count{font-size:11px;color:var(--text3);white-space:nowrap}
-.ind-btn{padding:7px 14px;border-radius:var(--rm);border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.ind-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--text3)}
-.ind-btn svg{flex-shrink:0}
-.ind-table-wrap{max-height:620px;overflow:auto;border:1px solid var(--border);border-radius:var(--r)}
-.ind-table-wrap table.dtable{font-size:11px}
-.ind-table-wrap table.dtable th{position:sticky;top:0;background:var(--surface);z-index:2;box-shadow:0 1px 0 var(--border)}
-.ind-table-wrap table.dtable th:first-child,
-.ind-table-wrap table.dtable td:first-child,
-.ind-table-wrap table.dtable th:nth-child(2),
-.ind-table-wrap table.dtable td:nth-child(2){
-  position:sticky;left:0;background:var(--surface);z-index:1;
-}
-.ind-table-wrap table.dtable th:first-child,
-.ind-table-wrap table.dtable th:nth-child(2){z-index:3}
-.ind-table-wrap table.dtable td:first-child{min-width:40px;text-align:center;color:var(--text3)}
-.ind-table-wrap table.dtable td:nth-child(2){min-width:150px}
-.ind-table-wrap table.dtable tr:hover td{background:var(--surface2)}
-.ind-table-wrap table.dtable tr:hover td:first-child,
-.ind-table-wrap table.dtable tr:hover td:nth-child(2){background:var(--surface2)}
-
 /* ── RESPONSIVE ─────────── */
 @media(max-width:640px){
   .app-header{padding:20px 16px 16px}
@@ -291,7 +265,7 @@ function makeDonut(id, data, colors, labels){
     type:'doughnut',
     data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,data.reduce((a,b)=>a+b,0))+'%)'}}}}}
-  });
+  );
 }
 function makeHBar(id, labels, data, color, maxVal){
   destroyChart(id);
@@ -443,52 +417,6 @@ function renderDashboard(records){
   /* ── SCATTER DATA ────────────────────────────────────────── */
   const scatterPts = mets.map((m,i)=>({x:m,y:fss[i]}));
 
-  /* ── INDIVIDUAL SCORES DATA ──────────────────────────── */
-  const indData = records.map((rec, i) => {
-    const f = rec.fields;
-    return {
-      id: rec.id,
-      fields: f,
-      name: f.Name || f.Respondent_Name || f.FullName || f.Respondent || f['Respondent ID'] || rec.id,
-      age: f.Age || '',
-      sex: f.Sex || '',
-      workArr: f.Work_Arrangement || '',
-      met: mets[i],
-      ipaqLevel: ipaqLvls[i],
-      fs: fss[i],
-      fsLevel: fsLvls[i],
-      mbi: mbis[i],
-      mbiLevel: mbiLvls[i],
-      mspss: mspssTs[i],
-      mspssAvg: +(mspssAs[i].toFixed(2)),
-      mspssLevel: mspssLvls[i]
-    };
-  });
-  window._indData = indData;
-
-  const individualRows = indData.map((d, i) => {
-    const ipaqBadge = d.ipaqLevel==='High' ? 'badge-green' : d.ipaqLevel==='Moderate' ? 'badge-amber' : 'badge-red';
-    const fsBadge = d.fsLevel==='High' ? 'badge-green' : d.fsLevel==='Moderate' ? 'badge-amber' : 'badge-red';
-    const mbiBadge = d.mbiLevel==='Low' ? 'badge-green' : d.mbiLevel==='Moderate' ? 'badge-amber' : 'badge-red';
-    const mspssBadge = d.mspssLevel==='High' ? 'badge-green' : d.mspssLevel==='Moderate' ? 'badge-amber' : 'badge-red';
-    
-    return `<tr>
-      <td>${i+1}</td>
-      <td><strong>${d.name}</strong></td>
-      <td>${d.age}</td>
-      <td>${d.sex}</td>
-      <td>${d.workArr}</td>
-      <td>${d.met.toLocaleString()}</td>
-      <td><span class="badge ${ipaqBadge}">${d.ipaqLevel}</span></td>
-      <td>${d.fs}</td>
-      <td><span class="badge ${fsBadge}">${d.fsLevel}</span></td>
-      <td>${d.mbi}</td>
-      <td><span class="badge ${mbiBadge}">${d.mbiLevel}</span></td>
-      <td>${d.mspss}</td>
-      <td><span class="badge ${mspssBadge}">${d.mspssLevel}</span></td>
-    </tr>`;
-  }).join('');
-
   /* ══════════════════════════════════════════════════════════
      BUILD HTML
   ══════════════════════════════════════════════════════════ */
@@ -510,7 +438,6 @@ function renderDashboard(records){
     <button class="tab" onclick="switchTab('scales')">Scale distributions</button>
     <button class="tab" onclick="switchTab('demo')">Demographics</button>
     <button class="tab" onclick="switchTab('corr')">Correlations &amp; stats</button>
-    <button class="tab" onclick="switchTab('individual')">Individual scores</button>
   </div>
 
   <!-- ═══ TAB: OVERVIEW ═══ -->
@@ -694,46 +621,6 @@ function renderDashboard(records){
     </div>
 
   </div>
-
-  <!-- ═══ TAB: INDIVIDUAL SCORES ═══ -->
-  <div id="tab-individual" class="tab-pane">
-    <div class="card">
-      <div class="card-title">Individual respondent scores &amp; classifications</div>
-      <div class="ind-toolbar">
-        <input type="text" class="ind-search" id="indSearch" placeholder="Search by name, ID, age, work arrangement…" oninput="searchIndividual(this)">
-        <div class="ind-count" id="indCount">Showing ${n} of ${n} respondents</div>
-        <button class="ind-btn" onclick="exportCSV()" title="Export all individual data to CSV (includes full item-level responses + computed scores)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export CSV
-        </button>
-      </div>
-      <div class="ind-table-wrap">
-        <table class="dtable" id="indTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Respondent</th>
-              <th>Age</th>
-              <th>Sex</th>
-              <th>Work arrangement</th>
-              <th>IPAQ MET-min/wk</th>
-              <th>PA Level</th>
-              <th>FS Total (8–56)</th>
-              <th>FS Level</th>
-              <th>MBI-EE Total (0–42)</th>
-              <th>MBI Level</th>
-              <th>MSPSS Total (12–84)</th>
-              <th>MSPSS Level</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${individualRows}
-          </tbody>
-        </table>
-      </div>
-      <p class="card-note">Scores computed per thesis methodology. IPAQ-SF: MET-min/wk based on IPAQ Research Committee (2005) scoring protocol. FS: Diener &amp; Biswas-Diener (2009) 8-item sum. MBI-EE: Maslach &amp; Jackson (1981) 7-item sum. MSPSS: Zimet et al. (1988) 12-item sum, classified by item average using Dahlem et al. (1991) cutoffs.</p>
-    </div>
-  </div>
   `;
 
   /* ── Draw charts after DOM settles ────────────────────── */
@@ -754,87 +641,6 @@ function switchTab(name){
   if(btn) btn.classList.add('active');
   const pane=document.getElementById('tab-'+name);
   if(pane) pane.classList.add('active');
-}
-
-/* ── SEARCH INDIVIDUAL ───────────────────────────────────── */
-function searchIndividual(input){
-  const term = input.value.toLowerCase().trim();
-  const rows = document.querySelectorAll('#indTable tbody tr');
-  let visible = 0;
-  rows.forEach(row => {
-    const text = row.textContent.toLowerCase();
-    if(!term || text.includes(term)){
-      row.style.display = '';
-      visible++;
-    } else {
-      row.style.display = 'none';
-    }
-  });
-  const countEl = document.getElementById('indCount');
-  if(countEl) countEl.textContent = `Showing ${visible} of ${rows.length} respondents`;
-}
-
-/* ── EXPORT CSV ──────────────────────────────────────────── */
-function exportCSV(){
-  if(!window._indData || !window._indData.length){
-    alert('No data available to export. Please wait for the dashboard to load.');
-    return;
-  }
-  const data = window._indData;
-  
-  // Dynamically collect all field names from all records
-  const allFieldNames = new Set();
-  data.forEach(d => {
-    Object.keys(d.fields).forEach(k => allFieldNames.add(k));
-  });
-  const fieldNames = Array.from(allFieldNames).sort();
-  
-  // Computed score columns
-  const computedCols = [
-    'Computed_IPAQ_MET_min_wk','Computed_IPAQ_Level',
-    'Computed_FS_Total','Computed_FS_Level',
-    'Computed_MBI_Total','Computed_MBI_Level',
-    'Computed_MSPSS_Total','Computed_MSPSS_Average','Computed_MSPSS_Level'
-  ];
-  
-  const headers = ['Record_ID', 'Respondent_Name', ...fieldNames, ...computedCols];
-  
-  const escapeCSV = v => {
-    const s = String(v ?? '');
-    if(s.includes(',') || s.includes('"') || s.includes('\n') || s.includes('\r')){
-      return '"' + s.replace(/"/g, '""') + '"';
-    }
-    return s;
-  };
-  
-  const rows = data.map(d => {
-    const f = d.fields;
-    const name = f.Name || f.Respondent_Name || f.FullName || f.Respondent || f['Respondent ID'] || d.id;
-    const fieldVals = fieldNames.map(k => {
-      let v = f[k];
-      if(Array.isArray(v)) v = v.join('; ');
-      return v ?? '';
-    });
-    const computedVals = [
-      d.met, d.ipaqLevel,
-      d.fs, d.fsLevel,
-      d.mbi, d.mbiLevel,
-      d.mspss, d.mspssAvg, d.mspssLevel
-    ];
-    return [d.id, name, ...fieldVals, ...computedVals].map(escapeCSV).join(',');
-  });
-  
-  const csv = [headers.map(escapeCSV).join(','), ...rows].join('\n');
-  // Add BOM for proper UTF-8 handling in Excel
-  const blob = new Blob(['\uFEFF' + csv], {type: 'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `individual_scores_${new Date().toISOString().slice(0,10)}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }
 
 /* ── LOAD ────────────────────────────────────────────────── */
