@@ -126,6 +126,46 @@ table.dtable tr:hover td{background:var(--surface2)}
 .badge-amber{background:#fef9c3;color:#854d0e}
 .badge-red{background:#fee2e2;color:#991b1b}
 
+/* ── INDIVIDUAL SCORES TABLE ─────────── */
+.ind-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.ind-search{flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rm);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none}
+.ind-search:focus{border-color:var(--accent)}
+.ind-filter{padding:8px 12px;border:1px solid var(--border);border-radius:var(--rm);font-size:12px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text2);cursor:pointer;outline:none}
+.ind-filter:focus{border-color:var(--accent)}
+.ind-count{font-size:12px;color:var(--text3);margin-left:auto}
+.ind-table-wrap{overflow-x:auto;border-radius:var(--rm);border:1px solid var(--border)}
+table.ind-table{width:100%;border-collapse:collapse;font-size:12px;min-width:820px}
+table.ind-table thead{position:sticky;top:0;z-index:2}
+table.ind-table th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:600;text-align:left;padding:9px 12px;background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+table.ind-table th:hover{color:var(--accent)}
+table.ind-table th .sort-icon{margin-left:4px;opacity:.4}
+table.ind-table th.sorted .sort-icon{opacity:1;color:var(--accent)}
+table.ind-table td{padding:9px 12px;border-bottom:1px solid var(--surface2);color:var(--text);vertical-align:middle}
+table.ind-table tr:last-child td{border-bottom:none}
+table.ind-table tr:hover td{background:#faf9f7;cursor:pointer}
+table.ind-table tr.expanded-row td{background:#f0f8ff}
+.score-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500}
+.score-num{font-weight:600;font-size:12px}
+.met-num{font-size:11px;color:var(--text2)}
+
+/* DETAIL PANEL */
+.detail-row{display:none;background:#f5f9ff}
+.detail-row.open{display:table-row}
+.detail-cell{padding:16px 20px!important;border-bottom:1px solid var(--border)!important}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.detail-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rm);padding:14px 16px}
+.detail-card-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:600;margin-bottom:10px}
+.detail-score-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.detail-score-lbl{font-size:11px;color:var(--text2)}
+.detail-score-val{font-size:13px;font-weight:600;color:var(--text)}
+.detail-bar-wrap{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.detail-bar{height:100%;border-radius:2px}
+.detail-meta{font-size:11px;color:var(--text3);line-height:1.5;margin-top:6px;border-top:1px solid var(--surface2);padding-top:6px}
+.detail-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:8px}
+.detail-info-item{font-size:11px;color:var(--text2)}
+.detail-info-item span{font-weight:500;color:var(--text)}
+.no-results{padding:40px;text-align:center;color:var(--text3);font-size:13px}
+
 /* ── LOADING ─────────── */
 .loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:16px}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
@@ -438,6 +478,7 @@ function renderDashboard(records){
     <button class="tab" onclick="switchTab('scales')">Scale distributions</button>
     <button class="tab" onclick="switchTab('demo')">Demographics</button>
     <button class="tab" onclick="switchTab('corr')">Correlations &amp; stats</button>
+    <button class="tab" onclick="switchTab('individual')">Individual scores</button>
   </div>
 
   <!-- ═══ TAB: OVERVIEW ═══ -->
@@ -579,6 +620,56 @@ function renderDashboard(records){
     <div class="card"><div class="card-title">Job type</div>${freqBars(jobF,n,'#e8401c',true)}</div>
   </div>
 
+  <!-- ═══ TAB: INDIVIDUAL SCORES ═══ -->
+  <div id="tab-individual" class="tab-pane">
+    <div class="card">
+      <div class="card-title">Individual respondent scores — all four instruments</div>
+      <div class="ind-toolbar">
+        <input class="ind-search" id="indSearch" type="search" placeholder="Search by name, sex, position, sector…" oninput="filterIndTable()">
+        <select class="ind-filter" id="indFilterIPAQ" onchange="filterIndTable()">
+          <option value="">All PA levels</option>
+          <option>High</option><option>Moderate</option><option>Low</option>
+        </select>
+        <select class="ind-filter" id="indFilterFS" onchange="filterIndTable()">
+          <option value="">All FS levels</option>
+          <option>High</option><option>Moderate</option><option>Low</option>
+        </select>
+        <select class="ind-filter" id="indFilterMBI" onchange="filterIndTable()">
+          <option value="">All burnout levels</option>
+          <option>High</option><option>Moderate</option><option>Low</option>
+        </select>
+        <select class="ind-filter" id="indFilterMSPSS" onchange="filterIndTable()">
+          <option value="">All support levels</option>
+          <option>High</option><option>Moderate</option><option>Low</option>
+        </select>
+        <span class="ind-count" id="indCount"></span>
+      </div>
+      <div class="ind-table-wrap">
+        <table class="ind-table" id="indTable">
+          <thead>
+            <tr>
+              <th onclick="sortIndTable(0)" title="Sort by name">#&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(1)" title="Sort by name">Name&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(2)">Age&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(3)">Sex</th>
+              <th onclick="sortIndTable(4)" title="Sort by MET">PA — MET-min/wk&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(5)">PA Level</th>
+              <th onclick="sortIndTable(6)" title="Sort by FS score">FS Score&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(7)">FS Level</th>
+              <th onclick="sortIndTable(8)" title="Sort by MBI score">MBI-EE Score&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(9)">Burnout Level</th>
+              <th onclick="sortIndTable(10)" title="Sort by MSPSS score">MSPSS Score&nbsp;<span class="sort-icon">↕</span></th>
+              <th onclick="sortIndTable(11)">Support Level</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="indTbody"></tbody>
+        </table>
+      </div>
+      <p class="card-note">Click any row to expand detailed score breakdown per instrument. Scores computed per official scoring protocols: IPAQ-SF MET-min/wk (8.0 / 4.0 / 3.3 coefficients), FS total 8–56, MBI-EE total 0–42, MSPSS total 12–84 with item average for classification.</p>
+    </div>
+  </div>
+
   <!-- ═══ TAB: CORRELATIONS & STATS ═══ -->
   <div id="tab-corr" class="tab-pane">
 
@@ -623,6 +714,50 @@ function renderDashboard(records){
   </div>
   `;
 
+  /* ── Build individual scores table data ─────────────── */
+  window._indData = fields.map((f,idx)=>{
+    const met   = calcMET(f);
+    const vig   = (()=>{ const vD=+(f.IPAQ_Q1_Vigorous_Days||0),vDK=f.IPAQ_Q2_DK,vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60 + +(f.IPAQ_Q2_Vigorous_Minutes||0)):0; return 8.0*vMin*vD; })();
+    const fs    = calcFS(f);
+    const mbi   = calcMBI(f);
+    const mspssT= calcMSPSS(f);
+    const mspssA= mspssT/12;
+
+    // MSPSS subscales: SO=items 1,2,5,10 | Family=3,4,8,11 | Friends=6,7,9,12
+    const mspsSO  = ([1,2,5,10].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
+    const mspaFam = ([3,4,8,11].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
+    const mspaFri = ([6,7,9,12].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
+
+    // IPAQ component MET scores
+    const mDays=+(f.IPAQ_Q3_Moderate_Days||0),mDK=f.IPAQ_Q4_DK,mMin=(!mDK&&mDays>0)?(+(f.IPAQ_Q4_Moderate_Hours||0)*60 + +(f.IPAQ_Q4_Moderate_Minutes||0)):0;
+    const wDays=+(f.IPAQ_Q5_Walking_Days||0),wDK=f.IPAQ_Q6_DK,wMin=(!wDK&&wDays>0)?(+(f.IPAQ_Q6_Walking_Hours||0)*60 + +(f.IPAQ_Q6_Walking_Minutes||0)):0;
+    const vigMETv = Math.round(vig);
+    const modMETv = Math.round(4.0*mMin*mDays);
+    const walkMETv= Math.round(3.3*wMin*wDays);
+    const sitMin  = +(f.IPAQ_Q7_Sitting_Hours||0)*60 + +(f.IPAQ_Q7_Sitting_Minutes||0);
+
+    return {
+      idx, f,
+      name: f.Full_Name || f.Consent_Name || ('Respondent '+(idx+1)),
+      age:  f.Age||'—', sex: f.Sex||'—',
+      workArr: f.Work_Arrangement||'—', sector: f.Sector||'—',
+      position: f.Job_Position||'—', tenure: f.Tenure||'—',
+      palevel: f.Physical_Activity_Level||'—',
+      met, ipaqLevel: metLevel(met,vig),
+      vigMETv, modMETv, walkMETv, sitMin,
+      fs, fsLevel: fsLevel(fs),
+      mbi, mbiLevel: mbiLevel(mbi),
+      mspssT, mspssA: mspssA.toFixed(2), mspssLevel: mspssLevel(mspssA),
+      mspsSO, mspaFam, mspaFri,
+      // item arrays for sparkline detail
+      fsItems: Array.from({length:8},(_,i)=>+(f['FS_Q'+(i+1)]||0)),
+      mbiItems: Array.from({length:7},(_,i)=>+(f['MBI_Q'+(i+1)]||0)),
+      mspssItems: Array.from({length:12},(_,i)=>+(f['MSPSS_Q'+(i+1)]||0)),
+    };
+  });
+  window._indSort = {col:-1, asc:true};
+  buildIndTable(window._indData);
+
   /* ── Draw charts after DOM settles ────────────────────── */
   requestAnimationFrame(()=>{
     makeDonut('cIPAQ',[ipaqF.High||0,ipaqF.Moderate||0,ipaqF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
@@ -631,6 +766,218 @@ function renderDashboard(records){
     makeDonut('cMSPSS',[mspssF.High||0,mspssF.Moderate||0,mspssF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
     makeScatter('cScatter',scatterPts,'MET-min / week (physical activity)','Flourishing Scale total score');
   });
+}
+
+/* ── INDIVIDUAL TABLE ────────────────────────────────────── */
+function badgeCls(level, invert){
+  // invert=true means High is bad (burnout)
+  if(invert){ return level==='High'?'badge-red':level==='Low'?'badge-green':'badge-amber'; }
+  return level==='High'?'badge-green':level==='Low'?'badge-red':'badge-amber';
+}
+function levelBadge(level, invert){
+  return `<span class="badge ${badgeCls(level,invert)}">${level}</span>`;
+}
+
+function buildIndTable(data){
+  const tbody = document.getElementById('indTbody');
+  if(!tbody) return;
+  const count = document.getElementById('indCount');
+  if(count) count.textContent = data.length + ' respondents';
+
+  if(data.length===0){
+    tbody.innerHTML=`<tr><td colspan="13" class="no-results">No matching respondents.</td></tr>`;
+    return;
+  }
+
+  const fsItemLbls=['Purposeful life','Supportive rels.','Engaged & interested','Contributes to others','Competent & capable','Good person/life','Optimistic','Respected'];
+  const mbiItemLbls=['Emotionally drained','People require effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by contact','End of rope'];
+  const mspssItemLbls=['Special person-need','Share joys/sorrows','Family helps','Family emotional support','Person-comfort','Friends help','Count on friends','Talk problems-family','Friends-share joys','Special person cares','Family-decisions','Talk problems-friends'];
+
+  tbody.innerHTML = data.map((d,i)=>{
+    const detailId = 'detail-'+d.idx;
+    const rowId    = 'row-'+d.idx;
+
+    // FS item bars
+    const fsBarRows = d.fsItems.map((v,ii)=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${fsItemLbls[ii]}">${fsItemLbls[ii]}</div>
+        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/7*100)}%;background:#1a8c6b;border-radius:3px"></div></div>
+        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
+      </div>`).join('');
+
+    const mbiBarRows = d.mbiItems.map((v,ii)=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${mbiItemLbls[ii]}">${mbiItemLbls[ii]}</div>
+        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/6*100)}%;background:#e8401c;border-radius:3px"></div></div>
+        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
+      </div>`).join('');
+
+    const mspssBarRows = d.mspssItems.map((v,ii)=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${mspssItemLbls[ii]}">${mspssItemLbls[ii]}</div>
+        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/7*100)}%;background:#2d5a9e;border-radius:3px"></div></div>
+        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
+      </div>`).join('');
+
+    const detailHTML = `
+    <tr class="detail-row" id="${detailId}">
+      <td class="detail-cell" colspan="13">
+        <div class="detail-grid">
+
+          <!-- IPAQ Detail -->
+          <div class="detail-card">
+            <div class="detail-card-title">&#128202; IPAQ-SF &#8212; Physical Activity</div>
+            <div class="detail-score-row"><span class="detail-score-lbl">Total MET-min/wk</span><span class="detail-score-val">${d.met.toLocaleString()}</span></div>
+            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.min(100,Math.round(d.met/6000*100))}%;background:#1a8c6b"></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:11px;color:var(--text2);margin-bottom:6px">
+              <span>Vigorous MET:</span><span style="font-weight:600;color:var(--text)">${d.vigMETv.toLocaleString()}</span>
+              <span>Moderate MET:</span><span style="font-weight:600;color:var(--text)">${d.modMETv.toLocaleString()}</span>
+              <span>Walking MET:</span><span style="font-weight:600;color:var(--text)">${d.walkMETv.toLocaleString()}</span>
+              <span>Sitting time:</span><span style="font-weight:600;color:var(--text)">${d.sitMin ? d.sitMin+' min/day' : '—'}</span>
+            </div>
+            <div class="detail-meta">Classification: ${levelBadge(d.ipaqLevel,false)}<br>High ≥3,000 MET-min/wk (or vig ≥1,500) · Moderate 600–2,999 · Low &lt;600</div>
+          </div>
+
+          <!-- FS Detail -->
+          <div class="detail-card">
+            <div class="detail-card-title">&#127807; Flourishing Scale (FS)</div>
+            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.fs} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 56</span></span></div>
+            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.fs/56*100)}%;background:#1a8c6b"></div></div>
+            ${fsBarRows}
+            <div class="detail-meta">Classification: ${levelBadge(d.fsLevel,false)}<br>High ≥48 · Moderate 33–47 · Low &lt;33</div>
+          </div>
+
+          <!-- MBI Detail -->
+          <div class="detail-card">
+            <div class="detail-card-title">&#128293; MBI &#8212; Emotional Exhaustion</div>
+            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.mbi} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 42</span></span></div>
+            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.mbi/42*100)}%;background:#e8401c"></div></div>
+            ${mbiBarRows}
+            <div class="detail-meta">Classification: ${levelBadge(d.mbiLevel,true)}<br>Low ≤16 (healthy) · Moderate 17–26 · High ≥27 (severe burnout)</div>
+          </div>
+
+          <!-- MSPSS Detail -->
+          <div class="detail-card">
+            <div class="detail-card-title">&#129309; MSPSS &#8212; Social Support</div>
+            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.mspssT} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 84</span></span></div>
+            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.mspssT/84*100)}%;background:#2d5a9e"></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 8px;font-size:11px;color:var(--text2);margin-bottom:8px">
+              <span>Sig. Other avg:</span><span style="font-weight:600;color:var(--text)">${d.mspsSO}</span><span></span>
+              <span>Family avg:</span><span style="font-weight:600;color:var(--text)">${d.mspaFam}</span><span></span>
+              <span>Friends avg:</span><span style="font-weight:600;color:var(--text)">${d.mspaFri}</span><span></span>
+              <span>Overall item avg:</span><span style="font-weight:600;color:var(--text)">${d.mspssA}</span><span></span>
+            </div>
+            ${mspssBarRows}
+            <div class="detail-meta">Classification: ${levelBadge(d.mspssLevel,false)}<br>High avg ≥5.5 · Moderate 2.95–5.49 · Low &lt;2.95 (Dahlem et al., 1991)</div>
+          </div>
+
+          <!-- Respondent Profile -->
+          <div class="detail-card" style="grid-column:span 4">
+            <div class="detail-card-title">&#128100; Respondent profile</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px 16px;font-size:11px;color:var(--text2)">
+              <span>Age: <strong style="color:var(--text)">${d.age}</strong></span>
+              <span>Sex: <strong style="color:var(--text)">${d.sex}</strong></span>
+              <span>Work arrangement: <strong style="color:var(--text)">${d.workArr}</strong></span>
+              <span>Sector: <strong style="color:var(--text)">${d.sector}</strong></span>
+              <span>Position: <strong style="color:var(--text)">${d.position}</strong></span>
+              <span>Tenure: <strong style="color:var(--text)">${d.tenure}</strong></span>
+              <span>Self-reported PA: <strong style="color:var(--text)">${d.palevel}</strong></span>
+            </div>
+          </div>
+
+        </div>
+      </td>
+    </tr>`;
+
+    return `
+    <tr id="${rowId}" onclick="toggleDetail(${d.idx})" style="cursor:pointer">
+      <td style="color:var(--text3)">${i+1}</td>
+      <td><strong>${d.name}</strong></td>
+      <td>${d.age}</td>
+      <td>${d.sex}</td>
+      <td><span class="score-num">${d.met.toLocaleString()}</span></td>
+      <td>${levelBadge(d.ipaqLevel,false)}</td>
+      <td><span class="score-num">${d.fs}</span><span style="font-size:10px;color:var(--text3)"> /56</span></td>
+      <td>${levelBadge(d.fsLevel,false)}</td>
+      <td><span class="score-num">${d.mbi}</span><span style="font-size:10px;color:var(--text3)"> /42</span></td>
+      <td>${levelBadge(d.mbiLevel,true)}</td>
+      <td><span class="score-num">${d.mspssT}</span><span style="font-size:10px;color:var(--text3)"> /84</span></td>
+      <td>${levelBadge(d.mspssLevel,false)}</td>
+      <td style="color:var(--text3);font-size:11px" id="chevron-${d.idx}">▶</td>
+    </tr>
+    ${detailHTML}`;
+  }).join('');
+}
+
+function toggleDetail(idx){
+  const dr = document.getElementById('detail-'+idx);
+  const ch = document.getElementById('chevron-'+idx);
+  if(!dr) return;
+  const isOpen = dr.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.detail-row.open').forEach(r=>r.classList.remove('open'));
+  document.querySelectorAll('[id^="chevron-"]').forEach(c=>c.textContent='▶');
+  if(!isOpen){ dr.classList.add('open'); if(ch) ch.textContent='▼'; }
+}
+
+function filterIndTable(){
+  const q    = (document.getElementById('indSearch')?.value||'').toLowerCase();
+  const fPA  = document.getElementById('indFilterIPAQ')?.value||'';
+  const fFS  = document.getElementById('indFilterFS')?.value||'';
+  const fMBI = document.getElementById('indFilterMBI')?.value||'';
+  const fMSP = document.getElementById('indFilterMSPSS')?.value||'';
+  const data = window._indData||[];
+  const filtered = data.filter(d=>{
+    const txt = [d.name,d.sex,d.workArr,d.sector,d.position,d.tenure,d.palevel].join(' ').toLowerCase();
+    return (!q||txt.includes(q))
+      && (!fPA ||d.ipaqLevel===fPA)
+      && (!fFS ||d.fsLevel===fFS)
+      && (!fMBI||d.mbiLevel===fMBI)
+      && (!fMSP||d.mspssLevel===fMSP);
+  });
+  buildIndTable(filtered);
+}
+
+let _sortAsc = true, _sortCol = -1;
+function sortIndTable(col){
+  const data = window._indData||[];
+  // Close all open details
+  document.querySelectorAll('.detail-row.open').forEach(r=>r.classList.remove('open'));
+
+  if(_sortCol===col){ _sortAsc=!_sortAsc; } else { _sortAsc=true; _sortCol=col; }
+
+  const getVal = (d,c) => {
+    switch(c){
+      case 0: return d.idx;
+      case 1: return d.name.toLowerCase();
+      case 2: return +(d.age)||0;
+      case 3: return d.sex.toLowerCase();
+      case 4: return d.met;
+      case 5: return d.ipaqLevel;
+      case 6: return d.fs;
+      case 7: return d.fsLevel;
+      case 8: return d.mbi;
+      case 9: return d.mbiLevel;
+      case 10: return d.mspssT;
+      case 11: return d.mspssLevel;
+      default: return 0;
+    }
+  };
+  data.sort((a,b)=>{
+    const av=getVal(a,col), bv=getVal(b,col);
+    if(av<bv) return _sortAsc?-1:1;
+    if(av>bv) return _sortAsc?1:-1;
+    return 0;
+  });
+
+  // Update header indicators
+  document.querySelectorAll('table.ind-table th').forEach((th,i)=>{
+    th.classList.toggle('sorted',i===col);
+    const ic=th.querySelector('.sort-icon');
+    if(ic) ic.textContent = i===col ? (_sortAsc?'↑':'↓') : '↕';
+  });
+
+  filterIndTable(); // re-render with current filters applied
 }
 
 /* ── TAB SWITCHER ────────────────────────────────────────── */
