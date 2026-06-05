@@ -3,618 +3,669 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Psychological Pathways to Flourishing — Dashboard</title>
+<title>Psychological Pathways to Flourishing — Research Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root{
-  /* MODERN LIGHT COLOR PALETTE 2026 */
-  --bg:#fcfaf7;--surface:#fff;--surface2:#f8f6f3;--border:#eae7e3;
-  --text:#2a2723;--text2:#7a746d;--text3:#a8a39c;
-  --accent:#3a6db7;--red:#d95a3f;--green:#2a9d8f;--amber:#d4a017;--purple:#6a5fd3;
-  --r:14px;--rm:10px;
+  --bg:#f7f5f0;
+  --surface:#ffffff;
+  --surface2:#f0ede8;
+  --border:#e3dfd8;
+  --text:#1a1814;
+  --text2:#6b6660;
+  --text3:#9e9890;
+  --accent:#2d5a9e;
+  --accent2:#e8401c;
+  --accent3:#1a8c6b;
+  --accent4:#c67c00;
+  --r:12px;
+  --rm:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 
-/* HEADER */
-.app-header{background:var(--text);color:#fff;padding:28px 32px 22px;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.app-header::before{content:'';position:absolute;right:-40px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.06)}
-.hdr-lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px}
-.hdr-title{font-family:'DM Serif Display',serif;font-size:24px;line-height:1.2;color:#fff;max-width:540px}
-.hdr-title em{font-style:italic;color:rgba(255,255,255,.8)}
-.hdr-meta{margin-top:10px;font-size:12px;color:rgba(255,255,255,.5);display:flex;gap:20px;flex-wrap:wrap}
-.hdr-actions{position:absolute;top:24px;right:28px;display:flex;gap:10px}
-.hbtn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rm);border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
-.hbtn:hover{background:rgba(255,255,255,.18);color:#fff}
-.hbtn:active{transform:scale(0.98)}
+/* ── HEADER ─────────── */
+.app-header{background:var(--text);color:#fff;padding:28px 32px 22px;position:relative;overflow:hidden}
+.app-header::before{content:'';position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.04)}
+.app-header::after{content:'';position:absolute;right:60px;bottom:-80px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.03)}
+.header-label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px}
+.header-title{font-family:'DM Serif Display',serif;font-size:24px;line-height:1.2;color:#fff;max-width:540px}
+.header-title em{font-style:italic;color:rgba(255,255,255,.75)}
+.header-meta{margin-top:10px;font-size:12px;color:rgba(255,255,255,.45);display:flex;gap:20px;flex-wrap:wrap}
+.header-actions{position:absolute;top:24px;right:28px;display:flex;gap:8px}
+.icon-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--rm);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s}
+.icon-btn:hover{background:rgba(255,255,255,.14);color:#fff}
+.icon-btn svg{flex-shrink:0}
 
-/* STATUS */
-.status-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 32px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.sdot{width:9px;height:9px;border-radius:50%;background:#2a9d8f;flex-shrink:0;box-shadow:0 0 0 0 rgba(42,157,143,0.4)}
-.sdot.loading{background:#d4a017;animation:pulse 1.2s infinite;box-shadow:0 0 0 0 rgba(212,160,23,0.4)}
-.sdot.error{background:#d95a3f;box-shadow:0 0 0 0 rgba(217,90,63,0.4)}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(212,160,23,0)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(212,160,23,0.2)}}
-.stxt{font-size:12px;color:var(--text2);font-weight:500}
-.stime{font-size:11px;color:var(--text3);margin-left:auto;font-weight:400}
+/* ── STATUS BAR ─────────── */
+.status-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 0 2px rgba(34,197,94,.2)}
+.status-dot.loading{background:#f59e0b;animation:pulse 1s infinite}
+.status-dot.error{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-text{font-size:12px;color:var(--text2)}
+.status-time{font-size:11px;color:var(--text3);margin-left:auto}
 
-/* MAIN */
-.main{padding:24px 32px;max-width:1120px}
+/* ── MAIN LAYOUT ─────────── */
+.main{padding:24px 32px;max-width:1100px}
 
-/* KPIs */
-.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.03);transition:transform 0.2s, box-shadow 0.2s}
-.kpi:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.06)}
-.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--kc,var(--accent))}
-.kpi-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:500}
-.kpi-val{font-size:28px;font-weight:300;letter-spacing:-.02em;line-height:1}
+/* ── KPI STRIP ─────────── */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--kpi-color,var(--accent))}
+.kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.kpi-val{font-size:26px;font-weight:300;color:var(--text);letter-spacing:-.02em;line-height:1}
 .kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
-/* TABS */
-.tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--border)}
-.tab{font-size:13px;font-family:'DM Sans',sans-serif;padding:10px 18px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;margin-bottom:-1px;transition:all .18s;border-radius:var(--rm) var(--rm) 0 0;font-weight:500}
+/* ── TABS ─────────── */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;margin-bottom:-1px;transition:all .15s;border-radius:var(--rm) var(--rm) 0 0}
 .tab:hover{color:var(--text2);background:var(--surface2)}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--surface);box-shadow:0 -2px 4px rgba(58,109,183,0.08)}
-.tab-pane{display:none}.tab-pane.active{display:block}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;background:var(--surface)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
 
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.03);transition:transform 0.2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.06)}
-.card-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px}
-.card-note{font-size:11px;color:var(--text3);line-height:1.6;margin-top:12px}
-.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-bottom:20px}
+/* ── SECTION HEADING ─────── */
+.sec-head{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
 
-/* DONUT */
-.donut-area{display:flex;align-items:center;gap:20px}
+/* ── CARD ─────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:14px}
+.card-note{font-size:11px;color:var(--text3);line-height:1.6;margin-top:10px}
+
+/* ── CHART GRID ─────────── */
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:16px}
+.chart-wrap{position:relative}
+
+/* ── DONUT CARD ─────────── */
+.donut-card{display:flex;flex-direction:column}
+.donut-area{display:flex;align-items:center;gap:16px}
 .donut-wrap{position:relative;width:120px;height:120px;flex-shrink:0}
-.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-.donut-cval{font-size:20px;font-weight:400}
-.donut-clbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
-.donut-legend{flex:1;display:flex;flex-direction:column;gap:9px}
-.leg-item{display:flex;align-items:center;gap:10px;font-size:13px}
-.leg-sw{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.leg-lbl{color:var(--text2);flex:1;font-weight:500}
-.leg-n{font-weight:600;color:var(--text)}
-.leg-pct{font-size:11px;color:var(--text3);font-weight:500}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.donut-center-val{font-size:18px;font-weight:300;color:var(--text)}
+.donut-center-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.legend-lbl{color:var(--text2);flex:1}
+.legend-n{font-weight:500;color:var(--text)}
+.legend-pct{font-size:11px;color:var(--text3)}
 
-/* BARS */
-.bar-list{display:flex;flex-direction:column;gap:11px}
-.bar-item{display:flex;align-items:center;gap:12px}
-.bar-lbl{font-size:12px;color:var(--text2);width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.bar-lbl.wide{width:180px}
-.bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px}
-.bar-val{font-size:12px;font-weight:600;min-width:40px;text-align:right;color:var(--text)}
-.bar-count{font-size:11px;color:var(--text3);min-width:42px;text-align:right;font-weight:500}
+/* ── BAR ITEMS ─────────── */
+.bar-list{display:flex;flex-direction:column;gap:9px}
+.bar-item{display:flex;align-items:center;gap:8px}
+.bar-lbl{font-size:11px;color:var(--text2);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-lbl.wide{width:170px}
+.bar-track{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-size:11px;font-weight:500;color:var(--text);min-width:36px;text-align:right}
+.bar-count{font-size:10px;color:var(--text3);min-width:38px;text-align:right}
 
-/* CORR */
-.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
-.corr-cell{background:var(--surface2);border-radius:var(--r);padding:18px 20px;border-left:4px solid var(--cc,var(--border));transition:transform 0.2s}
-.corr-cell:hover{transform:translateY(-2px)}
-.corr-r{font-size:30px;font-weight:300;letter-spacing:-.02em}
-.corr-pair{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.4;font-weight:500}
-.corr-str{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:8px}
+/* ── CORR GRID ─────────── */
+.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.corr-cell{background:var(--surface2);border-radius:var(--r);padding:16px 18px;border-left:3px solid var(--corr-color,var(--border))}
+.corr-r{font-size:28px;font-weight:300;letter-spacing:-.02em}
+.corr-pairs{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4}
+.corr-interp{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
 
-/* TABLE */
-.dtable-wrap{overflow-x:auto;margin:0 -4px;padding:0 4px}
-table.dtable{width:100%;border-collapse:collapse;font-size:13px}
-table.dtable th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:600;text-align:left;padding:10px 12px;border-bottom:2px solid var(--border)}
-table.dtable td{padding:11px 12px;border-bottom:1px solid var(--surface2)}
+/* ── DATA TABLE ─────────── */
+.dtable-wrap{overflow-x:auto}
+table.dtable{width:100%;border-collapse:collapse;font-size:12px}
+table.dtable th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+table.dtable td{padding:8px 10px;border-bottom:1px solid var(--surface2);color:var(--text)}
 table.dtable tr:last-child td{border-bottom:none}
-table.dtable tr:hover td{background:var(--surface2);transition:background 0.2s}
+table.dtable tr:hover td{background:var(--surface2)}
 
-/* LOADING / ERROR */
-.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:90px 24px;gap:18px}
-.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+/* ── BADGE ─────────── */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:500;letter-spacing:.02em}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-amber{background:#fef9c3;color:#854d0e}
+.badge-red{background:#fee2e2;color:#991b1b}
+
+/* ── LOADING ─────────── */
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:16px}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-lbl{font-size:14px;color:var(--text2);text-align:center;max-width:380px;line-height:1.6;font-weight:500}
-.error-box{padding:60px 32px;text-align:center}
-.error-box h3{font-size:18px;color:var(--text);margin-bottom:12px;font-weight:600}
-.error-box p{font-size:14px;color:var(--text2);max-width:440px;margin-inline:auto;line-height:1.7}
-.error-box code{font-size:12px;background:var(--surface2);padding:12px 16px;border-radius:var(--rm);display:block;margin-top:16px;text-align:left;word-break:break-all;color:var(--red);font-family:monospace}
+.loading-label{font-size:13px;color:var(--text2)}
 
+.error-state{padding:60px 32px;text-align:center;color:var(--text3)}
+.error-state .err-ico{font-size:40px;margin-bottom:12px}
+.error-state p{font-size:13px;color:var(--text2);margin-top:6px;max-width:380px;margin-inline:auto}
+
+/* ── SCATTER PLACEHOLDER ── */
+.scatter-ph{position:relative;height:240px}
+
+/* ── RESPONSIVE ─────────── */
 @media(max-width:640px){
   .app-header{padding:20px 16px 16px}
-  .hdr-actions{position:static;margin-top:12px}
-  .main{padding:16px 16px}
+  .header-actions{position:static;margin-top:12px}
+  .main{padding:16px}
   .kpi-strip{grid-template-columns:repeat(2,1fr)}
-  .donut-area{flex-direction:column;text-align:center}
-  .chart-row{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
 <header class="app-header">
-  <div class="hdr-lbl">Research Dashboard · Mapúa University · 2026</div>
-  <h1 class="hdr-title">Psychological Pathways to <em>Flourishing</em></h1>
-  <div class="hdr-meta">
-    <span>Jolina U. Villalobos, RPm · MA Psychology</span>
+  <div class="header-label">Research Dashboard · Mapúa University · 2026</div>
+  <h1 class="header-title">Psychological Pathways to <em>Flourishing</em></h1>
+  <div class="header-meta">
+    <span>Jolina U. Villalobos, RPm</span>
     <span>N = <span id="hN">—</span> Filipino workers</span>
-    <span>IPAQ-SF · FS · MBI · MSPSS</span>
+    <span>Instruments: IPAQ-SF · FS · MBI · MSPSS</span>
   </div>
-  <div class="hdr-actions">
-    <button class="hbtn" onclick="loadData()">↺ Refresh</button>
+  <div class="header-actions">
+    <button class="icon-btn" onclick="loadData()" title="Refresh data">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Refresh
+    </button>
   </div>
 </header>
 
 <div class="status-bar">
-  <div class="sdot loading" id="sDot"></div>
-  <div class="stxt" id="sTxt">Connecting…</div>
-  <div class="stime" id="sTime"></div>
+  <div class="status-dot loading" id="statusDot"></div>
+  <div class="status-text" id="statusText">Connecting to Airtable…</div>
+  <div class="status-time" id="statusTime"></div>
 </div>
 
 <div class="main" id="mainArea">
   <div class="loading-state">
     <div class="spinner"></div>
-    <div class="load-lbl">Loading survey responses from Airtable…</div>
+    <div class="loading-label">Fetching survey responses…</div>
   </div>
 </div>
 
 <script>
-/* ─── CONFIG ──────────────────────────────────────── */
+/* ── CONFIG ─────────────────────────────────────────────── */
 const AT_TOKEN = 'patGENwLuAKtovqaI.13401f4b0161b141f8723f616f0ead192519287f178b17f6f23ceb5ac3137a0d';
 const AT_BASE  = 'app4Hmc0skWBEvxCD';
 const AT_TABLE = 'Responses';
-const MAX_RETRIES = 3;
-const TIMEOUT_MS = 30000; // 30 second timeout
 
-/* ─── MATH HELPERS ────────────────────────────────── */
-const mean = a => a.length ? a.reduce((s,v)=>s+v,0)/a.length : 0;
-const sd   = a => { if(a.length<2) return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1)); };
+/* ── HELPERS ─────────────────────────────────────────────── */
+const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+const sd   = arr => {
+  if(arr.length<2) return 0;
+  const m=mean(arr);
+  return Math.sqrt(arr.reduce((a,b)=>a+(b-m)**2,0)/(arr.length-1));
+};
 const pearson = (xs,ys) => {
   if(xs.length<3) return 0;
-  const mx=mean(xs),my=mean(ys); let n=0,dx=0,dy=0;
-  xs.forEach((x,i)=>{const a=x-mx,b=ys[i]-my;n+=a*b;dx+=a*a;dy+=b*b;});
-  if(!dx||!dy) return 0;
-  return +(n/Math.sqrt(dx*dy)).toFixed(2);
+  const mx=mean(xs), my=mean(ys);
+  let num=0,dx2=0,dy2=0;
+  xs.forEach((x,i)=>{const a=x-mx,b=ys[i]-my;num+=a*b;dx2+=a*a;dy2+=b*b;});
+  if(!dx2||!dy2) return 0;
+  return +(num/Math.sqrt(dx2*dy2)).toFixed(2);
 };
-const freq = arr => { const m={}; arr.filter(v=>v!=null&&v!=='').forEach(v=>m[v]=(m[v]||0)+1); return m; };
-const pct  = (n,t) => t ? Math.round(n/t*100) : 0;
-const r1   = v => Math.round(v*10)/10;
+const freq  = arr => { const m={}; arr.filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1); return m; };
+const pct   = (n,t) => t ? Math.round(n/t*100) : 0;
+const r2    = v => Math.round(v*10)/10;
+const fmtN  = n => n.toLocaleString();
 
-/* ─── SCORE COMPUTATIONS (per thesis ch.3) ────────── */
-function calcMET(f){
-  const vD=+(f.IPAQ_Q1_Vigorous_Days||0), vDK=f.IPAQ_Q2_DK;
-  const mD=+(f.IPAQ_Q3_Moderate_Days||0), mDK=f.IPAQ_Q4_DK;
-  const wD=+(f.IPAQ_Q5_Walking_Days||0),  wDK=f.IPAQ_Q6_DK;
-  const vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60++(f.IPAQ_Q2_Vigorous_Minutes||0)):0;
-  const mMin=(!mDK&&mD>0)?(+(f.IPAQ_Q4_Moderate_Hours||0)*60++(f.IPAQ_Q4_Moderate_Minutes||0)):0;
-  const wMin=(!wDK&&wD>0)?(+(f.IPAQ_Q6_Walking_Hours||0)*60++(f.IPAQ_Q6_Walking_Minutes||0)):0;
-  return Math.round(8.0*vMin*vD + 4.0*mMin*mD + 3.3*wMin*wD);
+/* ── SCORE COMPUTATIONS (per thesis methodology) ─────────── */
+function calcMET(f) {
+  const vDK=f.IPAQ_Q2_DK, mDK=f.IPAQ_Q4_DK, wDK=f.IPAQ_Q6_DK;
+  const vDays=+(f.IPAQ_Q1_Vigorous_Days||0);
+  const vMin =!vDK&&vDays>0 ? (+(f.IPAQ_Q2_Vigorous_Hours||0)*60 + +(f.IPAQ_Q2_Vigorous_Minutes||0)) : 0;
+  const mDays=+(f.IPAQ_Q3_Moderate_Days||0);
+  const mMin =!mDK&&mDays>0 ? (+(f.IPAQ_Q4_Moderate_Hours||0)*60 + +(f.IPAQ_Q4_Moderate_Minutes||0)) : 0;
+  const wDays=+(f.IPAQ_Q5_Walking_Days||0);
+  const wMin =!wDK&&wDays>0 ? (+(f.IPAQ_Q6_Walking_Hours||0)*60 + +(f.IPAQ_Q6_Walking_Minutes||0)) : 0;
+  return Math.round(8.0*vMin*vDays + 4.0*mMin*mDays + 3.3*wMin*wDays);
 }
-function vigMET(f){
-  const vD=+(f.IPAQ_Q1_Vigorous_Days||0), vDK=f.IPAQ_Q2_DK;
-  const vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60++(f.IPAQ_Q2_Vigorous_Minutes||0)):0;
-  return 8.0*vMin*vD;
+function metLevel(met, vigMET) {
+  if(vigMET>=1500 || met>=3000) return 'High';
+  if(met>=600) return 'Moderate';
+  return 'Low';
 }
-function metLevel(met,vig){ return (vig>=1500||met>=3000)?'High':met>=600?'Moderate':'Low'; }
-function calcFS(f)    { let s=0; for(let i=1;i<=8; i++) s+=+(f['FS_Q'+i]||0); return s; }
-function calcMBI(f)   { let s=0; for(let i=1;i<=7; i++) s+=+(f['MBI_Q'+i]||0); return s; }
+function calcFS(f)    { let s=0; for(let i=1;i<=8;i++) s+=+(f['FS_Q'+i]||0); return s; }
+function calcMBI(f)   { let s=0; for(let i=1;i<=7;i++) s+=+(f['MBI_Q'+i]||0); return s; }
 function calcMSPSS(f) { let s=0; for(let i=1;i<=12;i++) s+=+(f['MSPSS_Q'+i]||0); return s; }
+
 function mbiLevel(v)  { return v<=16?'Low':v<=26?'Moderate':'High'; }
 function fsLevel(v)   { return v>=48?'High':v>=33?'Moderate':'Low'; }
-function mspssLevel(a){ return a>=5.5?'High':a>=2.95?'Moderate':'Low'; }
-function corrStr(r)   { const a=Math.abs(r); return a>=.5?'Strong':a>=.3?'Moderate':a>=.1?'Weak':'Negligible'; }
-function corrCol(r)   { return r>=0.1?'#2a9d8f':r<=-0.1?'#d95a3f':'#a8a39c'; }
+function mspssLevel(avg){ return avg>=5.5?'High':avg>=2.95?'Moderate':'Low'; }
 
-/* ─── ENHANCED FETCH WITH RETRY & TIMEOUT ────────────
-   Since Airtable blocks direct browser requests due to CORS policy,
-   we use Anthropic API as a secure proxy. This implementation adds:
-   - Retry mechanism (up to 3 attempts)
-   - Connection timeout (30 seconds)
-   - Better error handling
-───────────────────────────────────────────────────── */
-async function fetchWithRetry(attempt = 1){
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  
-  try {
-    const systemPrompt = `You are a precise data-fetching assistant.
-The user will ask you to fetch Airtable data.
-Fetch ALL pages (follow offset) from the Airtable REST API and return ONLY a valid JSON array of record field objects — no markdown, no explanation, no backticks.
-Each element should be the "fields" object of one Airtable record.
-The array must start with [ and end with ].`;
+function corrStrength(r) {
+  const a=Math.abs(r);
+  if(a>=.5) return 'Strong';
+  if(a>=.3) return 'Moderate';
+  if(a>=.1) return 'Weak';
+  return 'Negligible';
+}
+function corrColor(r) { return r>=0.1?'#1a8c6b':r<=-0.1?'#e8401c':'#9e9890'; }
 
-    const userMsg = `Fetch all records from Airtable.
-Base ID: ${AT_BASE}
-Table: ${AT_TABLE}
-Token: ${AT_TOKEN}
-
-Use GET https://api.airtable.com/v0/${AT_BASE}/${encodeURIComponent(AT_TABLE)}?pageSize=100
-Header: Authorization: Bearer ${AT_TOKEN}
-
-If there is an "offset" field in the response, fetch the next page with ?pageSize=100&offset=OFFSET_VALUE and concatenate all records.
-Return ONLY a JSON array of field objects, no extra text.`;
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 16000,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userMsg }]
-      }),
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      const err = await response.json().catch(()=>({}));
-      throw new Error('Anthropic API error: ' + (err.error?.message || response.status));
-    }
-
-    const data = await response.json();
-    const rawText = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-
-    // Strip any accidental markdown fences
-    const clean = rawText.replace(/```json|```/gi,'').trim();
-    let parsed;
-    try { parsed = JSON.parse(clean); }
-    catch(e) { 
-      console.error('Parse error details:', clean.slice(0, 500));
-      throw new Error('Could not parse Airtable data from Claude response'); 
-    }
-
-    if (!Array.isArray(parsed)) throw new Error('Expected array from Claude, got: '+typeof parsed);
-    return parsed;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    
-    if (error.name === 'AbortError') {
-      throw new Error('Request timed out after ' + TIMEOUT_MS/1000 + ' seconds');
-    }
-    
-    if (attempt < MAX_RETRIES) {
-      // Wait before retrying (exponential backoff)
-      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-      return fetchWithRetry(attempt + 1);
-    }
-    
-    throw error;
-  }
+/* ── FETCH ALL PAGES ─────────────────────────────────────── */
+async function fetchAll() {
+  let records=[], offset=null;
+  do {
+    let url=`https://api.airtable.com/v0/${AT_BASE}/${encodeURIComponent(AT_TABLE)}?pageSize=100`;
+    if(offset) url+=`&offset=${offset}`;
+    const r = await fetch(url,{headers:{Authorization:`Bearer ${AT_TOKEN}`}});
+    if(!r.ok){ const e=await r.json(); throw new Error(e.error?.message||`HTTP ${r.status}`); }
+    const d=await r.json();
+    records=records.concat(d.records);
+    offset=d.offset||null;
+  } while(offset);
+  return records;
 }
 
-/* ─── CHART REGISTRY ──────────────────────────────── */
+/* ── CHART REGISTRY ─────────────────────────────────────── */
 const charts={};
-function dc(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
 
-function mkDonut(id,data,colors,labels,n){
-  dc(id); const ctx=document.getElementById(id); if(!ctx)return;
+function makeDonut(id, data, colors, labels){
+  destroyChart(id);
+  const ctx=document.getElementById(id);
+  if(!ctx) return;
   charts[id]=new Chart(ctx,{
     type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:6}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,n)+'%)'}}}}
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,data.reduce((a,b)=>a+b,0))+'%)'}}}}}
+  );
+}
+function makeHBar(id, labels, data, color, maxVal){
+  destroyChart(id);
+  const ctx=document.getElementById(id);
+  if(!ctx) return;
+  charts[id]=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{data,backgroundColor:color+'cc',borderRadius:4,borderSkipped:false}]},
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+r2(c.raw)}}},
+      scales:{
+        x:{max:maxVal,min:0,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},maxTicksLimit:5}},
+        y:{grid:{display:false},ticks:{font:{size:10}}}
+      }
+    }
   });
 }
-function mkScatter(id,pts){
-  dc(id); const ctx=document.getElementById(id); if(!ctx)return;
+function makeScatter(id, pts, xLabel, yLabel){
+  destroyChart(id);
+  const ctx=document.getElementById(id);
+  if(!ctx) return;
   charts[id]=new Chart(ctx,{
     type:'scatter',
-    data:{datasets:[{data:pts,backgroundColor:'rgba(58,109,183,.6)',pointRadius:6,pointHoverRadius:8,pointBorderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'MET: '+Math.round(c.raw.x).toLocaleString()+', FS: '+Math.round(c.raw.y)}}},
+    data:{datasets:[{data:pts,backgroundColor:'rgba(45,90,158,.5)',pointRadius:5,pointHoverRadius:7,pointBorderWidth:0}]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`MET: ${Math.round(c.raw.x).toLocaleString()}, FS: ${Math.round(c.raw.y)}`}}},
       scales:{
-        x:{title:{display:true,text:'MET-min / week (IPAQ-SF)',font:{size:12},color:'#7a746d'},grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11}}},
-        y:{title:{display:true,text:'Flourishing Scale total score',font:{size:12},color:'#7a746d'},grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11}}}
-      }}
+        x:{title:{display:true,text:xLabel,font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}},
+        y:{title:{display:true,text:yLabel,font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}}
+      }
+    }
   });
 }
 
-/* ─── BAR HELPERS ─────────────────────────────────── */
-function freqBars(obj,n,color,wide){
-  const items=Object.entries(obj).sort((a,b)=>b[1]-a[1]);
-  const mx=items[0]?.[1]||1;
-  return '<div class="bar-list">'+items.map(([k,v])=>`
-    <div class="bar-item">
-      <div class="bar-lbl${wide?' wide':''}" title="${k}">${k}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mx*100)}%;background:${color}"></div></div>
-      <div class="bar-val">${v}</div>
-      <div class="bar-count">(${pct(v,n)}%)</div>
-    </div>`).join('')+'</div>';
+/* ── RENDER HELPERS ─────────────────────────────────────── */
+function barList(items, maxCount, color, wide){
+  return items.map(([lbl,v,total])=>{
+    const pctW=Math.round(v/(maxCount||1)*100);
+    return `<div class="bar-item">
+      <div class="bar-lbl${wide?' wide':''}" title="${lbl}">${lbl}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pctW}%;background:${color}"></div></div>
+      <div class="bar-val">${r2(v)}</div>
+      ${total!==undefined?`<div class="bar-count">(${pct(v,total)}%)</div>`:''}
+    </div>`;
+  }).join('');
 }
-function scaleBars(means,labels,max,color){
-  return '<div class="bar-list">'+means.map((m,i)=>`
-    <div class="bar-item">
+function freqBars(freqObj, n, color, wide){
+  const items=Object.entries(freqObj).sort((a,b)=>b[1]-a[1]);
+  const max=items[0]?.[1]||1;
+  return `<div class="bar-list">${barList(items.map(([k,v])=>[k,v,n]),max,color,wide)}</div>`;
+}
+
+/* ── MAIN RENDER ─────────────────────────────────────────── */
+function renderDashboard(records){
+  const fields=records.map(r=>r.fields);
+  const n=fields.length;
+
+  /* computed scores */
+  const mets    = fields.map(f=>calcMET(f));
+  const vigMETs = fields.map(f=>{
+    const vDays=+(f.IPAQ_Q1_Vigorous_Days||0),vH=+(f.IPAQ_Q2_Vigorous_Hours||0),vM=+(f.IPAQ_Q2_Vigorous_Minutes||0),vDK=f.IPAQ_Q2_DK;
+    return(!vDK&&vDays>0)?8.0*(vH*60+vM)*vDays:0;
+  });
+  const fss     = fields.map(f=>calcFS(f));
+  const mbis    = fields.map(f=>calcMBI(f));
+  const mspssTs = fields.map(f=>calcMSPSS(f));
+  const mspssAs = mspssTs.map(t=>t/12);
+
+  const ipaqLvls  = mets.map((m,i)=>metLevel(m,vigMETs[i]));
+  const fsLvls    = fss.map(v=>fsLevel(v));
+  const mbiLvls   = mbis.map(v=>mbiLevel(v));
+  const mspssLvls = mspssAs.map(v=>mspssLevel(v));
+
+  /* averages */
+  const avgFS  = mean(fss),   sdFS  = sd(fss);
+  const avgMBI = mean(mbis),  sdMBI = sd(mbis);
+  const avgMSP = mean(mspssTs), sdMSP= sd(mspssTs);
+  const avgMET = mean(mets);
+  const ages   = fields.map(f=>+(f.Age||0)).filter(v=>v>0);
+  const avgAge = Math.round(mean(ages));
+
+  /* correlations */
+  const rMETvsFS   = pearson(mets,fss);
+  const rMBIvsFS   = pearson(mbis,fss);
+  const rMSPSSvsFS = pearson(mspssTs,fss);
+  const rMETvsMBI  = pearson(mets,mbis);
+  const rMBIvsMSP  = pearson(mbis,mspssTs);
+
+  /* frequencies */
+  const ipaqF  = freq(ipaqLvls);
+  const fsF    = freq(fsLvls);
+  const mbiF   = freq(mbiLvls);
+  const mspssF = freq(mspssLvls);
+  const workF  = freq(fields.map(f=>f.Work_Arrangement));
+  const sexF   = freq(fields.map(f=>f.Sex));
+  const civilF = freq(fields.map(f=>f.Civil_Status));
+  const tenureF= freq(fields.map(f=>f.Tenure));
+  const posF   = freq(fields.map(f=>f.Job_Position));
+  const schedF = freq(fields.map(f=>f.Work_Schedule));
+  const sectorF= freq(fields.map(f=>f.Sector));
+  const paF    = freq(fields.map(f=>f.Physical_Activity_Level));
+  const jobF   = freq(fields.map(f=>f.Job_Type));
+
+  /* update header */
+  document.getElementById('hN').textContent=n;
+
+  /* ── item averages ─────────────────────────────────────── */
+  const fsLabels=['Purposeful life','Supportive relationships','Engaged & interested','Contributes to others','Competent & capable','Good person / good life','Optimistic about future','People respect me'];
+  const mbiLabels=['Emotionally drained','People require great effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by direct contact','End of my rope'];
+  const mspssLabels=['Special person when in need','Share joys and sorrows','Family tries to help','Emotional help from family','Special source of comfort','Friends try to help','Count on friends','Talk problems with family','Friends share joys/sorrows','Special person cares','Family helps with decisions','Talk problems with friends'];
+
+  function itemMeans(prefix,count,allFields){ return Array.from({length:count},(_,i)=>mean(allFields.map(f=>+(f[prefix+(i+1)]||0)))); }
+  const fsMeans    = itemMeans('FS_Q',8,fields);
+  const mbiMeans   = itemMeans('MBI_Q',7,fields);
+  const mpssMeans  = itemMeans('MSPSS_Q',12,fields);
+
+  function scaleItemBars(means,labels,max,color){
+    return `<div class="bar-list">${means.map((m,i)=>`<div class="bar-item">
       <div class="bar-lbl wide" title="${labels[i]}">${labels[i]}</div>
       <div class="bar-track"><div class="bar-fill" style="width:${Math.round(m/max*100)}%;background:${color}"></div></div>
       <div class="bar-val">${m.toFixed(2)}</div>
-    </div>`).join('')+'</div>';
-}
+    </div>`).join('')}</div>`;
+  }
 
-/* ─── RENDER ──────────────────────────────────────── */
-function renderDashboard(fields){
-  const n=fields.length;
-  if(n===0){ document.getElementById('mainArea').innerHTML='<div class="error-box"><h3>No responses yet</h3><p>No records found in the Airtable. Check that the table name is "Responses" and data has been submitted.</p></div>'; return; }
-
-  // Computed scores
-  const mets  = fields.map(f=>calcMET(f));
-  const vigs  = fields.map(f=>vigMET(f));
-  const fss   = fields.map(f=>calcFS(f));
-  const mbis  = fields.map(f=>calcMBI(f));
-  const mspTs = fields.map(f=>calcMSPSS(f));
-  const mspAs = mspTs.map(t=>t/12);
-
-  const ipaqLv = mets.map((m,i)=>metLevel(m,vigs[i]));
-  const fsLv   = fss.map(v=>fsLevel(v));
-  const mbiLv  = mbis.map(v=>mbiLevel(v));
-  const mspLv  = mspAs.map(v=>mspssLevel(v));
-
-  // Frequencies
-  const iF=freq(ipaqLv), fsF=freq(fsLv), mbiF=freq(mbiLv), mspF=freq(mspLv);
-  const sexF=freq(fields.map(f=>f.Sex));
-  const civilF=freq(fields.map(f=>f.Civil_Status));
-  const workF=freq(fields.map(f=>f.Work_Arrangement));
-  const schedF=freq(fields.map(f=>f.Work_Schedule));
-  const tenureF=freq(fields.map(f=>f.Tenure));
-  const posF=freq(fields.map(f=>f.Job_Position));
-  const sectorF=freq(fields.map(f=>f.Sector));
-  const paF=freq(fields.map(f=>f.Physical_Activity_Level));
-  const jobF=freq(fields.map(f=>f.Job_Type));
-
-  // Stats
-  const avgFS=mean(fss), sdFS=sd(fss);
-  const avgMBI=mean(mbis), sdMBI=sd(mbis);
-  const avgMSP=mean(mspTs), sdMSP=sd(mspTs);
-  const avgMET=mean(mets);
-  const ages=fields.map(f=>+(f.Age||0)).filter(v=>v>0);
-  const avgAge=Math.round(mean(ages));
-
-  // Correlations
-  const rMF=pearson(mets,fss), rBF=pearson(mbis,fss), rSF=pearson(mspTs,fss);
-  const rMB=pearson(mets,mbis), rBS=pearson(mbis,mspTs);
-
-  // Item means
-  const fsLbls=['Purposeful life','Supportive relationships','Engaged & interested','Contributes to others','Competent & capable','Good person / good life','Optimistic about future','People respect me'];
-  const mbiLbls=['Emotionally drained','People require great effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by direct contact','End of my rope'];
-  const mspLbls=['Special person when in need','Share joys and sorrows','Family tries to help','Emotional help from family','Person – real comfort','Friends try to help','Count on friends','Talk problems – family','Friends share joys/sorrows','Special person cares','Family helps with decisions','Talk problems – friends'];
-
-  const iMeans=(pref,cnt)=>Array.from({length:cnt},(_,i)=>mean(fields.map(f=>+(f[pref+(i+1)]||0))));
-  const fsMns=iMeans('FS_Q',8), mbiMns=iMeans('MBI_Q',7), mspMns=iMeans('MSPSS_Q',12);
-
-  // By-work table
-  const arrs=[...new Set(fields.map(f=>f.Work_Arrangement).filter(Boolean))];
-  const wRows=arrs.map(a=>{
-    const g=fields.filter(f=>f.Work_Arrangement===a);
+  /* ── by-work-arrangement table ─────────────────────────── */
+  const arrangements=[...new Set(fields.map(f=>f.Work_Arrangement).filter(Boolean))];
+  const workTableRows=arrangements.map(arr=>{
+    const g=fields.filter(f=>f.Work_Arrangement===arr);
     if(!g.length) return '';
-    return `<tr><td><strong>${a}</strong></td><td>${g.length}</td>
-      <td>${mean(g.map(f=>calcFS(f))).toFixed(1)}</td>
-      <td>${mean(g.map(f=>calcMBI(f))).toFixed(1)}</td>
-      <td>${mean(g.map(f=>calcMSPSS(f))).toFixed(1)}</td>
-      <td>${Math.round(mean(g.map(f=>calcMET(f)))).toLocaleString()}</td></tr>`;
+    const gFS=g.map(f=>calcFS(f)), gMBI=g.map(f=>calcMBI(f)), gMSP=g.map(f=>calcMSPSS(f)), gMET=g.map(f=>calcMET(f));
+    return `<tr>
+      <td><strong>${arr}</strong></td><td>${g.length}</td>
+      <td>${mean(gFS).toFixed(1)}</td><td>${mean(gMBI).toFixed(1)}</td>
+      <td>${mean(gMSP).toFixed(1)}</td><td>${Math.round(mean(gMET)).toLocaleString()}</td>
+    </tr>`;
   }).join('');
 
-  // Update header
-  document.getElementById('hN').textContent=n;
+  /* ── descriptive stats table ────────────────────────────── */
+  const descRows=[
+    ['Flourishing Scale (FS total)', fss.length, Math.min(...fss), Math.max(...fss), avgFS.toFixed(1), sdFS.toFixed(1), '8–56'],
+    ['Burnout / EE (MBI total)', mbis.length, Math.min(...mbis), Math.max(...mbis), avgMBI.toFixed(1), sdMBI.toFixed(1), '0–42'],
+    ['Social Support (MSPSS total)', mspssTs.length, Math.min(...mspssTs), Math.max(...mspssTs), avgMSP.toFixed(1), sdMSP.toFixed(1), '12–84'],
+    ['Physical Activity (MET-min/wk)', mets.length, Math.min(...mets), Math.max(...mets).toLocaleString(), Math.round(avgMET).toLocaleString(), Math.round(sd(mets)).toLocaleString(), 'IPAQ-SF'],
+    ['Age (years)', ages.length, Math.min(...ages), Math.max(...ages), avgAge, (Math.round(sd(ages)*10)/10).toFixed(1), '—'],
+  ].map(([v,nv,mn,mx,avg,sdd,rng])=>`<tr><td>${v}</td><td>${nv}</td><td>${mn}</td><td>${mx}</td><td>${avg}</td><td>${sdd}</td><td>${rng}</td></tr>`).join('');
 
+  /* ── SCATTER DATA ────────────────────────────────────────── */
+  const scatterPts = mets.map((m,i)=>({x:m,y:fss[i]}));
+
+  /* ══════════════════════════════════════════════════════════
+     BUILD HTML
+  ══════════════════════════════════════════════════════════ */
   document.getElementById('mainArea').innerHTML=`
 
   <!-- KPI STRIP -->
   <div class="kpi-strip">
-    <div class="kpi" style="--kc:#3a6db7"><div class="kpi-lbl">Total responses</div><div class="kpi-val">${n}</div><div class="kpi-sub">Target N = 300</div></div>
-    <div class="kpi" style="--kc:#7a746d"><div class="kpi-lbl">Mean age</div><div class="kpi-val">${avgAge}</div><div class="kpi-sub">SD = ${r1(sd(ages))}&nbsp;yrs</div></div>
-    <div class="kpi" style="--kc:#2a9d8f"><div class="kpi-lbl">Avg flourishing (FS)</div><div class="kpi-val">${avgFS.toFixed(1)}</div><div class="kpi-sub">SD = ${sdFS.toFixed(1)}&nbsp;/ 56</div></div>
-    <div class="kpi" style="--kc:#d95a3f"><div class="kpi-lbl">Avg burnout (MBI-EE)</div><div class="kpi-val">${avgMBI.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMBI.toFixed(1)}&nbsp;/ 42</div></div>
-    <div class="kpi" style="--kc:#d4a017"><div class="kpi-lbl">Avg social support</div><div class="kpi-val">${avgMSP.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMSP.toFixed(1)}&nbsp;/ 84</div></div>
-    <div class="kpi" style="--kc:#6a5fd3"><div class="kpi-lbl">Avg MET-min/wk</div><div class="kpi-val">${Math.round(avgMET).toLocaleString()}</div><div class="kpi-sub">IPAQ-SF computed</div></div>
+    <div class="kpi" style="--kpi-color:#2d5a9e"><div class="kpi-label">Total responses</div><div class="kpi-val">${n}</div><div class="kpi-sub">Target = 300</div></div>
+    <div class="kpi" style="--kpi-color:#6b6660"><div class="kpi-label">Mean age</div><div class="kpi-val">${avgAge}</div><div class="kpi-sub">years (SD = ${(Math.round(sd(ages)*10)/10).toFixed(1)})</div></div>
+    <div class="kpi" style="--kpi-color:#1a8c6b"><div class="kpi-label">Avg flourishing</div><div class="kpi-val">${avgFS.toFixed(1)}</div><div class="kpi-sub">SD = ${sdFS.toFixed(1)} &nbsp;/ 56</div></div>
+    <div class="kpi" style="--kpi-color:#e8401c"><div class="kpi-label">Avg burnout (EE)</div><div class="kpi-val">${avgMBI.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMBI.toFixed(1)} &nbsp;/ 42</div></div>
+    <div class="kpi" style="--kpi-color:#c67c00"><div class="kpi-label">Avg social support</div><div class="kpi-val">${avgMSP.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMSP.toFixed(1)} &nbsp;/ 84</div></div>
+    <div class="kpi" style="--kpi-color:#534AB7"><div class="kpi-label">Avg MET-min/wk</div><div class="kpi-val">${Math.round(avgMET).toLocaleString()}</div><div class="kpi-sub">IPAQ-SF computed</div></div>
   </div>
 
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('overview')">Overview</button>
-    <button class="tab" onclick="switchTab('scales')">Scale details</button>
+    <button class="tab" onclick="switchTab('scales')">Scale distributions</button>
     <button class="tab" onclick="switchTab('demo')">Demographics</button>
     <button class="tab" onclick="switchTab('corr')">Correlations &amp; stats</button>
   </div>
 
-  <!-- OVERVIEW TAB -->
+  <!-- ═══ TAB: OVERVIEW ═══ -->
   <div id="tab-overview" class="tab-pane active">
     <div class="chart-row">
-      <div class="card">
+
+      <!-- IPAQ -->
+      <div class="card donut-card">
         <div class="card-title">Physical activity level (IPAQ-SF)</div>
         <div class="donut-area">
           <div class="donut-wrap">
-            <canvas id="cIPAQ" width="120" height="120" role="img" aria-label="Donut chart showing IPAQ physical activity distribution">${iF.High||0} High, ${iF.Moderate||0} Moderate, ${iF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+            <canvas id="cIPAQ" width="120" height="120" role="img" aria-label="Doughnut: IPAQ physical activity levels">${ipaqF.High||0} High, ${ipaqF.Moderate||0} Moderate, ${ipaqF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
           </div>
           <div class="donut-legend">
-            <div class="leg-item"><div class="leg-sw" style="background:#2a9d8f"></div><div class="leg-lbl">High</div><div class="leg-n">${iF.High||0}</div><div class="leg-pct">${pct(iF.High||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d4a017"></div><div class="leg-lbl">Moderate</div><div class="leg-n">${iF.Moderate||0}</div><div class="leg-pct">${pct(iF.Moderate||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d95a3f"></div><div class="leg-lbl">Low</div><div class="leg-n">${iF.Low||0}</div><div class="leg-pct">${pct(iF.Low||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High</div><div class="legend-n">${ipaqF.High||0}</div><div class="legend-pct">${pct(ipaqF.High||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate</div><div class="legend-n">${ipaqF.Moderate||0}</div><div class="legend-pct">${pct(ipaqF.Moderate||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low</div><div class="legend-n">${ipaqF.Low||0}</div><div class="legend-pct">${pct(ipaqF.Low||0,n)}%</div></div>
           </div>
         </div>
-        <p class="card-note">High ≥3,000 MET-min/wk (or vig ≥1,500), Moderate 600–2,999, Low &lt;600. IPAQ Research Committee (2005).</p>
+        <p class="card-note">MET-min/wk: High ≥3000 (or vigorous ≥1500), Moderate 600–2999, Low &lt;600. Computed via IPAQ-SF scoring protocol (IPAQ Research Committee, 2005).</p>
       </div>
-      <div class="card">
+
+      <!-- FLOURISHING -->
+      <div class="card donut-card">
         <div class="card-title">Flourishing Scale level (FS)</div>
         <div class="donut-area">
           <div class="donut-wrap">
-            <canvas id="cFS" width="120" height="120" role="img" aria-label="Donut chart showing Flourishing Scale distribution">${fsF.High||0} High, ${fsF.Moderate||0} Moderate, ${fsF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+            <canvas id="cFS" width="120" height="120" role="img" aria-label="Doughnut: Flourishing Scale levels">${fsF.High||0} High, ${fsF.Moderate||0} Moderate, ${fsF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
           </div>
           <div class="donut-legend">
-            <div class="leg-item"><div class="leg-sw" style="background:#2a9d8f"></div><div class="leg-lbl">High ≥48</div><div class="leg-n">${fsF.High||0}</div><div class="leg-pct">${pct(fsF.High||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d4a017"></div><div class="leg-lbl">Moderate 33–47</div><div class="leg-n">${fsF.Moderate||0}</div><div class="leg-pct">${pct(fsF.Moderate||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d95a3f"></div><div class="leg-lbl">Low &lt;33</div><div class="leg-n">${fsF.Low||0}</div><div class="leg-pct">${pct(fsF.Low||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High ≥48</div><div class="legend-n">${fsF.High||0}</div><div class="legend-pct">${pct(fsF.High||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 33–47</div><div class="legend-n">${fsF.Moderate||0}</div><div class="legend-pct">${pct(fsF.Moderate||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low &lt;33</div><div class="legend-n">${fsF.Low||0}</div><div class="legend-pct">${pct(fsF.Low||0,n)}%</div></div>
           </div>
         </div>
-        <p class="card-note">Diener &amp; Biswas-Diener (2009). 8 items × 1–7 Likert. Range 8–56.</p>
+        <p class="card-note">Diener &amp; Biswas-Diener (2009) Flourishing Scale: 8 items, 1–7 Likert. Total range 8–56. High ≥48, Low &lt;33.</p>
       </div>
+
     </div>
     <div class="chart-row">
-      <div class="card">
+
+      <!-- MBI -->
+      <div class="card donut-card">
         <div class="card-title">Burnout — Emotional Exhaustion (MBI-EE)</div>
         <div class="donut-area">
           <div class="donut-wrap">
-            <canvas id="cMBI" width="120" height="120" role="img" aria-label="Donut chart showing MBI burnout distribution">${mbiF.Low||0} Low, ${mbiF.Moderate||0} Moderate, ${mbiF.High||0} High</canvas>
-            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+            <canvas id="cMBI" width="120" height="120" role="img" aria-label="Doughnut: MBI burnout levels">${mbiF.Low||0} Low, ${mbiF.Moderate||0} Moderate, ${mbiF.High||0} High</canvas>
+            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
           </div>
           <div class="donut-legend">
-            <div class="leg-item"><div class="leg-sw" style="background:#2a9d8f"></div><div class="leg-lbl">Low ≤16</div><div class="leg-n">${mbiF.Low||0}</div><div class="leg-pct">${pct(mbiF.Low||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d4a017"></div><div class="leg-lbl">Moderate 17–26</div><div class="leg-n">${mbiF.Moderate||0}</div><div class="leg-pct">${pct(mbiF.Moderate||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d95a3f"></div><div class="leg-lbl">High ≥27</div><div class="leg-n">${mbiF.High||0}</div><div class="leg-pct">${pct(mbiF.High||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">Low ≤16</div><div class="legend-n">${mbiF.Low||0}</div><div class="legend-pct">${pct(mbiF.Low||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 17–26</div><div class="legend-n">${mbiF.Moderate||0}</div><div class="legend-pct">${pct(mbiF.Moderate||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">High ≥27</div><div class="legend-n">${mbiF.High||0}</div><div class="legend-pct">${pct(mbiF.High||0,n)}%</div></div>
           </div>
         </div>
-        <p class="card-note">Maslach &amp; Jackson (1981). 7 EE items × 0–6 frequency. Range 0–42. Low ≤16, High ≥27.</p>
+        <p class="card-note">Maslach Burnout Inventory (Maslach &amp; Jackson, 1981) — 7 EE items, 0–6 frequency scale. Total range 0–42. Low ≤16, High ≥27.</p>
       </div>
-      <div class="card">
+
+      <!-- MSPSS -->
+      <div class="card donut-card">
         <div class="card-title">Perceived Social Support (MSPSS)</div>
         <div class="donut-area">
           <div class="donut-wrap">
-            <canvas id="cMSPSS" width="120" height="120" role="img" aria-label="Donut chart showing MSPSS social support distribution">${mspF.High||0} High, ${mspF.Moderate||0} Moderate, ${mspF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+            <canvas id="cMSPSS" width="120" height="120" role="img" aria-label="Doughnut: MSPSS social support levels">${mspssF.High||0} High, ${mspssF.Moderate||0} Moderate, ${mspssF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
           </div>
           <div class="donut-legend">
-            <div class="leg-item"><div class="leg-sw" style="background:#2a9d8f"></div><div class="leg-lbl">High avg ≥5.5</div><div class="leg-n">${mspF.High||0}</div><div class="leg-pct">${pct(mspF.High||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d4a017"></div><div class="leg-lbl">Moderate 2.95–5.49</div><div class="leg-n">${mspF.Moderate||0}</div><div class="leg-pct">${pct(mspF.Moderate||0,n)}%</div></div>
-            <div class="leg-item"><div class="leg-sw" style="background:#d95a3f"></div><div class="leg-lbl">Low &lt;2.95</div><div class="leg-n">${mspF.Low||0}</div><div class="leg-pct">${pct(mspF.Low||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High avg ≥5.5</div><div class="legend-n">${mspssF.High||0}</div><div class="legend-pct">${pct(mspssF.High||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 2.95–5.49</div><div class="legend-n">${mspssF.Moderate||0}</div><div class="legend-pct">${pct(mspssF.Moderate||0,n)}%</div></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low &lt;2.95</div><div class="legend-n">${mspssF.Low||0}</div><div class="legend-pct">${pct(mspssF.Low||0,n)}%</div></div>
           </div>
         </div>
-        <p class="card-note">Zimet et al. (1988). 12 items × 1–7 across Family, Friends, Significant Other. Cutoffs: Dahlem et al. (1991).</p>
+        <p class="card-note">MSPSS (Zimet et al., 1988) — 12 items across Family, Friends, and Significant Other subscales. Item avg classified by Dahlem et al. (1991) cutoffs.</p>
       </div>
     </div>
 
+    <!-- PA vs FLOURISHING SCATTER -->
     <div class="card">
-      <div class="card-title">Physical activity vs. flourishing — scatter plot</div>
-      <div style="position:relative;height:290px"><canvas id="cScatter" role="img" aria-label="Scatter plot of MET-min per week vs Flourishing Scale total">Scatter of IPAQ MET vs FS score for all respondents.</canvas></div>
-      <p class="card-note">x = total MET-min/wk; y = FS total (8–56). r = <strong>${rMF}</strong> — ${corrStr(rMF).toLowerCase()} ${rMF>=0?'positive':'negative'} association. Each point = 1 respondent.</p>
+      <div class="card-title">Physical activity vs. flourishing — individual data points</div>
+      <div style="position:relative;height:280px"><canvas id="cScatter" role="img" aria-label="Scatter plot of IPAQ MET-minutes per week vs Flourishing Scale total score">Scatter of physical activity (MET-min/wk) against FS total score for all respondents.</canvas></div>
+      <p class="card-note">Each point = one respondent. x = total MET-min/wk (IPAQ-SF scoring). y = Flourishing Scale total (8–56). Pearson r = <strong>${rMETvsFS}</strong> — ${corrStrength(rMETvsFS).toLowerCase()} ${rMETvsFS>=0?'positive':'negative'} linear association.</p>
     </div>
 
+    <!-- MEANS BY WORK ARRANGEMENT -->
     <div class="card">
       <div class="card-title">Mean scale scores by work arrangement</div>
       <div class="dtable-wrap">
         <table class="dtable">
           <thead><tr><th>Work arrangement</th><th>n</th><th>Mean FS</th><th>Mean MBI-EE</th><th>Mean MSPSS</th><th>Mean MET-min/wk</th></tr></thead>
-          <tbody>${wRows||'<tr><td colspan="6" style="color:var(--text3)">No data</td></tr>'}</tbody>
+          <tbody>${workTableRows||'<tr><td colspan="6" style="color:var(--text3)">No data</td></tr>'}</tbody>
         </table>
       </div>
+      <p class="card-note">Higher FS and lower MBI indicate better psychological well-being. Differences across work arrangements may inform group comparisons in moderated mediation analysis.</p>
     </div>
   </div>
 
-  <!-- SCALES TAB -->
+  <!-- ═══ TAB: SCALE DISTRIBUTIONS ═══ -->
   <div id="tab-scales" class="tab-pane">
-    <div class="card"><div class="card-title">Flourishing Scale — mean item scores (1–7)</div>${scaleBars(fsMns,fsLbls,7,'#2a9d8f')}<p class="card-note">1 = strongly disagree, 7 = strongly agree. Higher = greater flourishing on that dimension.</p></div>
-    <div class="card"><div class="card-title">MBI Emotional Exhaustion — mean item scores (0–6)</div>${scaleBars(mbiMns,mbiLbls,6,'#d95a3f')}<p class="card-note">0 = never, 6 = every day. Higher = greater emotional exhaustion.</p></div>
-    <div class="card"><div class="card-title">MSPSS — mean item scores (1–7)</div>${scaleBars(mspMns,mspLbls,7,'#3a6db7')}<p class="card-note">1 = very strongly disagree, 7 = very strongly agree. Subscales: SO (1,2,5,10), Family (3,4,8,11), Friends (6,7,9,12).</p></div>
+
+    <div class="card">
+      <div class="card-title">Flourishing Scale — mean item scores (1–7)</div>
+      ${scaleItemBars(fsMeans,fsLabels,7,'#1a8c6b')}
+      <p class="card-note">FS items rated 1 (strongly disagree) – 7 (strongly agree). Bar length proportional to max = 7. Higher = greater flourishing on that dimension.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">MBI Emotional Exhaustion — mean item scores (0–6)</div>
+      ${scaleItemBars(mbiMeans,mbiLabels,6,'#e8401c')}
+      <p class="card-note">MBI-EE items rated 0 (never) – 6 (every day). Bar length proportional to max = 6. Higher = greater emotional exhaustion.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">MSPSS — mean item scores (1–7)</div>
+      ${scaleItemBars(mpssMeans,mspssLabels,7,'#2d5a9e')}
+      <p class="card-note">MSPSS items rated 1 (very strongly disagree) – 7 (very strongly agree). Subscales: Items 1,2,5,10 = Significant Other; Items 3,4,8,11 = Family; Items 6,7,9,12 = Friends.</p>
+    </div>
   </div>
 
-  <!-- DEMOGRAPHICS TAB -->
+  <!-- ═══ TAB: DEMOGRAPHICS ═══ -->
   <div id="tab-demo" class="tab-pane">
     <div class="chart-row">
-      <div class="card"><div class="card-title">Sex</div>${freqBars(sexF,n,'#6a5fd3')}</div>
-      <div class="card"><div class="card-title">Civil status</div>${freqBars(civilF,n,'#6a5fd3')}</div>
+      <div class="card"><div class="card-title">Sex</div>${freqBars(sexF,n,'#534AB7')}</div>
+      <div class="card"><div class="card-title">Civil status</div>${freqBars(civilF,n,'#534AB7')}</div>
     </div>
     <div class="chart-row">
-      <div class="card"><div class="card-title">Work arrangement</div>${freqBars(workF,n,'#3a6db7')}</div>
-      <div class="card"><div class="card-title">Work schedule</div>${freqBars(schedF,n,'#3a6db7')}</div>
+      <div class="card"><div class="card-title">Work arrangement</div>${freqBars(workF,n,'#2d5a9e')}</div>
+      <div class="card"><div class="card-title">Work schedule</div>${freqBars(schedF,n,'#2d5a9e')}</div>
     </div>
     <div class="chart-row">
-      <div class="card"><div class="card-title">Tenure in organization</div>${freqBars(tenureF,n,'#2a9d8f')}</div>
-      <div class="card"><div class="card-title">Job position level</div>${freqBars(posF,n,'#2a9d8f')}</div>
+      <div class="card"><div class="card-title">Tenure in current organization</div>${freqBars(tenureF,n,'#1a8c6b')}</div>
+      <div class="card"><div class="card-title">Job position level</div>${freqBars(posF,n,'#1a8c6b')}</div>
     </div>
     <div class="chart-row">
-      <div class="card"><div class="card-title">Employment sector</div>${freqBars(sectorF,n,'#d4a017')}</div>
-      <div class="card"><div class="card-title">Self-reported PA level</div>${freqBars(paF,n,'#d4a017')}</div>
+      <div class="card"><div class="card-title">Employment sector</div>${freqBars(sectorF,n,'#c67c00')}</div>
+      <div class="card"><div class="card-title">Self-reported PA level</div>${freqBars(paF,n,'#c67c00')}</div>
     </div>
-    <div class="card"><div class="card-title">Job type</div>${freqBars(jobF,n,'#d95a3f',true)}</div>
+    <div class="card"><div class="card-title">Job type</div>${freqBars(jobF,n,'#e8401c',true)}</div>
   </div>
 
-  <!-- CORRELATIONS TAB -->
+  <!-- ═══ TAB: CORRELATIONS & STATS ═══ -->
   <div id="tab-corr" class="tab-pane">
+
     <div class="card">
       <div class="card-title">Bivariate Pearson correlations (r)</div>
       <div class="corr-grid">
-        ${[[rMF,'PA (MET-min/wk)','Flourishing (FS)'],[rBF,'Burnout (MBI-EE)','Flourishing (FS)'],[rSF,'Social support (MSPSS)','Flourishing (FS)'],[rMB,'PA (MET-min/wk)','Burnout (MBI-EE)'],[rBS,'Burnout (MBI-EE)','Social support (MSPSS)']].map(([r,x,y])=>`
-        <div class="corr-cell" style="--cc:${corrCol(r)}">
-          <div class="corr-r" style="color:${corrCol(r)}">${r}</div>
-          <div class="corr-pair">${x} ↔ ${y}</div>
-          <div class="corr-str" style="color:${corrCol(r)}">${corrStr(r)} ${r>=0?'positive':'negative'}</div>
+        ${[[rMETvsFS,'PA (MET-min/wk)','Flourishing (FS total)'],[rMBIvsFS,'Burnout (MBI-EE)','Flourishing (FS total)'],[rMSPSSvsFS,'Social support (MSPSS)','Flourishing (FS total)'],[rMETvsMBI,'PA (MET-min/wk)','Burnout (MBI-EE)'],[rMBIvsMSP,'Burnout (MBI-EE)','Social support (MSPSS)']].map(([r,x,y])=>`
+        <div class="corr-cell" style="--corr-color:${corrColor(r)}">
+          <div class="corr-r" style="color:${corrColor(r)}">${r}</div>
+          <div class="corr-pairs">${x} ↔ ${y}</div>
+          <div class="corr-interp" style="color:${corrColor(r)}">${corrStrength(r)} ${r>=0?'positive':'negative'}</div>
         </div>`).join('')}
       </div>
       <p class="card-note">⚠ Preliminary bivariate Pearson r only. Final hypothesis testing (H1–H4) requires PROCESS Macro Model 14 with 5,000 bootstrap resamples in SPSS v29 as specified in Chapter 3. Strength: |r| ≥.5 Strong, .3–.49 Moderate, .1–.29 Weak.</p>
     </div>
+
     <div class="card">
-      <div class="card-title">Descriptive statistics table</div>
+      <div class="card-title">Descriptive statistics</div>
       <div class="dtable-wrap">
         <table class="dtable">
           <thead><tr><th>Variable</th><th>n</th><th>Min</th><th>Max</th><th>Mean</th><th>SD</th><th>Possible range</th></tr></thead>
-          <tbody>
-            <tr><td>Flourishing Scale (FS total)</td><td>${fss.length}</td><td>${Math.min(...fss)}</td><td>${Math.max(...fss)}</td><td>${avgFS.toFixed(1)}</td><td>${sdFS.toFixed(1)}</td><td>8–56</td></tr>
-            <tr><td>Burnout / EE (MBI total)</td><td>${mbis.length}</td><td>${Math.min(...mbis)}</td><td>${Math.max(...mbis)}</td><td>${avgMBI.toFixed(1)}</td><td>${sdMBI.toFixed(1)}</td><td>0–42</td></tr>
-            <tr><td>Social Support (MSPSS total)</td><td>${mspTs.length}</td><td>${Math.min(...mspTs)}</td><td>${Math.max(...mspTs)}</td><td>${avgMSP.toFixed(1)}</td><td>${sdMSP.toFixed(1)}</td><td>12–84</td></tr>
-            <tr><td>Physical Activity (MET-min/wk)</td><td>${mets.length}</td><td>${Math.min(...mets)}</td><td>${Math.max(...mets).toLocaleString()}</td><td>${Math.round(avgMET).toLocaleString()}</td><td>${Math.round(sd(mets)).toLocaleString()}</td><td>IPAQ-SF</td></tr>
-            <tr><td>Age (years)</td><td>${ages.length}</td><td>${Math.min(...ages)}</td><td>${Math.max(...ages)}</td><td>${avgAge}</td><td>${r1(sd(ages)).toFixed(1)}</td><td>—</td></tr>
-          </tbody>
+          <tbody>${descRows}</tbody>
         </table>
       </div>
     </div>
+
     <div class="card">
       <div class="card-title">Level classification summary</div>
       <div class="dtable-wrap">
         <table class="dtable">
-          <thead><tr><th>Scale</th><th>Low — n (%)</th><th>Moderate — n (%)</th><th>High — n (%)</th></tr></thead>
+          <thead><tr><th>Scale</th><th>Low</th><th>Moderate</th><th>High</th></tr></thead>
           <tbody>
-            <tr><td>Physical activity (IPAQ)</td><td>${iF.Low||0} (${pct(iF.Low||0,n)}%)</td><td>${iF.Moderate||0} (${pct(iF.Moderate||0,n)}%)</td><td>${iF.High||0} (${pct(iF.High||0,n)}%)</td></tr>
-            <tr><td>Flourishing (FS)</td><td>${fsF.Low||0} (${pct(fsF.Low||0,n)}%)</td><td>${fsF.Moderate||0} (${pct(fsF.Moderate||0,n)}%)</td><td>${fsF.High||0} (${pct(fsF.High||0,n)}%)</td></tr>
+            <tr><td>Physical activity (IPAQ-SF)</td><td>${ipaqF.Low||0} (${pct(ipaqF.Low||0,n)}%)</td><td>${ipaqF.Moderate||0} (${pct(ipaqF.Moderate||0,n)}%)</td><td>${ipaqF.High||0} (${pct(ipaqF.High||0,n)}%)</td></tr>
+            <tr><td>Flourishing Scale (FS)</td><td>${fsF.Low||0} (${pct(fsF.Low||0,n)}%)</td><td>${fsF.Moderate||0} (${pct(fsF.Moderate||0,n)}%)</td><td>${fsF.High||0} (${pct(fsF.High||0,n)}%)</td></tr>
             <tr><td>Burnout / EE (MBI)</td><td>${mbiF.Low||0} (${pct(mbiF.Low||0,n)}%)</td><td>${mbiF.Moderate||0} (${pct(mbiF.Moderate||0,n)}%)</td><td>${mbiF.High||0} (${pct(mbiF.High||0,n)}%)</td></tr>
-            <tr><td>Social support (MSPSS)</td><td>${mspF.Low||0} (${pct(mspF.Low||0,n)}%)</td><td>${mspF.Moderate||0} (${pct(mspF.Moderate||0,n)}%)</td><td>${mspF.High||0} (${pct(mspF.High||0,n)}%)</td></tr>
+            <tr><td>Social support (MSPSS)</td><td>${mspssF.Low||0} (${pct(mspssF.Low||0,n)}%)</td><td>${mspssF.Moderate||0} (${pct(mspssF.Moderate||0,n)}%)</td><td>${mspssF.High||0} (${pct(mspssF.High||0,n)}%)</td></tr>
           </tbody>
         </table>
       </div>
     </div>
+
   </div>
   `;
 
-  // Draw charts after DOM is ready
+  /* ── Draw charts after DOM settles ────────────────────── */
   requestAnimationFrame(()=>{
-    mkDonut('cIPAQ',[iF.High||0,iF.Moderate||0,iF.Low||0],['#2a9d8f','#d4a017','#d95a3f'],['High','Moderate','Low'],n);
-    mkDonut('cFS',[fsF.High||0,fsF.Moderate||0,fsF.Low||0],['#2a9d8f','#d4a017','#d95a3f'],['High','Moderate','Low'],n);
-    mkDonut('cMBI',[mbiF.Low||0,mbiF.Moderate||0,mbiF.High||0],['#2a9d8f','#d4a017','#d95a3f'],['Low','Moderate','High'],n);
-    mkDonut('cMSPSS',[mspF.High||0,mspF.Moderate||0,mspF.Low||0],['#2a9d8f','#d4a017','#d95a3f'],['High','Moderate','Low'],n);
-    mkScatter('cScatter',mets.map((m,i)=>({x:m,y:fss[i]})));
+    makeDonut('cIPAQ',[ipaqF.High||0,ipaqF.Moderate||0,ipaqF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
+    makeDonut('cFS',[fsF.High||0,fsF.Moderate||0,fsF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
+    makeDonut('cMBI',[mbiF.Low||0,mbiF.Moderate||0,mbiF.High||0],['#1a8c6b','#c67c00','#e8401c'],['Low','Moderate','High']);
+    makeDonut('cMSPSS',[mspssF.High||0,mspssF.Moderate||0,mspssF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
+    makeScatter('cScatter',scatterPts,'MET-min / week (physical activity)','Flourishing Scale total score');
   });
 }
 
-/* ─── TAB SWITCHER ────────────────────────────────── */
+/* ── TAB SWITCHER ────────────────────────────────────────── */
 function switchTab(name){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  document.querySelector(`.tab[onclick*="${name}"]`)?.classList.add('active');
-  document.getElementById('tab-'+name)?.classList.add('active');
+  const btn=document.querySelector(`.tab[onclick*="${name}"]`);
+  if(btn) btn.classList.add('active');
+  const pane=document.getElementById('tab-'+name);
+  if(pane) pane.classList.add('active');
 }
 
-/* ─── LOAD ────────────────────────────────────────── */
+/* ── LOAD ────────────────────────────────────────────────── */
 async function loadData(){
-  const dot=document.getElementById('sDot'), stxt=document.getElementById('sTxt'), stime=document.getElementById('sTime');
-  dot.className='sdot loading'; stxt.textContent='Connecting securely…'; stime.textContent='';
-  document.getElementById('mainArea').innerHTML=`<div class="loading-state"><div class="spinner"></div><div class="load-lbl">Securely retrieving all Airtable responses through Anthropic API. This may take 10–20 seconds…</div></div>`;
-  
+  const dot=document.getElementById('statusDot');
+  const stxt=document.getElementById('statusText');
+  const stime=document.getElementById('statusTime');
+  dot.className='status-dot loading';
+  stxt.textContent='Fetching responses from Airtable…';
+  stime.textContent='';
+  document.getElementById('mainArea').innerHTML=`<div class="loading-state"><div class="spinner"></div><div class="loading-label">Loading survey data…</div></div>`;
   try {
-    const fields = await fetchWithRetry();
-    dot.className='sdot'; stxt.textContent=fields.length+' responses loaded successfully'; stime.textContent='Updated: '+new Date().toLocaleTimeString();
-    renderDashboard(fields);
+    const records=await fetchAll();
+    dot.className='status-dot';
+    stxt.textContent=`${records.length} responses loaded`;
+    stime.textContent='Last updated: '+new Date().toLocaleTimeString();
+    renderDashboard(records);
   } catch(e){
-    dot.className='sdot error'; stxt.textContent='Connection failed';
-    document.getElementById('mainArea').innerHTML=`<div class="error-box">
-      <h3>Connection Error</h3>
-      <p>Unable to load data from Airtable. This dashboard uses Anthropic API as a secure proxy to bypass browser restrictions. Please check your internet connection and try again.</p>
-      <code>${e.message || 'Unknown error occurred'}</code>
-    </div>`;
-    console.error('Load data error:', e);
+    dot.className='status-dot error';
+    stxt.textContent='Error: '+e.message;
+    document.getElementById('mainArea').innerHTML=`<div class="error-state"><div class="err-ico">⚠</div><div style="font-size:15px;color:var(--text)">Could not load data</div><p>${e.message}</p></div>`;
   }
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', loadData);
+loadData();
 </script>
 </body>
 </html>
