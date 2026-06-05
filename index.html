@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychological Pathways to Flourishing — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#f7f5f0;--surface:#fff;--surface2:#f0ede8;--border:#e3dfd8;
+  --text:#1a1814;--text2:#6b6660;--text3:#9e9890;
+  --accent:#2d5a9e;--red:#e8401c;--green:#1a8c6b;--amber:#c67c00;--purple:#534AB7;
+  --r:12px;--rm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden}
+
+/* HEADER */
+.app-header{background:var(--text);color:#fff;padding:26px 32px 20px;position:relative;overflow:hidden}
+.app-header::before{content:'';position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hdr-lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+.hdr-title{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.2;color:#fff;max-width:540px}
+.hdr-title em{font-style:italic;color:rgba(255,255,255,.7)}
+.hdr-meta{margin-top:8px;font-size:12px;color:rgba(255,255,255,.4);display:flex;gap:18px;flex-wrap:wrap}
+.hdr-actions{position:absolute;top:22px;right:28px;display:flex;gap:8px}
+.hbtn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--rm);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s}
+.hbtn:hover{background:rgba(255,255,255,.14);color:#fff}
+
+/* STATUS */
+.status-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.sdot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0}
+.sdot.loading{background:#f59e0b;animation:pulse 1s infinite}
+.sdot.error{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.stxt{font-size:12px;color:var(--text2)}
+.stime{font-size:11px;color:var(--text3);margin-left:auto}
+
+/* MAIN */
+.main{padding:22px 32px;max-width:1100px}
+
+/* KPIs */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--kc,var(--accent))}
+.kpi-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.kpi-val{font-size:26px;font-weight:300;letter-spacing:-.02em;line-height:1}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* TABS */
+.tabs{display:flex;gap:2px;margin-bottom:18px;border-bottom:1px solid var(--border)}
+.tab{font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;margin-bottom:-1px;transition:all .15s;border-radius:var(--rm) var(--rm) 0 0}
+.tab:hover{color:var(--text2);background:var(--surface2)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;background:var(--surface)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:14px}
+.card-note{font-size:11px;color:var(--text3);line-height:1.6;margin-top:10px}
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:16px}
+
+/* DONUT */
+.donut-area{display:flex;align-items:center;gap:16px}
+.donut-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-cval{font-size:18px;font-weight:300}
+.donut-clbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:7px}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.leg-sw{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.leg-lbl{color:var(--text2);flex:1}
+.leg-n{font-weight:500}
+.leg-pct{font-size:10px;color:var(--text3)}
+
+/* BARS */
+.bar-list{display:flex;flex-direction:column;gap:9px}
+.bar-item{display:flex;align-items:center;gap:8px}
+.bar-lbl{font-size:11px;color:var(--text2);width:128px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-lbl.wide{width:172px}
+.bar-track{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.bar-val{font-size:11px;font-weight:500;min-width:36px;text-align:right}
+.bar-count{font-size:10px;color:var(--text3);min-width:38px;text-align:right}
+
+/* CORR */
+.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.corr-cell{background:var(--surface2);border-radius:var(--r);padding:16px 18px;border-left:3px solid var(--cc,var(--border))}
+.corr-r{font-size:28px;font-weight:300;letter-spacing:-.02em}
+.corr-pair{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4}
+.corr-str{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+
+/* TABLE */
+.dtable-wrap{overflow-x:auto}
+table.dtable{width:100%;border-collapse:collapse;font-size:12px}
+table.dtable th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+table.dtable td{padding:8px 10px;border-bottom:1px solid var(--surface2)}
+table.dtable tr:last-child td{border-bottom:none}
+table.dtable tr:hover td{background:var(--surface2)}
+
+/* LOADING / ERROR */
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;gap:14px}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-lbl{font-size:13px;color:var(--text2);text-align:center;max-width:340px;line-height:1.6}
+.error-box{padding:50px 32px;text-align:center}
+.error-box h3{font-size:16px;color:var(--text);margin-bottom:8px}
+.error-box p{font-size:13px;color:var(--text2);max-width:400px;margin-inline:auto;line-height:1.7}
+.error-box code{font-size:11px;background:var(--surface2);padding:10px 14px;border-radius:var(--rm);display:block;margin-top:12px;text-align:left;word-break:break-all;color:var(--red)}
+
+@media(max-width:640px){
+  .app-header{padding:18px 16px 14px}
+  .hdr-actions{position:static;margin-top:10px}
+  .main{padding:14px 14px}
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="hdr-lbl">Research Dashboard · Mapúa University · 2026</div>
+  <h1 class="hdr-title">Psychological Pathways to <em>Flourishing</em></h1>
+  <div class="hdr-meta">
+    <span>Jolina U. Villalobos, RPm · MA Psychology</span>
+    <span>N = <span id="hN">—</span> Filipino workers</span>
+    <span>IPAQ-SF · FS · MBI · MSPSS</span>
+  </div>
+  <div class="hdr-actions">
+    <button class="hbtn" onclick="loadData()">↺ Refresh</button>
+  </div>
+</header>
+
+<div class="status-bar">
+  <div class="sdot loading" id="sDot"></div>
+  <div class="stxt" id="sTxt">Connecting…</div>
+  <div class="stime" id="sTime"></div>
+</div>
+
+<div class="main" id="mainArea">
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <div class="load-lbl">Loading survey responses from Airtable…</div>
+  </div>
+</div>
+
+<script>
+/* ─── CONFIG ──────────────────────────────────────── */
+const AT_TOKEN = 'patGENwLuAKtovqaI.13401f4b0161b141f8723f616f0ead192519287f178b17f6f23ceb5ac3137a0d';
+const AT_BASE  = 'app4Hmc0skWBEvxCD';
+const AT_TABLE = 'Responses';
+
+/* ─── MATH HELPERS ────────────────────────────────── */
+const mean = a => a.length ? a.reduce((s,v)=>s+v,0)/a.length : 0;
+const sd   = a => { if(a.length<2) return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1)); };
+const pearson = (xs,ys) => {
+  if(xs.length<3) return 0;
+  const mx=mean(xs),my=mean(ys); let n=0,dx=0,dy=0;
+  xs.forEach((x,i)=>{const a=x-mx,b=ys[i]-my;n+=a*b;dx+=a*a;dy+=b*b;});
+  if(!dx||!dy) return 0;
+  return +(n/Math.sqrt(dx*dy)).toFixed(2);
+};
+const freq = arr => { const m={}; arr.filter(v=>v!=null&&v!=='').forEach(v=>m[v]=(m[v]||0)+1); return m; };
+const pct  = (n,t) => t ? Math.round(n/t*100) : 0;
+const r1   = v => Math.round(v*10)/10;
+
+/* ─── SCORE COMPUTATIONS (per thesis ch.3) ────────── */
+function calcMET(f){
+  const vD=+(f.IPAQ_Q1_Vigorous_Days||0), vDK=f.IPAQ_Q2_DK;
+  const mD=+(f.IPAQ_Q3_Moderate_Days||0), mDK=f.IPAQ_Q4_DK;
+  const wD=+(f.IPAQ_Q5_Walking_Days||0),  wDK=f.IPAQ_Q6_DK;
+  const vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60++(f.IPAQ_Q2_Vigorous_Minutes||0)):0;
+  const mMin=(!mDK&&mD>0)?(+(f.IPAQ_Q4_Moderate_Hours||0)*60++(f.IPAQ_Q4_Moderate_Minutes||0)):0;
+  const wMin=(!wDK&&wD>0)?(+(f.IPAQ_Q6_Walking_Hours||0)*60++(f.IPAQ_Q6_Walking_Minutes||0)):0;
+  return Math.round(8.0*vMin*vD + 4.0*mMin*mD + 3.3*wMin*wD);
+}
+function vigMET(f){
+  const vD=+(f.IPAQ_Q1_Vigorous_Days||0), vDK=f.IPAQ_Q2_DK;
+  const vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60++(f.IPAQ_Q2_Vigorous_Minutes||0)):0;
+  return 8.0*vMin*vD;
+}
+function metLevel(met,vig){ return (vig>=1500||met>=3000)?'High':met>=600?'Moderate':'Low'; }
+function calcFS(f)    { let s=0; for(let i=1;i<=8; i++) s+=+(f['FS_Q'+i]||0); return s; }
+function calcMBI(f)   { let s=0; for(let i=1;i<=7; i++) s+=+(f['MBI_Q'+i]||0); return s; }
+function calcMSPSS(f) { let s=0; for(let i=1;i<=12;i++) s+=+(f['MSPSS_Q'+i]||0); return s; }
+function mbiLevel(v)  { return v<=16?'Low':v<=26?'Moderate':'High'; }
+function fsLevel(v)   { return v>=48?'High':v>=33?'Moderate':'Low'; }
+function mspssLevel(a){ return a>=5.5?'High':a>=2.95?'Moderate':'Low'; }
+function corrStr(r)   { const a=Math.abs(r); return a>=.5?'Strong':a>=.3?'Moderate':a>=.1?'Weak':'Negligible'; }
+function corrCol(r)   { return r>=0.1?'#1a8c6b':r<=-0.1?'#e8401c':'#9e9890'; }
+
+/* ─── FETCH ALL PAGES via Claude API ─────────────────
+   The browser cannot call api.airtable.com directly due to
+   CORS. We ask Claude (via the Anthropic API) to fetch and
+   return the data as JSON. Claude's server-side request is
+   not subject to browser CORS restrictions.
+───────────────────────────────────────────────────── */
+async function fetchViaClaudeAPI(){
+  const systemPrompt = `You are a precise data-fetching assistant.
+The user will ask you to fetch Airtable data.
+Fetch ALL pages (follow offset) from the Airtable REST API and return ONLY a valid JSON array of record field objects — no markdown, no explanation, no backticks.
+Each element should be the "fields" object of one Airtable record.
+The array must start with [ and end with ].`;
+
+  const userMsg = `Fetch all records from Airtable.
+Base ID: ${AT_BASE}
+Table: ${AT_TABLE}
+Token: ${AT_TOKEN}
+
+Use GET https://api.airtable.com/v0/${AT_BASE}/${encodeURIComponent(AT_TABLE)}?pageSize=100
+Header: Authorization: Bearer ${AT_TOKEN}
+
+If there is an "offset" field in the response, fetch the next page with ?pageSize=100&offset=OFFSET_VALUE and concatenate all records.
+Return ONLY a JSON array of field objects, no extra text.`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 16000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMsg }]
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(()=>({}));
+    throw new Error('Anthropic API error: ' + (err.error?.message || response.status));
+  }
+
+  const data = await response.json();
+  const rawText = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+
+  // Strip any accidental markdown fences
+  const clean = rawText.replace(/```json|```/gi,'').trim();
+  let parsed;
+  try { parsed = JSON.parse(clean); }
+  catch(e) { throw new Error('Could not parse Airtable data from Claude response. Raw: '+clean.slice(0,300)); }
+
+  if (!Array.isArray(parsed)) throw new Error('Expected array from Claude, got: '+typeof parsed);
+  return parsed; // array of field objects
+}
+
+/* ─── CHART REGISTRY ──────────────────────────────── */
+const charts={};
+function dc(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+
+function mkDonut(id,data,colors,labels,n){
+  dc(id); const ctx=document.getElementById(id); if(!ctx)return;
+  charts[id]=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,n)+'%)'}}}}
+  });
+}
+function mkScatter(id,pts){
+  dc(id); const ctx=document.getElementById(id); if(!ctx)return;
+  charts[id]=new Chart(ctx,{
+    type:'scatter',
+    data:{datasets:[{data:pts,backgroundColor:'rgba(45,90,158,.5)',pointRadius:5,pointHoverRadius:7,pointBorderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'MET: '+Math.round(c.raw.x).toLocaleString()+', FS: '+Math.round(c.raw.y)}}},
+      scales:{
+        x:{title:{display:true,text:'MET-min / week (IPAQ-SF)',font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}},
+        y:{title:{display:true,text:'Flourishing Scale total score',font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}}
+      }}
+  });
+}
+
+/* ─── BAR HELPERS ─────────────────────────────────── */
+function freqBars(obj,n,color,wide){
+  const items=Object.entries(obj).sort((a,b)=>b[1]-a[1]);
+  const mx=items[0]?.[1]||1;
+  return '<div class="bar-list">'+items.map(([k,v])=>`
+    <div class="bar-item">
+      <div class="bar-lbl${wide?' wide':''}" title="${k}">${k}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/mx*100)}%;background:${color}"></div></div>
+      <div class="bar-val">${v}</div>
+      <div class="bar-count">(${pct(v,n)}%)</div>
+    </div>`).join('')+'</div>';
+}
+function scaleBars(means,labels,max,color){
+  return '<div class="bar-list">'+means.map((m,i)=>`
+    <div class="bar-item">
+      <div class="bar-lbl wide" title="${labels[i]}">${labels[i]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(m/max*100)}%;background:${color}"></div></div>
+      <div class="bar-val">${m.toFixed(2)}</div>
+    </div>`).join('')+'</div>';
+}
+
+/* ─── RENDER ──────────────────────────────────────── */
+function renderDashboard(fields){
+  const n=fields.length;
+  if(n===0){ document.getElementById('mainArea').innerHTML='<div class="error-box"><h3>No responses yet</h3><p>No records found in the Airtable. Check that the table name is "Responses" and data has been submitted.</p></div>'; return; }
+
+  // Computed scores
+  const mets  = fields.map(f=>calcMET(f));
+  const vigs  = fields.map(f=>vigMET(f));
+  const fss   = fields.map(f=>calcFS(f));
+  const mbis  = fields.map(f=>calcMBI(f));
+  const mspTs = fields.map(f=>calcMSPSS(f));
+  const mspAs = mspTs.map(t=>t/12);
+
+  const ipaqLv = mets.map((m,i)=>metLevel(m,vigs[i]));
+  const fsLv   = fss.map(v=>fsLevel(v));
+  const mbiLv  = mbis.map(v=>mbiLevel(v));
+  const mspLv  = mspAs.map(v=>mspssLevel(v));
+
+  // Frequencies
+  const iF=freq(ipaqLv), fsF=freq(fsLv), mbiF=freq(mbiLv), mspF=freq(mspLv);
+  const sexF=freq(fields.map(f=>f.Sex));
+  const civilF=freq(fields.map(f=>f.Civil_Status));
+  const workF=freq(fields.map(f=>f.Work_Arrangement));
+  const schedF=freq(fields.map(f=>f.Work_Schedule));
+  const tenureF=freq(fields.map(f=>f.Tenure));
+  const posF=freq(fields.map(f=>f.Job_Position));
+  const sectorF=freq(fields.map(f=>f.Sector));
+  const paF=freq(fields.map(f=>f.Physical_Activity_Level));
+  const jobF=freq(fields.map(f=>f.Job_Type));
+
+  // Stats
+  const avgFS=mean(fss), sdFS=sd(fss);
+  const avgMBI=mean(mbis), sdMBI=sd(mbis);
+  const avgMSP=mean(mspTs), sdMSP=sd(mspTs);
+  const avgMET=mean(mets);
+  const ages=fields.map(f=>+(f.Age||0)).filter(v=>v>0);
+  const avgAge=Math.round(mean(ages));
+
+  // Correlations
+  const rMF=pearson(mets,fss), rBF=pearson(mbis,fss), rSF=pearson(mspTs,fss);
+  const rMB=pearson(mets,mbis), rBS=pearson(mbis,mspTs);
+
+  // Item means
+  const fsLbls=['Purposeful life','Supportive relationships','Engaged & interested','Contributes to others','Competent & capable','Good person / good life','Optimistic about future','People respect me'];
+  const mbiLbls=['Emotionally drained','People require great effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by direct contact','End of my rope'];
+  const mspLbls=['Special person when in need','Share joys and sorrows','Family tries to help','Emotional help from family','Person – real comfort','Friends try to help','Count on friends','Talk problems – family','Friends share joys/sorrows','Special person cares','Family helps with decisions','Talk problems – friends'];
+
+  const iMeans=(pref,cnt)=>Array.from({length:cnt},(_,i)=>mean(fields.map(f=>+(f[pref+(i+1)]||0))));
+  const fsMns=iMeans('FS_Q',8), mbiMns=iMeans('MBI_Q',7), mspMns=iMeans('MSPSS_Q',12);
+
+  // By-work table
+  const arrs=[...new Set(fields.map(f=>f.Work_Arrangement).filter(Boolean))];
+  const wRows=arrs.map(a=>{
+    const g=fields.filter(f=>f.Work_Arrangement===a);
+    if(!g.length) return '';
+    return `<tr><td><strong>${a}</strong></td><td>${g.length}</td>
+      <td>${mean(g.map(f=>calcFS(f))).toFixed(1)}</td>
+      <td>${mean(g.map(f=>calcMBI(f))).toFixed(1)}</td>
+      <td>${mean(g.map(f=>calcMSPSS(f))).toFixed(1)}</td>
+      <td>${Math.round(mean(g.map(f=>calcMET(f)))).toLocaleString()}</td></tr>`;
+  }).join('');
+
+  // Update header
+  document.getElementById('hN').textContent=n;
+
+  document.getElementById('mainArea').innerHTML=`
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi" style="--kc:#2d5a9e"><div class="kpi-lbl">Total responses</div><div class="kpi-val">${n}</div><div class="kpi-sub">Target N = 300</div></div>
+    <div class="kpi" style="--kc:#6b6660"><div class="kpi-lbl">Mean age</div><div class="kpi-val">${avgAge}</div><div class="kpi-sub">SD = ${r1(sd(ages))}&nbsp;yrs</div></div>
+    <div class="kpi" style="--kc:#1a8c6b"><div class="kpi-lbl">Avg flourishing (FS)</div><div class="kpi-val">${avgFS.toFixed(1)}</div><div class="kpi-sub">SD = ${sdFS.toFixed(1)}&nbsp;/ 56</div></div>
+    <div class="kpi" style="--kc:#e8401c"><div class="kpi-lbl">Avg burnout (MBI-EE)</div><div class="kpi-val">${avgMBI.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMBI.toFixed(1)}&nbsp;/ 42</div></div>
+    <div class="kpi" style="--kc:#c67c00"><div class="kpi-lbl">Avg social support</div><div class="kpi-val">${avgMSP.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMSP.toFixed(1)}&nbsp;/ 84</div></div>
+    <div class="kpi" style="--kc:#534AB7"><div class="kpi-lbl">Avg MET-min/wk</div><div class="kpi-val">${Math.round(avgMET).toLocaleString()}</div><div class="kpi-sub">IPAQ-SF computed</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab" onclick="switchTab('scales')">Scale details</button>
+    <button class="tab" onclick="switchTab('demo')">Demographics</button>
+    <button class="tab" onclick="switchTab('corr')">Correlations &amp; stats</button>
+  </div>
+
+  <!-- OVERVIEW TAB -->
+  <div id="tab-overview" class="tab-pane active">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Physical activity level (IPAQ-SF)</div>
+        <div class="donut-area">
+          <div class="donut-wrap">
+            <canvas id="cIPAQ" width="110" height="110" role="img" aria-label="Donut chart showing IPAQ physical activity distribution">${iF.High||0} High, ${iF.Moderate||0} Moderate, ${iF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+          </div>
+          <div class="donut-legend">
+            <div class="leg-item"><div class="leg-sw" style="background:#1a8c6b"></div><div class="leg-lbl">High</div><div class="leg-n">${iF.High||0}</div><div class="leg-pct">${pct(iF.High||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#c67c00"></div><div class="leg-lbl">Moderate</div><div class="leg-n">${iF.Moderate||0}</div><div class="leg-pct">${pct(iF.Moderate||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#e8401c"></div><div class="leg-lbl">Low</div><div class="leg-n">${iF.Low||0}</div><div class="leg-pct">${pct(iF.Low||0,n)}%</div></div>
+          </div>
+        </div>
+        <p class="card-note">High ≥3,000 MET-min/wk (or vig ≥1,500), Moderate 600–2,999, Low &lt;600. IPAQ Research Committee (2005).</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Flourishing Scale level (FS)</div>
+        <div class="donut-area">
+          <div class="donut-wrap">
+            <canvas id="cFS" width="110" height="110" role="img" aria-label="Donut chart showing Flourishing Scale distribution">${fsF.High||0} High, ${fsF.Moderate||0} Moderate, ${fsF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+          </div>
+          <div class="donut-legend">
+            <div class="leg-item"><div class="leg-sw" style="background:#1a8c6b"></div><div class="leg-lbl">High ≥48</div><div class="leg-n">${fsF.High||0}</div><div class="leg-pct">${pct(fsF.High||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#c67c00"></div><div class="leg-lbl">Moderate 33–47</div><div class="leg-n">${fsF.Moderate||0}</div><div class="leg-pct">${pct(fsF.Moderate||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#e8401c"></div><div class="leg-lbl">Low &lt;33</div><div class="leg-n">${fsF.Low||0}</div><div class="leg-pct">${pct(fsF.Low||0,n)}%</div></div>
+          </div>
+        </div>
+        <p class="card-note">Diener &amp; Biswas-Diener (2009). 8 items × 1–7 Likert. Range 8–56.</p>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Burnout — Emotional Exhaustion (MBI-EE)</div>
+        <div class="donut-area">
+          <div class="donut-wrap">
+            <canvas id="cMBI" width="110" height="110" role="img" aria-label="Donut chart showing MBI burnout distribution">${mbiF.Low||0} Low, ${mbiF.Moderate||0} Moderate, ${mbiF.High||0} High</canvas>
+            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+          </div>
+          <div class="donut-legend">
+            <div class="leg-item"><div class="leg-sw" style="background:#1a8c6b"></div><div class="leg-lbl">Low ≤16</div><div class="leg-n">${mbiF.Low||0}</div><div class="leg-pct">${pct(mbiF.Low||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#c67c00"></div><div class="leg-lbl">Moderate 17–26</div><div class="leg-n">${mbiF.Moderate||0}</div><div class="leg-pct">${pct(mbiF.Moderate||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#e8401c"></div><div class="leg-lbl">High ≥27</div><div class="leg-n">${mbiF.High||0}</div><div class="leg-pct">${pct(mbiF.High||0,n)}%</div></div>
+          </div>
+        </div>
+        <p class="card-note">Maslach &amp; Jackson (1981). 7 EE items × 0–6 frequency. Range 0–42. Low ≤16, High ≥27.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Perceived Social Support (MSPSS)</div>
+        <div class="donut-area">
+          <div class="donut-wrap">
+            <canvas id="cMSPSS" width="110" height="110" role="img" aria-label="Donut chart showing MSPSS social support distribution">${mspF.High||0} High, ${mspF.Moderate||0} Moderate, ${mspF.Low||0} Low</canvas>
+            <div class="donut-center"><div class="donut-cval">${n}</div><div class="donut-clbl">total</div></div>
+          </div>
+          <div class="donut-legend">
+            <div class="leg-item"><div class="leg-sw" style="background:#1a8c6b"></div><div class="leg-lbl">High avg ≥5.5</div><div class="leg-n">${mspF.High||0}</div><div class="leg-pct">${pct(mspF.High||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#c67c00"></div><div class="leg-lbl">Moderate 2.95–5.49</div><div class="leg-n">${mspF.Moderate||0}</div><div class="leg-pct">${pct(mspF.Moderate||0,n)}%</div></div>
+            <div class="leg-item"><div class="leg-sw" style="background:#e8401c"></div><div class="leg-lbl">Low &lt;2.95</div><div class="leg-n">${mspF.Low||0}</div><div class="leg-pct">${pct(mspF.Low||0,n)}%</div></div>
+          </div>
+        </div>
+        <p class="card-note">Zimet et al. (1988). 12 items × 1–7 across Family, Friends, Significant Other. Cutoffs: Dahlem et al. (1991).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Physical activity vs. flourishing — scatter plot</div>
+      <div style="position:relative;height:270px"><canvas id="cScatter" role="img" aria-label="Scatter plot of MET-min per week vs Flourishing Scale total">Scatter of IPAQ MET vs FS score for all respondents.</canvas></div>
+      <p class="card-note">x = total MET-min/wk; y = FS total (8–56). r = <strong>${rMF}</strong> — ${corrStr(rMF).toLowerCase()} ${rMF>=0?'positive':'negative'} association. Each point = 1 respondent.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Mean scale scores by work arrangement</div>
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Work arrangement</th><th>n</th><th>Mean FS</th><th>Mean MBI-EE</th><th>Mean MSPSS</th><th>Mean MET-min/wk</th></tr></thead>
+          <tbody>${wRows||'<tr><td colspan="6" style="color:var(--text3)">No data</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCALES TAB -->
+  <div id="tab-scales" class="tab-pane">
+    <div class="card"><div class="card-title">Flourishing Scale — mean item scores (1–7)</div>${scaleBars(fsMns,fsLbls,7,'#1a8c6b')}<p class="card-note">1 = strongly disagree, 7 = strongly agree. Higher = greater flourishing on that dimension.</p></div>
+    <div class="card"><div class="card-title">MBI Emotional Exhaustion — mean item scores (0–6)</div>${scaleBars(mbiMns,mbiLbls,6,'#e8401c')}<p class="card-note">0 = never, 6 = every day. Higher = greater emotional exhaustion.</p></div>
+    <div class="card"><div class="card-title">MSPSS — mean item scores (1–7)</div>${scaleBars(mspMns,mspLbls,7,'#2d5a9e')}<p class="card-note">1 = very strongly disagree, 7 = very strongly agree. Subscales: SO (1,2,5,10), Family (3,4,8,11), Friends (6,7,9,12).</p></div>
+  </div>
+
+  <!-- DEMOGRAPHICS TAB -->
+  <div id="tab-demo" class="tab-pane">
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Sex</div>${freqBars(sexF,n,'#534AB7')}</div>
+      <div class="card"><div class="card-title">Civil status</div>${freqBars(civilF,n,'#534AB7')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Work arrangement</div>${freqBars(workF,n,'#2d5a9e')}</div>
+      <div class="card"><div class="card-title">Work schedule</div>${freqBars(schedF,n,'#2d5a9e')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Tenure in organization</div>${freqBars(tenureF,n,'#1a8c6b')}</div>
+      <div class="card"><div class="card-title">Job position level</div>${freqBars(posF,n,'#1a8c6b')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Employment sector</div>${freqBars(sectorF,n,'#c67c00')}</div>
+      <div class="card"><div class="card-title">Self-reported PA level</div>${freqBars(paF,n,'#c67c00')}</div>
+    </div>
+    <div class="card"><div class="card-title">Job type</div>${freqBars(jobF,n,'#e8401c',true)}</div>
+  </div>
+
+  <!-- CORRELATIONS TAB -->
+  <div id="tab-corr" class="tab-pane">
+    <div class="card">
+      <div class="card-title">Bivariate Pearson correlations (r)</div>
+      <div class="corr-grid">
+        ${[[rMF,'PA (MET-min/wk)','Flourishing (FS)'],[rBF,'Burnout (MBI-EE)','Flourishing (FS)'],[rSF,'Social support (MSPSS)','Flourishing (FS)'],[rMB,'PA (MET-min/wk)','Burnout (MBI-EE)'],[rBS,'Burnout (MBI-EE)','Social support (MSPSS)']].map(([r,x,y])=>`
+        <div class="corr-cell" style="--cc:${corrCol(r)}">
+          <div class="corr-r" style="color:${corrCol(r)}">${r}</div>
+          <div class="corr-pair">${x} ↔ ${y}</div>
+          <div class="corr-str" style="color:${corrCol(r)}">${corrStr(r)} ${r>=0?'positive':'negative'}</div>
+        </div>`).join('')}
+      </div>
+      <p class="card-note">⚠ Preliminary bivariate Pearson r only. Final hypothesis testing (H1–H4) requires PROCESS Macro Model 14 with 5,000 bootstrap resamples in SPSS v29 as specified in Chapter 3. Strength: |r| ≥.5 Strong, .3–.49 Moderate, .1–.29 Weak.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Descriptive statistics table</div>
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Variable</th><th>n</th><th>Min</th><th>Max</th><th>Mean</th><th>SD</th><th>Possible range</th></tr></thead>
+          <tbody>
+            <tr><td>Flourishing Scale (FS total)</td><td>${fss.length}</td><td>${Math.min(...fss)}</td><td>${Math.max(...fss)}</td><td>${avgFS.toFixed(1)}</td><td>${sdFS.toFixed(1)}</td><td>8–56</td></tr>
+            <tr><td>Burnout / EE (MBI total)</td><td>${mbis.length}</td><td>${Math.min(...mbis)}</td><td>${Math.max(...mbis)}</td><td>${avgMBI.toFixed(1)}</td><td>${sdMBI.toFixed(1)}</td><td>0–42</td></tr>
+            <tr><td>Social Support (MSPSS total)</td><td>${mspTs.length}</td><td>${Math.min(...mspTs)}</td><td>${Math.max(...mspTs)}</td><td>${avgMSP.toFixed(1)}</td><td>${sdMSP.toFixed(1)}</td><td>12–84</td></tr>
+            <tr><td>Physical Activity (MET-min/wk)</td><td>${mets.length}</td><td>${Math.min(...mets)}</td><td>${Math.max(...mets).toLocaleString()}</td><td>${Math.round(avgMET).toLocaleString()}</td><td>${Math.round(sd(mets)).toLocaleString()}</td><td>IPAQ-SF</td></tr>
+            <tr><td>Age (years)</td><td>${ages.length}</td><td>${Math.min(...ages)}</td><td>${Math.max(...ages)}</td><td>${avgAge}</td><td>${r1(sd(ages)).toFixed(1)}</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Level classification summary</div>
+      <div class="dtable-wrap">
+        <table class="dtable">
+          <thead><tr><th>Scale</th><th>Low — n (%)</th><th>Moderate — n (%)</th><th>High — n (%)</th></tr></thead>
+          <tbody>
+            <tr><td>Physical activity (IPAQ)</td><td>${iF.Low||0} (${pct(iF.Low||0,n)}%)</td><td>${iF.Moderate||0} (${pct(iF.Moderate||0,n)}%)</td><td>${iF.High||0} (${pct(iF.High||0,n)}%)</td></tr>
+            <tr><td>Flourishing (FS)</td><td>${fsF.Low||0} (${pct(fsF.Low||0,n)}%)</td><td>${fsF.Moderate||0} (${pct(fsF.Moderate||0,n)}%)</td><td>${fsF.High||0} (${pct(fsF.High||0,n)}%)</td></tr>
+            <tr><td>Burnout / EE (MBI)</td><td>${mbiF.Low||0} (${pct(mbiF.Low||0,n)}%)</td><td>${mbiF.Moderate||0} (${pct(mbiF.Moderate||0,n)}%)</td><td>${mbiF.High||0} (${pct(mbiF.High||0,n)}%)</td></tr>
+            <tr><td>Social support (MSPSS)</td><td>${mspF.Low||0} (${pct(mspF.Low||0,n)}%)</td><td>${mspF.Moderate||0} (${pct(mspF.Moderate||0,n)}%)</td><td>${mspF.High||0} (${pct(mspF.High||0,n)}%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  `;
+
+  // Draw charts after DOM is ready
+  requestAnimationFrame(()=>{
+    mkDonut('cIPAQ',[iF.High||0,iF.Moderate||0,iF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low'],n);
+    mkDonut('cFS',[fsF.High||0,fsF.Moderate||0,fsF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low'],n);
+    mkDonut('cMBI',[mbiF.Low||0,mbiF.Moderate||0,mbiF.High||0],['#1a8c6b','#c67c00','#e8401c'],['Low','Moderate','High'],n);
+    mkDonut('cMSPSS',[mspF.High||0,mspF.Moderate||0,mspF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low'],n);
+    mkScatter('cScatter',mets.map((m,i)=>({x:m,y:fss[i]})));
+  });
+}
+
+/* ─── TAB SWITCHER ────────────────────────────────── */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`.tab[onclick*="${name}"]`)?.classList.add('active');
+  document.getElementById('tab-'+name)?.classList.add('active');
+}
+
+/* ─── LOAD ────────────────────────────────────────── */
+async function loadData(){
+  const dot=document.getElementById('sDot'), stxt=document.getElementById('sTxt'), stime=document.getElementById('sTime');
+  dot.className='sdot loading'; stxt.textContent='Fetching data via Claude API…'; stime.textContent='';
+  document.getElementById('mainArea').innerHTML=`<div class="loading-state"><div class="spinner"></div><div class="load-lbl">Retrieving all Airtable responses through the Anthropic API bridge. This may take 10–20 seconds…</div></div>`;
+  try {
+    const fields = await fetchViaClaudeAPI();
+    dot.className='sdot'; stxt.textContent=fields.length+' responses loaded'; stime.textContent='Updated: '+new Date().toLocaleTimeString();
+    renderDashboard(fields);
+  } catch(e){
+    dot.className='sdot error'; stxt.textContent='Error loading data';
+    document.getElementById('mainArea').innerHTML=`<div class="error-box">
+      <h3>Could not load data</h3>
+      <p>The dashboard uses the Anthropic API to fetch Airtable data (bypassing browser CORS restrictions). Make sure you are viewing this file from within <strong>claude.ai</strong> as an artifact, or from a page that has Anthropic API access.</p>
+      <code>${e.message}</code>
+    </div>`;
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
