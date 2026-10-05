@@ -62,8 +62,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
 /* ── TABS ─────────── */
-.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
-.tab{font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;margin-bottom:-1px;transition:all .15s;border-radius:var(--rm) var(--rm) 0 0}
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.tab{white-space:nowrap;flex-shrink:0;font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;margin-bottom:-1px;transition:all .15s;border-radius:var(--rm) var(--rm) 0 0}
 .tab:hover{color:var(--text2);background:var(--surface2)}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;background:var(--surface)}
 .tab-pane{display:none}
@@ -179,12 +179,96 @@ table.ind-table tr.expanded-row td{background:#f0f8ff}
 /* ── SCATTER PLACEHOLDER ── */
 .scatter-ph{position:relative;height:240px}
 
+/* ── FILTER BAR ─────────── */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:20px}
+.fgroup{display:flex;flex-direction:column;gap:3px;min-width:130px}
+.fgroup label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500}
+.fgroup select{padding:6px 10px;border:1px solid var(--border);border-radius:var(--rm);font-size:12px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);cursor:pointer;outline:none}
+.fgroup select:focus{border-color:var(--accent)}
+.filter-count{font-size:12px;color:var(--text2);margin-left:auto;align-self:center}
+.filter-count strong{color:var(--text);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--rm);border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#244a83;color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.inline-ctl{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.inline-ctl select{padding:5px 8px;border:1px solid var(--border);border-radius:var(--rm);font-size:12px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.card-head .card-title{margin-bottom:0}
+.ctl-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* ── PROGRESS ─────────── */
+.progress{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px}
+.stat-inline{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:12px}
+.stat-inline div{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.stat-inline strong{display:block;font-size:20px;font-weight:300;color:var(--text);letter-spacing:-.01em;text-transform:none}
+
+/* ── STATS / MATRIX ─────────── */
+table.dtable td.num,table.dtable th.num{text-align:right;font-variant-numeric:tabular-nums}
+table.dtable td.num{white-space:nowrap}
+table.dtable tr.foot td{border-top:1px solid var(--border);background:var(--surface2);font-size:11px;color:var(--text2)}
+table.matrix{border-collapse:separate;border-spacing:2px;font-size:12px;width:100%}
+table.matrix th{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:6px;text-align:center;white-space:nowrap}
+table.matrix th.rowh{text-align:left;text-transform:none;font-size:11px;color:var(--text2);letter-spacing:0}
+table.matrix td{text-align:center;padding:8px 4px;border-radius:4px;font-variant-numeric:tabular-nums;color:var(--text);min-width:58px}
+table.matrix td.diag{color:var(--text3);background:var(--surface2)}
+.scale-legend{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);margin-top:10px}
+.scale-legend .grad{width:160px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(232,64,28,.6),rgba(232,64,28,0) 50%,rgba(45,90,158,0) 50%,rgba(45,90,158,.6))}
+.sig{color:var(--text2);font-size:10px;vertical-align:super}
+
+/* ── CI ROWS (group comparisons) ─────────── */
+.ci-list{display:flex;flex-direction:column;gap:10px}
+.ci-row{display:grid;grid-template-columns:160px 1fr 150px;gap:10px;align-items:center;font-size:11px}
+.ci-lbl{color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-track{position:relative;height:18px;background:linear-gradient(var(--surface2),var(--surface2)) center/100% 2px no-repeat}
+.ci-whisker{position:absolute;top:8px;height:2px;background:var(--accent);opacity:.55}
+.ci-dot{position:absolute;top:4px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--surface)}
+.ci-val{color:var(--text);font-variant-numeric:tabular-nums;text-align:right}
+.ci-axis{display:grid;grid-template-columns:160px 1fr 150px;gap:10px;font-size:10px;color:var(--text3)}
+.ci-axis div:nth-child(2){display:flex;justify-content:space-between}
+
+/* ── MODEL ─────────── */
+.path-svg{width:100%;max-width:680px;height:auto;display:block;margin:0 auto}
+.path-svg rect{fill:var(--surface2);stroke:var(--border)}
+.path-svg .box-t{font-size:13px;font-weight:600;fill:var(--text)}
+.path-svg .box-s{font-size:10px;fill:var(--text3)}
+.path-svg .coef{font-size:12px;font-weight:600;fill:var(--accent)}
+.path-svg .coef-s{font-size:10px;fill:var(--text3)}
+.path-svg line,.path-svg path{stroke:var(--text2);stroke-width:1.5;fill:none}
+.verdict{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:var(--rm);background:var(--surface2);margin-bottom:8px;font-size:12px;color:var(--text2)}
+.verdict strong{color:var(--text)}
+.verdict .vi{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.vi.yes{background:#1a8c6b}.vi.no{background:#9e9890}
+.boot-status{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:10px}
+.mini-spin{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+
+/* ── QUALITY ─────────── */
+.flag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:999px;margin:1px 4px 1px 0;font-weight:500}
+.flag.bad{background:#fee2e2;color:#991b1b}
+.flag.warn{background:#fef9c3;color:#854d0e}
+.flag-dot{display:inline-block;margin-left:6px;font-size:10px;padding:1px 6px;border-radius:999px;background:#fef9c3;color:#854d0e;font-weight:600}
+.flag-dot.bad{background:#fee2e2;color:#991b1b}
+.rule-list{font-size:12px;color:var(--text2);padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.rule-list strong{color:var(--text)}
+.empty-card{padding:40px;text-align:center;color:var(--text3);font-size:13px}
+
 /* ── RESPONSIVE ─────────── */
 @media(max-width:640px){
   .app-header{padding:20px 16px 16px}
   .header-actions{position:static;margin-top:12px}
   .main{padding:16px}
   .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .status-bar{padding:10px 16px}
+  .fgroup{min-width:calc(50% - 5px);flex:1}
+  .ci-row,.ci-axis{grid-template-columns:90px 1fr 110px}
+}
+@media print{
+  .header-actions,.filter-bar,.tabs,.ind-toolbar{display:none!important}
+  .tab-pane{display:block!important}
+  .app-header{background:#fff;color:#000}
+  .card{break-inside:avoid}
 }
 </style>
 </head>
@@ -199,6 +283,10 @@ table.ind-table tr.expanded-row td{background:#f0f8ff}
     <span>Instruments: IPAQ-SF · FS · MBI · MSPSS</span>
   </div>
   <div class="header-actions">
+    <button class="icon-btn" onclick="exportCSV('all')" title="Download computed scores for all included respondents (CSV)">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+      Export CSV
+    </button>
     <button class="icon-btn" onclick="loadData()" title="Refresh data">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
       Refresh
@@ -224,59 +312,291 @@ table.ind-table tr.expanded-row td{background:#f0f8ff}
 const AT_TOKEN = 'patGENwLuAKtovqaI.13401f4b0161b141f8723f616f0ead192519287f178b17f6f23ceb5ac3137a0d';
 const AT_BASE  = 'app4Hmc0skWBEvxCD';
 const AT_TABLE = 'Responses';
+const TARGET_N = 300;
+
+/* ── INSTRUMENTS ─────────────────────────────────────────── */
+const FS_LABELS=['Purposeful life','Supportive relationships','Engaged & interested','Contributes to others','Competent & capable','Good person / good life','Optimistic about future','People respect me'];
+const MBI_LABELS=['Emotionally drained','People require great effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by direct contact','End of my rope'];
+const MSPSS_LABELS=['Special person when in need','Share joys and sorrows','Family tries to help','Emotional help from family','Special source of comfort','Friends try to help','Count on friends','Talk problems with family','Friends share joys/sorrows','Special person cares','Family helps with decisions','Talk problems with friends'];
+const MSPSS_SUB={so:[1,2,5,10],fam:[3,4,8,11],fri:[6,7,9,12]};
+const SCALES={
+  fs:   {abbr:'FS',   name:'Flourishing Scale (FS)',            prefix:'FS_Q',   k:8,  min:1, max:7, labels:FS_LABELS,    color:'#1a8c6b', totMin:8,  totMax:56},
+  mbi:  {abbr:'MBI-EE',name:'MBI — Emotional Exhaustion',       prefix:'MBI_Q',  k:7,  min:0, max:6, labels:MBI_LABELS,   color:'#e8401c', totMin:0,  totMax:42},
+  mspss:{abbr:'MSPSS',name:'Perceived Social Support (MSPSS)',  prefix:'MSPSS_Q',k:12, min:1, max:7, labels:MSPSS_LABELS, color:'#2d5a9e', totMin:12, totMax:84},
+};
+const LVL_GOOD='#1a8c6b', LVL_MID='#c67c00', LVL_BAD='#e8401c';
+
+/* demographic / grouping variables */
+const DEMO=[
+  {key:'Sex',label:'Sex'},
+  {key:'Civil_Status',label:'Civil status'},
+  {key:'ageBand',label:'Age group'},
+  {key:'Work_Arrangement',label:'Work arrangement'},
+  {key:'Work_Schedule',label:'Work schedule'},
+  {key:'Tenure',label:'Tenure'},
+  {key:'Job_Position',label:'Job position'},
+  {key:'Sector',label:'Sector'},
+  {key:'Job_Type',label:'Job type'},
+  {key:'Physical_Activity_Level',label:'Self-reported PA'},
+  {key:'ipaqLevel',label:'IPAQ activity level'},
+];
+const ORDER={ageBand:['18–24','25–34','35–44','45–54','55+'],ipaqLevel:['Low','Moderate','High']};
+const FILTER_KEYS=['Sex','Work_Arrangement','Sector','Job_Position'];
+
+/* continuous variables available for correlations / scatter */
+const VARS={
+  met:  {label:'Physical activity (MET-min/wk)', short:'PA (MET)',    get:r=>r.met},
+  mbi:  {label:'Burnout — MBI-EE total',         short:'Burnout',     get:r=>r.mbi},
+  mspss:{label:'Social support — MSPSS total',   short:'Support',     get:r=>r.mspssT},
+  fs:   {label:'Flourishing — FS total',         short:'Flourishing', get:r=>r.fs},
+  so:   {label:'MSPSS Significant other (avg)',  short:'Sig. other',  get:r=>r.so},
+  fam:  {label:'MSPSS Family (avg)',             short:'Family',      get:r=>r.fam},
+  fri:  {label:'MSPSS Friends (avg)',            short:'Friends',     get:r=>r.fri},
+  sit:  {label:'Sitting time (min/day)',         short:'Sitting',     get:r=>r.sitMin},
+  age:  {label:'Age (years)',                    short:'Age',         get:r=>r.age},
+};
 
 /* ── HELPERS ─────────────────────────────────────────────── */
-const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
-const sd   = arr => {
-  if(arr.length<2) return 0;
-  const m=mean(arr);
-  return Math.sqrt(arr.reduce((a,b)=>a+(b-m)**2,0)/(arr.length-1));
+const isNum = v => typeof v==='number' && Number.isFinite(v);
+const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : NaN;
+const variance = arr => { if(arr.length<2) return NaN; const m=mean(arr); return arr.reduce((a,b)=>a+(b-m)**2,0)/(arr.length-1); };
+const sd   = arr => Math.sqrt(variance(arr));
+const pct  = (n,t) => t ? Math.round(n/t*100) : 0;
+const r2   = v => Math.round(v*10)/10;
+const esc  = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fx   = (v,d=1) => isNum(v) ? v.toFixed(d) : '—';
+const fint = v => isNum(v) ? Math.round(v).toLocaleString() : '—';
+const fp   = p => !isNum(p) ? '—' : p<.001 ? '< .001' : p.toFixed(3).replace(/^0/,'');
+const fr   = r => !isNum(r) ? '—' : (r<0?'−':'')+Math.abs(r).toFixed(2).replace(/^0/,'');
+const fb   = (v,d=3) => !isNum(v) ? '—' : (v<0?'−':'')+Math.abs(v).toFixed(d);
+const stars= p => !isNum(p) ? '' : p<.001 ? '***' : p<.01 ? '**' : p<.05 ? '*' : '';
+const freq = arr => { const m={}; arr.forEach(v=>{ if(v!==null&&v!==undefined&&v!=='') m[v]=(m[v]||0)+1; }); return m; };
+const vals = (rows,get) => rows.map(get).filter(isNum);
+function num(v){ if(v===undefined||v===null||v==='') return null; const n=+v; return Number.isFinite(n)?n:null; }
+function isDK(v){ return !!v && v!=='false' && v!=='No' && v!=='0' && v!==0; }
+function quantile(sorted,q){ if(!sorted.length) return NaN; const p=(sorted.length-1)*q, lo=Math.floor(p), hi=Math.ceil(p); return sorted[lo]+(sorted[hi]-sorted[lo])*(p-lo); }
+
+function pearsonRaw(xs,ys){
+  const n=xs.length; if(n<3) return NaN;
+  const mx=mean(xs), my=mean(ys); let num=0,dx2=0,dy2=0;
+  for(let i=0;i<n;i++){ const a=xs[i]-mx, b=ys[i]-my; num+=a*b; dx2+=a*a; dy2+=b*b; }
+  return (dx2&&dy2) ? num/Math.sqrt(dx2*dy2) : NaN;
+}
+function ranks(xs){
+  const idx=xs.map((v,i)=>[v,i]).sort((a,b)=>a[0]-b[0]); const r=new Array(xs.length);
+  for(let i=0;i<idx.length;){ let j=i; while(j+1<idx.length && idx[j+1][0]===idx[i][0]) j++; const avg=(i+j)/2+1; for(let k=i;k<=j;k++) r[idx[k][1]]=avg; i=j+1; }
+  return r;
+}
+function skewness(xs){ const n=xs.length; if(n<3) return NaN; const m=mean(xs), s=sd(xs); if(!s) return NaN; return n/((n-1)*(n-2))*xs.reduce((a,x)=>a+((x-m)/s)**3,0); }
+function kurtosis(xs){ const n=xs.length; if(n<4) return NaN; const m=mean(xs), s=sd(xs); if(!s) return NaN;
+  return n*(n+1)/((n-1)*(n-2)*(n-3))*xs.reduce((a,x)=>a+((x-m)/s)**4,0) - 3*(n-1)**2/((n-2)*(n-3)); }
+function describe(xs){
+  const n=xs.length; if(!n) return {n:0};
+  const s=[...xs].sort((a,b)=>a-b);
+  return {n, min:s[0], max:s[n-1], mean:mean(xs), sd:sd(xs), median:quantile(s,.5), q1:quantile(s,.25), q3:quantile(s,.75), skew:skewness(xs), kurt:kurtosis(xs)};
+}
+
+/* incomplete beta → t / F distribution p-values */
+function lgamma(x){
+  const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+  let y=x, tmp=x+5.5; tmp-=(x+0.5)*Math.log(tmp); let ser=1.000000000190015;
+  for(let j=0;j<6;j++) ser+=c[j]/++y;
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function betacf(a,b,x){
+  const FPMIN=1e-300; const qab=a+b,qap=a+1,qam=a-1; let c=1,d=1-qab*x/qap; if(Math.abs(d)<FPMIN) d=FPMIN; d=1/d; let h=d;
+  for(let m=1;m<=300;m++){
+    const m2=2*m; let aa=m*(b-m)*x/((qam+m2)*(a+m2));
+    d=1+aa*d; if(Math.abs(d)<FPMIN) d=FPMIN; c=1+aa/c; if(Math.abs(c)<FPMIN) c=FPMIN; d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));
+    d=1+aa*d; if(Math.abs(d)<FPMIN) d=FPMIN; c=1+aa/c; if(Math.abs(c)<FPMIN) c=FPMIN; d=1/d;
+    const del=d*c; h*=del; if(Math.abs(del-1)<3e-14) break;
+  }
+  return h;
+}
+function ibeta(x,a,b){
+  if(x<=0) return 0; if(x>=1) return 1;
+  const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2) ? bt*betacf(a,b,x)/a : 1-bt*betacf(b,a,1-x)/b;
+}
+const pT = (t,df) => (df>0&&isNum(t)) ? ibeta(df/(df+t*t),df/2,.5) : NaN;         // two-tailed
+const pF = (F,d1,d2) => (isNum(F)&&F>0) ? ibeta(d2/(d2+d1*F),d2/2,d1/2) : (F===0?1:NaN);
+function tCrit(df,alpha=.05){ let lo=0,hi=100; for(let i=0;i<80;i++){ const m=(lo+hi)/2; if(pT(m,df)>alpha) lo=m; else hi=m; } return (lo+hi)/2; }
+
+function corrTest(rows,ga,gb,method){
+  const xs=[],ys=[]; rows.forEach(r=>{ const a=ga(r), b=gb(r); if(isNum(a)&&isNum(b)){ xs.push(a); ys.push(b); } });
+  const n=xs.length;
+  const r = method==='spearman' ? pearsonRaw(ranks(xs),ranks(ys)) : pearsonRaw(xs,ys);
+  const t = isNum(r) && Math.abs(r)<1 ? r*Math.sqrt((n-2)/(1-r*r)) : NaN;
+  return {r, n, p: Math.abs(r)===1 ? 0 : pT(t,n-2), xs, ys};
+}
+function corrStrength(r){ const a=Math.abs(r); if(!isNum(a)) return '—'; if(a>=.5) return 'Strong'; if(a>=.3) return 'Moderate'; if(a>=.1) return 'Weak'; return 'Negligible'; }
+function corrColor(r){ return r>=0.1?'#1a8c6b':r<=-0.1?'#e8401c':'#9e9890'; }
+
+/* matrix inversion (Gauss-Jordan) and OLS */
+function invert(A){
+  const n=A.length, M=A.map((row,i)=>[...row,...Array.from({length:n},(_,j)=>i===j?1:0)]);
+  for(let c=0;c<n;c++){
+    let p=c; for(let r=c+1;r<n;r++) if(Math.abs(M[r][c])>Math.abs(M[p][c])) p=r;
+    if(Math.abs(M[p][c])<1e-12) return null;
+    [M[c],M[p]]=[M[p],M[c]];
+    const d=M[c][c]; for(let j=0;j<2*n;j++) M[c][j]/=d;
+    for(let r=0;r<n;r++) if(r!==c){ const f=M[r][c]; if(f) for(let j=0;j<2*n;j++) M[r][j]-=f*M[c][j]; }
+  }
+  return M.map(row=>row.slice(n));
+}
+/* y: array, X: array of predictor columns (no intercept), idx: optional resample indices */
+function olsBeta(y,X,idx){
+  const k=X.length+1, n=idx?idx.length:y.length;
+  const XtX=Array.from({length:k},()=>new Array(k).fill(0)), Xty=new Array(k).fill(0), xi=new Array(k);
+  for(let t=0;t<n;t++){
+    const i=idx?idx[t]:t; xi[0]=1; for(let j=1;j<k;j++) xi[j]=X[j-1][i];
+    for(let a=0;a<k;a++){ Xty[a]+=xi[a]*y[i]; for(let b=a;b<k;b++) XtX[a][b]+=xi[a]*xi[b]; }
+  }
+  for(let a=0;a<k;a++) for(let b=0;b<a;b++) XtX[a][b]=XtX[b][a];
+  const inv=invert(XtX); if(!inv) return null;
+  return {beta:inv.map(row=>row.reduce((s,v,j)=>s+v*Xty[j],0)), inv};
+}
+function ols(y,X){
+  const fit=olsBeta(y,X); if(!fit) return null;
+  const {beta,inv}=fit, n=y.length, k=beta.length, df=n-k;
+  const my=mean(y); let sse=0,sst=0;
+  for(let i=0;i<n;i++){ let yh=beta[0]; for(let j=1;j<k;j++) yh+=beta[j]*X[j-1][i]; sse+=(y[i]-yh)**2; sst+=(y[i]-my)**2; }
+  const mse=sse/df, tc=tCrit(df);
+  const se=inv.map((row,i)=>Math.sqrt(row[i]*mse));
+  const coefs=beta.map((b,i)=>{ const t=b/se[i]; return {b,se:se[i],t,p:pT(t,df),lo:b-tc*se[i],hi:b+tc*se[i]}; });
+  const R2=sst?1-sse/sst:NaN, F=((sst-sse)/(k-1))/mse;
+  return {coefs, R2, F, df1:k-1, df2:df, pF:pF(F,k-1,df), cov:inv.map(row=>row.map(v=>v*mse)), sse, n};
+}
+function anova(groups){
+  const gs=groups.filter(g=>g.length>=1), all=gs.flat(), N=all.length, k=gs.length;
+  if(k<2||N-k<1) return null;
+  const gm=mean(all); let ssb=0, ssw=0;
+  gs.forEach(g=>{ const m=mean(g); ssb+=g.length*(m-gm)**2; g.forEach(x=>ssw+=(x-m)**2); });
+  const df1=k-1, df2=N-k, F=(ssb/df1)/(ssw/df2);
+  return {F, df1, df2, p:pF(F,df1,df2), eta2: ssb/(ssb+ssw)};
+}
+function cronbach(itemRows){
+  const n=itemRows.length, k=itemRows[0]?.length||0;
+  if(n<3||k<2) return null;
+  const cols=Array.from({length:k},(_,j)=>itemRows.map(r=>r[j]));
+  const tot=itemRows.map(r=>r.reduce((a,b)=>a+b,0));
+  const alpha=(cs,ts)=>{ const tv=variance(ts); return tv>0 ? (cs.length/(cs.length-1))*(1-cs.reduce((s,c)=>s+variance(c),0)/tv) : NaN; };
+  const items=cols.map((c,j)=>{
+    const rest=tot.map((t,i)=>t-c[i]);
+    return {mean:mean(c), sd:sd(c), rit:pearsonRaw(c,rest), aDel: k>2 ? alpha(cols.filter((_,jj)=>jj!==j),rest) : NaN};
+  });
+  return {n,k,alpha:alpha(cols,tot),items};
+}
+function alphaLabel(a){ if(!isNum(a)) return '—'; return a>=.9?'Excellent':a>=.8?'Good':a>=.7?'Acceptable':a>=.6?'Questionable':a>=.5?'Poor':'Unacceptable'; }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* ── SCORING (per thesis methodology) ─────────────────────── */
+/* IPAQ-SF — Guidelines for Data Processing and Analysis (IPAQ Research Committee, 2005):
+   - cases with "don't know"/missing duration on an active domain are excluded
+   - cases whose walking+moderate+vigorous time exceeds 960 min/day are excluded
+   - bouts < 10 min are recoded to 0; durations > 180 min/day are truncated to 180
+   - categorical score uses the official High / Moderate / Low criteria */
+function scoreIPAQ(f){
+  const issues=[]; let truncated=false, shortBout=false;
+  const dom=(dK,hK,mK,dkK,label)=>{
+    let days=num(f[dK]) ?? 0;
+    if(days<0||days>7){ issues.push(`${label} days out of range (${days})`); days=Math.min(7,Math.max(0,days)); }
+    if(days===0) return {days:0,min:0,raw:0};
+    if(isDK(f[dkK])){ issues.push(`${label} duration: "don't know"`); return {days,min:0,raw:0}; }
+    const h=num(f[hK]), m=num(f[mK]);
+    if(h===null&&m===null){ issues.push(`${label} duration missing`); return {days,min:0,raw:0}; }
+    const raw=(h||0)*60+(m||0);
+    return {days,min:raw,raw};
+  };
+  const v=dom('IPAQ_Q1_Vigorous_Days','IPAQ_Q2_Vigorous_Hours','IPAQ_Q2_Vigorous_Minutes','IPAQ_Q2_DK','Vigorous');
+  const m=dom('IPAQ_Q3_Moderate_Days','IPAQ_Q4_Moderate_Hours','IPAQ_Q4_Moderate_Minutes','IPAQ_Q4_DK','Moderate');
+  const w=dom('IPAQ_Q5_Walking_Days','IPAQ_Q6_Walking_Hours','IPAQ_Q6_Walking_Minutes','IPAQ_Q6_DK','Walking');
+  if(v.raw+m.raw+w.raw>960) issues.push(`Activity time ${v.raw+m.raw+w.raw} min/day exceeds 960`);
+  [v,m,w].forEach(a=>{
+    if(a.min>0&&a.min<10){ a.min=0; a.days=0; shortBout=true; }
+    else if(a.min===0) a.days=0;
+    if(a.min>180){ a.min=180; truncated=true; }
+  });
+  const sh=num(f.IPAQ_Q7_Sitting_Hours), sm=num(f.IPAQ_Q7_Sitting_Minutes);
+  const sitMin=(sh===null&&sm===null)||isDK(f.IPAQ_Q7_DK) ? null : (sh||0)*60+(sm||0);
+  const vigMET=8.0*v.min*v.days, modMET=4.0*m.min*m.days, walkMET=3.3*w.min*w.days, total=vigMET+modMET+walkMET;
+  const valid=issues.length===0;
+  let level=null;
+  if(valid){
+    const days=v.days+m.days+w.days;
+    if((v.days>=3&&vigMET>=1500)||(days>=7&&total>=3000)) level='High';
+    else if((v.days>=3&&v.min>=20)||((m.min>=30?m.days:0)+(w.min>=30?w.days:0)>=5)||(days>=5&&total>=600)) level='Moderate';
+    else level='Low';
+  }
+  return {valid,issues,truncated,shortBout,v,m,w,
+    vigMET:Math.round(vigMET),modMET:Math.round(modMET),walkMET:Math.round(walkMET),
+    met:valid?Math.round(total):null, level, sitMin};
+}
+function scoreScale(f,sc){
+  const items=[]; let missing=0, oor=0;
+  for(let i=1;i<=sc.k;i++){
+    const v=num(f[sc.prefix+i]);
+    if(v===null){ missing++; items.push(null); }
+    else if(v<sc.min||v>sc.max||!Number.isInteger(v)){ oor++; items.push(null); }
+    else items.push(v);
+  }
+  const issues=[];
+  if(missing) issues.push(`${sc.abbr}: ${missing} item${missing>1?'s':''} unanswered`);
+  if(oor) issues.push(`${sc.abbr}: ${oor} out-of-range value${oor>1?'s':''}`);
+  return {items, total: issues.length?null:items.reduce((a,b)=>a+b,0), issues};
+}
+function mbiLevel(v)  { return !isNum(v)?null:v<=16?'Low':v<=26?'Moderate':'High'; }
+function fsLevel(v)   { return !isNum(v)?null:v>=48?'High':v>=33?'Moderate':'Low'; }
+function mspssLevel(avg){ return !isNum(avg)?null:avg>=5.5?'High':avg>=2.95?'Moderate':'Low'; }
+function ageBand(a){ return !isNum(a)?null:a<25?'18–24':a<35?'25–34':a<45?'35–44':a<55?'45–54':'55+'; }
+
+function buildRow(rec,idx){
+  const f=rec.fields||{};
+  const ip=scoreIPAQ(f), fsS=scoreScale(f,SCALES.fs), mbiS=scoreScale(f,SCALES.mbi), msS=scoreScale(f,SCALES.mspss);
+  const subAvg=items=>items.every(i=>msS.items[i-1]!==null) ? items.reduce((s,i)=>s+msS.items[i-1],0)/items.length : null;
+  const age=num(f.Age);
+  const realName=(f.Full_Name||f.Consent_Name||'').toString().trim();
+  const demo={}; DEMO.forEach(d=>{ const v=f[d.key]; demo[d.key]=(v===undefined||v===null||v==='')?null:String(v).trim(); });
+  demo.ageBand=ageBand(age); demo.ipaqLevel=ip.level;
+  const mspssA=isNum(msS.total)?msS.total/12:null;
+  const row={
+    idx, id:rec.id, created:rec.createdTime?new Date(rec.createdTime):null,
+    name: realName||('Respondent '+(idx+1)), realName,
+    age, demo, ipaq:ip, met:ip.met, ipaqLevel:ip.level, sitMin:ip.sitMin,
+    fsItems:fsS.items, fs:fsS.total, fsLevel:fsLevel(fsS.total),
+    mbiItems:mbiS.items, mbi:mbiS.total, mbiLevel:mbiLevel(mbiS.total),
+    mspssItems:msS.items, mspssT:msS.total, mspssA, mspssLevel:mspssLevel(mspssA),
+    so:subAvg(MSPSS_SUB.so), fam:subAvg(MSPSS_SUB.fam), fri:subAvg(MSPSS_SUB.fri),
+    invalid:[...fsS.issues,...mbiS.issues,...msS.issues,...ip.issues.map(s=>'IPAQ: '+s)],
+    warn:[],
+  };
+  const flat=a=>a.every(v=>v!==null)&&new Set(a).size===1;
+  if(flat(row.fsItems)&&flat(row.mbiItems)&&flat(row.mspssItems)) row.warn.push('Straight-lining (identical answer on every item)');
+  if(age===null) row.warn.push('Age missing');
+  else if(age<18||age>70) row.warn.push(`Implausible age (${age})`);
+  return row;
+}
+function markDuplicates(rows){
+  const seen={};
+  rows.forEach(r=>{ if(!r.realName) return; const k=r.realName.toLowerCase().replace(/\s+/g,' '); (seen[k]=seen[k]||[]).push(r); });
+  Object.values(seen).forEach(g=>{ if(g.length>1) g.forEach(r=>r.warn.push(`Possible duplicate (${g.length} responses with this name)`)); });
+}
+
+/* ── STATE ───────────────────────────────────────────────── */
+const state={
+  rows:[], tab:'overview', quality:'valid', filters:{},
+  scatterX:'met', scatterY:'fs', corrMethod:'pearson',
+  groupBy:'Work_Arrangement', groupOutcome:'fs',
+  model:{xMetric:'k', boots:5000, result:null, key:null, running:false, token:0},
+  ind:{q:'',pa:'',fs:'',mbi:'',msp:'',sortKey:null,asc:true,open:null},
 };
-const pearson = (xs,ys) => {
-  if(xs.length<3) return 0;
-  const mx=mean(xs), my=mean(ys);
-  let num=0,dx2=0,dy2=0;
-  xs.forEach((x,i)=>{const a=x-mx,b=ys[i]-my;num+=a*b;dx2+=a*a;dy2+=b*b;});
-  if(!dx2||!dy2) return 0;
-  return +(num/Math.sqrt(dx2*dy2)).toFixed(2);
-};
-const freq  = arr => { const m={}; arr.filter(Boolean).forEach(v=>m[v]=(m[v]||0)+1); return m; };
-const pct   = (n,t) => t ? Math.round(n/t*100) : 0;
-const r2    = v => Math.round(v*10)/10;
-const fmtN  = n => n.toLocaleString();
-
-/* ── SCORE COMPUTATIONS (per thesis methodology) ─────────── */
-function calcMET(f) {
-  const vDK=f.IPAQ_Q2_DK, mDK=f.IPAQ_Q4_DK, wDK=f.IPAQ_Q6_DK;
-  const vDays=+(f.IPAQ_Q1_Vigorous_Days||0);
-  const vMin =!vDK&&vDays>0 ? (+(f.IPAQ_Q2_Vigorous_Hours||0)*60 + +(f.IPAQ_Q2_Vigorous_Minutes||0)) : 0;
-  const mDays=+(f.IPAQ_Q3_Moderate_Days||0);
-  const mMin =!mDK&&mDays>0 ? (+(f.IPAQ_Q4_Moderate_Hours||0)*60 + +(f.IPAQ_Q4_Moderate_Minutes||0)) : 0;
-  const wDays=+(f.IPAQ_Q5_Walking_Days||0);
-  const wMin =!wDK&&wDays>0 ? (+(f.IPAQ_Q6_Walking_Hours||0)*60 + +(f.IPAQ_Q6_Walking_Minutes||0)) : 0;
-  return Math.round(8.0*vMin*vDays + 4.0*mMin*mDays + 3.3*wMin*wDays);
+function included(r){
+  if(state.quality==='valid' && r.invalid.length) return false;
+  if(state.quality==='strict' && (r.invalid.length||r.warn.length)) return false;
+  return FILTER_KEYS.every(k=>!state.filters[k]||r.demo[k]===state.filters[k]);
 }
-function metLevel(met, vigMET) {
-  if(vigMET>=1500 || met>=3000) return 'High';
-  if(met>=600) return 'Moderate';
-  return 'Low';
-}
-function calcFS(f)    { let s=0; for(let i=1;i<=8;i++) s+=+(f['FS_Q'+i]||0); return s; }
-function calcMBI(f)   { let s=0; for(let i=1;i<=7;i++) s+=+(f['MBI_Q'+i]||0); return s; }
-function calcMSPSS(f) { let s=0; for(let i=1;i<=12;i++) s+=+(f['MSPSS_Q'+i]||0); return s; }
-
-function mbiLevel(v)  { return v<=16?'Low':v<=26?'Moderate':'High'; }
-function fsLevel(v)   { return v>=48?'High':v>=33?'Moderate':'Low'; }
-function mspssLevel(avg){ return avg>=5.5?'High':avg>=2.95?'Moderate':'Low'; }
-
-function corrStrength(r) {
-  const a=Math.abs(r);
-  if(a>=.5) return 'Strong';
-  if(a>=.3) return 'Moderate';
-  if(a>=.1) return 'Weak';
-  return 'Negligible';
-}
-function corrColor(r) { return r>=0.1?'#1a8c6b':r<=-0.1?'#e8401c':'#9e9890'; }
+const activeRows=()=>state.rows.filter(included);
 
 /* ── FETCH ALL PAGES ─────────────────────────────────────── */
 async function fetchAll() {
@@ -285,7 +605,7 @@ async function fetchAll() {
     let url=`https://api.airtable.com/v0/${AT_BASE}/${encodeURIComponent(AT_TABLE)}?pageSize=100`;
     if(offset) url+=`&offset=${offset}`;
     const r = await fetch(url,{headers:{Authorization:`Bearer ${AT_TOKEN}`}});
-    if(!r.ok){ const e=await r.json(); throw new Error(e.error?.message||`HTTP ${r.status}`); }
+    if(!r.ok){ let msg=`HTTP ${r.status}`; try{ const e=await r.json(); msg=e.error?.message||e.error?.type||msg; }catch(_){} throw new Error(msg); }
     const d=await r.json();
     records=records.concat(d.records);
     offset=d.offset||null;
@@ -293,701 +613,882 @@ async function fetchAll() {
   return records;
 }
 
-/* ── CHART REGISTRY ─────────────────────────────────────── */
+/* ── CHARTS ─────────────────────────────────────────────── */
+if(window.Chart){
+  Chart.defaults.font.family="'DM Sans',sans-serif";
+  Chart.defaults.color='#6b6660';
+  Chart.defaults.animation.duration=350;
+}
+const GRID='rgba(0,0,0,.05)';
 const charts={};
 function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+function destroyAll(){ Object.keys(charts).forEach(destroyChart); }
+function newChart(id,cfg){ destroyChart(id); const ctx=document.getElementById(id); if(!ctx||!window.Chart) return; charts[id]=new Chart(ctx,cfg); }
 
-function makeDonut(id, data, colors, labels){
-  destroyChart(id);
-  const ctx=document.getElementById(id);
-  if(!ctx) return;
-  charts[id]=new Chart(ctx,{
-    type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,data.reduce((a,b)=>a+b,0))+'%)'}}}}}
-  );
+function makeDonut(id,data,colors,labels){
+  const tot=data.reduce((a,b)=>a+b,0);
+  newChart(id,{type:'doughnut',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+pct(c.raw,tot)+'%)'}}}}});
 }
-function makeHBar(id, labels, data, color, maxVal){
-  destroyChart(id);
-  const ctx=document.getElementById(id);
-  if(!ctx) return;
-  charts[id]=new Chart(ctx,{
-    type:'bar',
-    data:{labels,datasets:[{data,backgroundColor:color+'cc',borderRadius:4,borderSkipped:false}]},
-    options:{
-      indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+r2(c.raw)}}},
-      scales:{
-        x:{max:maxVal,min:0,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},maxTicksLimit:5}},
-        y:{grid:{display:false},ticks:{font:{size:10}}}
-      }
-    }
-  });
+function makeHist(id,labels,data,colors,xTitle,tipTitle){
+  newChart(id,{type:'bar',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:{topLeft:3,topRight:3},borderSkipped:'bottom',categoryPercentage:1,barPercentage:.88}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>tipTitle?tipTitle(c[0].label):c[0].label,label:c=>' '+c.raw+' respondent'+(c.raw===1?'':'s')}}},
+      scales:{x:{title:{display:!!xTitle,text:xTitle,font:{size:11}},grid:{display:false},ticks:{font:{size:10},autoSkip:true,maxRotation:0}},
+              y:{beginAtZero:true,grid:{color:GRID},ticks:{font:{size:10},precision:0},title:{display:true,text:'Respondents',font:{size:11}}}}}});
 }
-function makeScatter(id, pts, xLabel, yLabel){
-  destroyChart(id);
-  const ctx=document.getElementById(id);
-  if(!ctx) return;
-  charts[id]=new Chart(ctx,{
-    type:'scatter',
-    data:{datasets:[{data:pts,backgroundColor:'rgba(45,90,158,.5)',pointRadius:5,pointHoverRadius:7,pointBorderWidth:0}]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`MET: ${Math.round(c.raw.x).toLocaleString()}, FS: ${Math.round(c.raw.y)}`}}},
-      scales:{
-        x:{title:{display:true,text:xLabel,font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}},
-        y:{title:{display:true,text:yLabel,font:{size:11},color:'#6b6660'},grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10}}}
-      }
-    }
-  });
+function makeScatter(id,pts,line,xLabel,yLabel,xShort,yShort){
+  const ds=[{type:'scatter',data:pts,backgroundColor:'rgba(45,90,158,.45)',pointRadius:4.5,pointHoverRadius:7,pointBorderWidth:1,pointBorderColor:'#fff',pointHitRadius:8,label:'Respondents'}];
+  if(line) ds.push({type:'line',data:line,borderColor:'#1a1814',borderWidth:2,pointRadius:0,pointHitRadius:0,label:'OLS fit',fill:false});
+  newChart(id,{type:'scatter',data:{datasets:ds},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},
+      plugins:{legend:{display:false},tooltip:{filter:c=>c.datasetIndex===0,callbacks:{label:c=>`${xShort}: ${(+c.raw.x).toLocaleString(undefined,{maximumFractionDigits:2})}, ${yShort}: ${(+c.raw.y).toLocaleString(undefined,{maximumFractionDigits:2})}`}}},
+      scales:{x:{title:{display:true,text:xLabel,font:{size:11}},grid:{color:GRID},ticks:{font:{size:10}}},
+              y:{title:{display:true,text:yLabel,font:{size:11}},grid:{color:GRID},ticks:{font:{size:10}}}}}});
 }
 
 /* ── RENDER HELPERS ─────────────────────────────────────── */
-function barList(items, maxCount, color, wide){
+function barList(items,maxCount,color,wide){
   return items.map(([lbl,v,total])=>{
     const pctW=Math.round(v/(maxCount||1)*100);
     return `<div class="bar-item">
-      <div class="bar-lbl${wide?' wide':''}" title="${lbl}">${lbl}</div>
+      <div class="bar-lbl${wide?' wide':''}" title="${esc(lbl)}">${esc(lbl)}</div>
       <div class="bar-track"><div class="bar-fill" style="width:${pctW}%;background:${color}"></div></div>
       <div class="bar-val">${r2(v)}</div>
       ${total!==undefined?`<div class="bar-count">(${pct(v,total)}%)</div>`:''}
     </div>`;
   }).join('');
 }
-function freqBars(freqObj, n, color, wide){
-  const items=Object.entries(freqObj).sort((a,b)=>b[1]-a[1]);
-  const max=items[0]?.[1]||1;
+function freqBars(freqObj,n,color,wide,order){
+  const items=Object.entries(freqObj).sort(order?((a,b)=>order.indexOf(a[0])-order.indexOf(b[0])):((a,b)=>b[1]-a[1]));
+  if(!items.length) return '<div class="card-note">No responses.</div>';
+  const max=Math.max(...items.map(i=>i[1]));
   return `<div class="bar-list">${barList(items.map(([k,v])=>[k,v,n]),max,color,wide)}</div>`;
 }
+function scaleItemBars(means,labels,max,color){
+  return `<div class="bar-list">${means.map((m,i)=>`<div class="bar-item">
+    <div class="bar-lbl wide" title="${labels[i]}">${i+1}. ${labels[i]}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${isNum(m)?Math.round(m/max*100):0}%;background:${color}"></div></div>
+    <div class="bar-val">${fx(m,2)}</div>
+  </div>`).join('')}</div>`;
+}
+function badgeCls(level,invert){
+  if(invert) return level==='High'?'badge-red':level==='Low'?'badge-green':'badge-amber';
+  return level==='High'?'badge-green':level==='Low'?'badge-red':'badge-amber';
+}
+function levelBadge(level,invert){ return level ? `<span class="badge ${badgeCls(level,invert)}">${level}</span>` : '<span class="badge" style="background:var(--surface2);color:var(--text3)">n/a</span>'; }
+function donutCard(id,title,f,n,legend,note){
+  const tot=legend.reduce((s,l)=>s+(f[l.key]||0),0);
+  return `<div class="card donut-card">
+    <div class="card-title">${title}</div>
+    <div class="donut-area">
+      <div class="donut-wrap">
+        <canvas id="${id}" width="120" height="120" role="img" aria-label="Doughnut: ${title}">${legend.map(l=>`${f[l.key]||0} ${l.key}`).join(', ')}</canvas>
+        <div class="donut-center"><div class="donut-center-val">${tot}</div><div class="donut-center-lbl">scored</div></div>
+      </div>
+      <div class="donut-legend">${legend.map(l=>`<div class="legend-item"><div class="legend-swatch" style="background:${l.color}"></div><div class="legend-lbl">${l.label}</div><div class="legend-n">${f[l.key]||0}</div><div class="legend-pct">${pct(f[l.key]||0,tot)}%</div></div>`).join('')}
+        ${tot<n?`<div class="legend-item"><div class="legend-swatch" style="background:var(--border)"></div><div class="legend-lbl">Not scorable</div><div class="legend-n">${n-tot}</div><div class="legend-pct"></div></div>`:''}
+      </div>
+    </div>
+    <p class="card-note">${note}</p>
+  </div>`;
+}
+const levelOrder=(inv)=>inv?[{key:'Low',color:LVL_GOOD},{key:'Moderate',color:LVL_MID},{key:'High',color:LVL_BAD}]:[{key:'High',color:LVL_GOOD},{key:'Moderate',color:LVL_MID},{key:'Low',color:LVL_BAD}];
 
-/* ── MAIN RENDER ─────────────────────────────────────────── */
-function renderDashboard(records){
-  const fields=records.map(r=>r.fields);
-  const n=fields.length;
-
-  /* computed scores */
-  const mets    = fields.map(f=>calcMET(f));
-  const vigMETs = fields.map(f=>{
-    const vDays=+(f.IPAQ_Q1_Vigorous_Days||0),vH=+(f.IPAQ_Q2_Vigorous_Hours||0),vM=+(f.IPAQ_Q2_Vigorous_Minutes||0),vDK=f.IPAQ_Q2_DK;
-    return(!vDK&&vDays>0)?8.0*(vH*60+vM)*vDays:0;
-  });
-  const fss     = fields.map(f=>calcFS(f));
-  const mbis    = fields.map(f=>calcMBI(f));
-  const mspssTs = fields.map(f=>calcMSPSS(f));
-  const mspssAs = mspssTs.map(t=>t/12);
-
-  const ipaqLvls  = mets.map((m,i)=>metLevel(m,vigMETs[i]));
-  const fsLvls    = fss.map(v=>fsLevel(v));
-  const mbiLvls   = mbis.map(v=>mbiLevel(v));
-  const mspssLvls = mspssAs.map(v=>mspssLevel(v));
-
-  /* averages */
-  const avgFS  = mean(fss),   sdFS  = sd(fss);
-  const avgMBI = mean(mbis),  sdMBI = sd(mbis);
-  const avgMSP = mean(mspssTs), sdMSP= sd(mspssTs);
-  const avgMET = mean(mets);
-  const ages   = fields.map(f=>+(f.Age||0)).filter(v=>v>0);
-  const avgAge = Math.round(mean(ages));
-
-  /* correlations */
-  const rMETvsFS   = pearson(mets,fss);
-  const rMBIvsFS   = pearson(mbis,fss);
-  const rMSPSSvsFS = pearson(mspssTs,fss);
-  const rMETvsMBI  = pearson(mets,mbis);
-  const rMBIvsMSP  = pearson(mbis,mspssTs);
-
-  /* frequencies */
-  const ipaqF  = freq(ipaqLvls);
-  const fsF    = freq(fsLvls);
-  const mbiF   = freq(mbiLvls);
-  const mspssF = freq(mspssLvls);
-  const workF  = freq(fields.map(f=>f.Work_Arrangement));
-  const sexF   = freq(fields.map(f=>f.Sex));
-  const civilF = freq(fields.map(f=>f.Civil_Status));
-  const tenureF= freq(fields.map(f=>f.Tenure));
-  const posF   = freq(fields.map(f=>f.Job_Position));
-  const schedF = freq(fields.map(f=>f.Work_Schedule));
-  const sectorF= freq(fields.map(f=>f.Sector));
-  const paF    = freq(fields.map(f=>f.Physical_Activity_Level));
-  const jobF   = freq(fields.map(f=>f.Job_Type));
-
-  /* update header */
-  document.getElementById('hN').textContent=n;
-
-  /* ── item averages ─────────────────────────────────────── */
-  const fsLabels=['Purposeful life','Supportive relationships','Engaged & interested','Contributes to others','Competent & capable','Good person / good life','Optimistic about future','People respect me'];
-  const mbiLabels=['Emotionally drained','People require great effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by direct contact','End of my rope'];
-  const mspssLabels=['Special person when in need','Share joys and sorrows','Family tries to help','Emotional help from family','Special source of comfort','Friends try to help','Count on friends','Talk problems with family','Friends share joys/sorrows','Special person cares','Family helps with decisions','Talk problems with friends'];
-
-  function itemMeans(prefix,count,allFields){ return Array.from({length:count},(_,i)=>mean(allFields.map(f=>+(f[prefix+(i+1)]||0)))); }
-  const fsMeans    = itemMeans('FS_Q',8,fields);
-  const mbiMeans   = itemMeans('MBI_Q',7,fields);
-  const mpssMeans  = itemMeans('MSPSS_Q',12,fields);
-
-  function scaleItemBars(means,labels,max,color){
-    return `<div class="bar-list">${means.map((m,i)=>`<div class="bar-item">
-      <div class="bar-lbl wide" title="${labels[i]}">${labels[i]}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(m/max*100)}%;background:${color}"></div></div>
-      <div class="bar-val">${m.toFixed(2)}</div>
-    </div>`).join('')}</div>`;
-  }
-
-  /* ── by-work-arrangement table ─────────────────────────── */
-  const arrangements=[...new Set(fields.map(f=>f.Work_Arrangement).filter(Boolean))];
-  const workTableRows=arrangements.map(arr=>{
-    const g=fields.filter(f=>f.Work_Arrangement===arr);
-    if(!g.length) return '';
-    const gFS=g.map(f=>calcFS(f)), gMBI=g.map(f=>calcMBI(f)), gMSP=g.map(f=>calcMSPSS(f)), gMET=g.map(f=>calcMET(f));
-    return `<tr>
-      <td><strong>${arr}</strong></td><td>${g.length}</td>
-      <td>${mean(gFS).toFixed(1)}</td><td>${mean(gMBI).toFixed(1)}</td>
-      <td>${mean(gMSP).toFixed(1)}</td><td>${Math.round(mean(gMET)).toLocaleString()}</td>
-    </tr>`;
-  }).join('');
-
-  /* ── descriptive stats table ────────────────────────────── */
-  const descRows=[
-    ['Flourishing Scale (FS total)', fss.length, Math.min(...fss), Math.max(...fss), avgFS.toFixed(1), sdFS.toFixed(1), '8–56'],
-    ['Burnout / EE (MBI total)', mbis.length, Math.min(...mbis), Math.max(...mbis), avgMBI.toFixed(1), sdMBI.toFixed(1), '0–42'],
-    ['Social Support (MSPSS total)', mspssTs.length, Math.min(...mspssTs), Math.max(...mspssTs), avgMSP.toFixed(1), sdMSP.toFixed(1), '12–84'],
-    ['Physical Activity (MET-min/wk)', mets.length, Math.min(...mets), Math.max(...mets).toLocaleString(), Math.round(avgMET).toLocaleString(), Math.round(sd(mets)).toLocaleString(), 'IPAQ-SF'],
-    ['Age (years)', ages.length, Math.min(...ages), Math.max(...ages), avgAge, (Math.round(sd(ages)*10)/10).toFixed(1), '—'],
-  ].map(([v,nv,mn,mx,avg,sdd,rng])=>`<tr><td>${v}</td><td>${nv}</td><td>${mn}</td><td>${mx}</td><td>${avg}</td><td>${sdd}</td><td>${rng}</td></tr>`).join('');
-
-  /* ── SCATTER DATA ────────────────────────────────────────── */
-  const scatterPts = mets.map((m,i)=>({x:m,y:fss[i]}));
-
-  /* ══════════════════════════════════════════════════════════
-     BUILD HTML
-  ══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   SHELL (built once per data load)
+══════════════════════════════════════════════════════════ */
+const TABS=[
+  ['overview','Overview'],['scales','Scale distributions'],['reliability','Reliability'],['demo','Demographics'],
+  ['groups','Group comparisons'],['corr','Correlations & stats'],['model','Moderated mediation'],
+  ['quality','Data quality'],['individual','Individual scores'],
+];
+function renderShell(){
+  const opts=k=>[...new Set(state.rows.map(r=>r.demo[k]).filter(Boolean))].sort();
+  const lbl=k=>DEMO.find(d=>d.key===k).label;
   document.getElementById('mainArea').innerHTML=`
-
-  <!-- KPI STRIP -->
-  <div class="kpi-strip">
-    <div class="kpi" style="--kpi-color:#2d5a9e"><div class="kpi-label">Total responses</div><div class="kpi-val">${n}</div><div class="kpi-sub">Target = 300</div></div>
-    <div class="kpi" style="--kpi-color:#6b6660"><div class="kpi-label">Mean age</div><div class="kpi-val">${avgAge}</div><div class="kpi-sub">years (SD = ${(Math.round(sd(ages)*10)/10).toFixed(1)})</div></div>
-    <div class="kpi" style="--kpi-color:#1a8c6b"><div class="kpi-label">Avg flourishing</div><div class="kpi-val">${avgFS.toFixed(1)}</div><div class="kpi-sub">SD = ${sdFS.toFixed(1)} &nbsp;/ 56</div></div>
-    <div class="kpi" style="--kpi-color:#e8401c"><div class="kpi-label">Avg burnout (EE)</div><div class="kpi-val">${avgMBI.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMBI.toFixed(1)} &nbsp;/ 42</div></div>
-    <div class="kpi" style="--kpi-color:#c67c00"><div class="kpi-label">Avg social support</div><div class="kpi-val">${avgMSP.toFixed(1)}</div><div class="kpi-sub">SD = ${sdMSP.toFixed(1)} &nbsp;/ 84</div></div>
-    <div class="kpi" style="--kpi-color:#534AB7"><div class="kpi-label">Avg MET-min/wk</div><div class="kpi-val">${Math.round(avgMET).toLocaleString()}</div><div class="kpi-sub">IPAQ-SF computed</div></div>
+  <div class="filter-bar" role="region" aria-label="Filters">
+    <div class="fgroup"><label for="fQuality">Responses</label>
+      <select id="fQuality" onchange="onFilter()">
+        <option value="valid">Valid only (recommended)</option>
+        <option value="strict">Valid, excluding suspicious</option>
+        <option value="all">All responses</option>
+      </select></div>
+    ${FILTER_KEYS.map(k=>`<div class="fgroup"><label for="f_${k}">${lbl(k)}</label>
+      <select id="f_${k}" onchange="onFilter()"><option value="">All</option>${opts(k).map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select></div>`).join('')}
+    <button class="btn" onclick="resetFilters()">Reset</button>
+    <div class="filter-count" id="filterCount"></div>
   </div>
+  <div class="kpi-strip" id="kpis"></div>
+  <div class="tabs" role="tablist">${TABS.map(([k,l])=>`<button class="tab${state.tab===k?' active':''}" role="tab" data-tab="${k}" onclick="switchTab('${k}')">${l}<span id="tabBadge-${k}"></span></button>`).join('')}</div>
+  ${TABS.map(([k])=>`<div id="tab-${k}" class="tab-pane${state.tab===k?' active':''}" role="tabpanel"></div>`).join('')}`;
+  document.getElementById('fQuality').value=state.quality;
+  FILTER_KEYS.forEach(k=>{ const el=document.getElementById('f_'+k); if(el) el.value=state.filters[k]||''; });
+}
+function onFilter(){
+  state.quality=document.getElementById('fQuality').value;
+  FILTER_KEYS.forEach(k=>state.filters[k]=document.getElementById('f_'+k).value);
+  renderContent();
+}
+function resetFilters(){
+  state.quality='valid'; state.filters={};
+  document.getElementById('fQuality').value='valid';
+  FILTER_KEYS.forEach(k=>document.getElementById('f_'+k).value='');
+  renderContent();
+}
+function switchTab(name){
+  state.tab=name;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('active',p.id==='tab-'+name));
+  if(name==='model') ensureModel();
+}
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('overview')">Overview</button>
-    <button class="tab" onclick="switchTab('scales')">Scale distributions</button>
-    <button class="tab" onclick="switchTab('demo')">Demographics</button>
-    <button class="tab" onclick="switchTab('corr')">Correlations &amp; stats</button>
-    <button class="tab" onclick="switchTab('individual')">Individual scores</button>
-  </div>
+/* ══════════════════════════════════════════════════════════
+   CONTENT (re-rendered when filters change)
+══════════════════════════════════════════════════════════ */
+function renderContent(){
+  destroyAll();
+  const rows=activeRows(), n=rows.length, N=state.rows.length;
+  document.getElementById('hN').textContent=n;
+  document.getElementById('filterCount').innerHTML=`Analyzing <strong>${n}</strong> of ${N} responses`;
+  document.getElementById('statusText').textContent=`${N} responses loaded · ${n} included in analysis`;
+  const nBad=state.rows.filter(r=>r.invalid.length).length, nWarn=state.rows.filter(r=>!r.invalid.length&&r.warn.length).length;
+  document.getElementById('tabBadge-quality').innerHTML=nBad||nWarn?`<span class="flag-dot${nBad?' bad':''}">${nBad+nWarn}</span>`:'';
+  renderKPIs(rows);
+  const draw=[];
+  if(!n){
+    TABS.forEach(([k])=>{ if(k!=='quality') document.getElementById('tab-'+k).innerHTML=`<div class="card empty-card">${N?'No responses match the current filters.':'No survey responses have been collected yet.'}</div>`; });
+  } else {
+    draw.push(renderOverview(rows), renderScales(rows), renderReliability(rows), renderDemo(rows), renderGroups(rows), renderCorr(rows));
+    renderModelPane();
+    renderIndividualPane();
+  }
+  renderQuality();
+  requestAnimationFrame(()=>draw.forEach(fn=>fn&&fn()));
+  if(state.tab==='model') ensureModel();
+}
 
-  <!-- ═══ TAB: OVERVIEW ═══ -->
-  <div id="tab-overview" class="tab-pane active">
+function renderKPIs(rows){
+  const n=rows.length, N=state.rows.length;
+  const ages=vals(rows,r=>r.age), fs=vals(rows,r=>r.fs), mbi=vals(rows,r=>r.mbi), msp=vals(rows,r=>r.mspssT), met=vals(rows,r=>r.met);
+  const dm=describe(met);
+  const prog=Math.min(100,Math.round(N/TARGET_N*100));
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi" style="--kpi-color:#2d5a9e"><div class="kpi-label">Responses collected</div><div class="kpi-val">${N}</div><div class="kpi-sub">${prog}% of target ${TARGET_N}</div><div class="progress" role="progressbar" aria-valuenow="${N}" aria-valuemax="${TARGET_N}"><div class="progress-fill" style="width:${prog}%"></div></div></div>
+    <div class="kpi" style="--kpi-color:#6b6660"><div class="kpi-label">Mean age</div><div class="kpi-val">${fx(mean(ages),1)}</div><div class="kpi-sub">years (SD = ${fx(sd(ages),1)})</div></div>
+    <div class="kpi" style="--kpi-color:#1a8c6b"><div class="kpi-label">Avg flourishing</div><div class="kpi-val">${fx(mean(fs))}</div><div class="kpi-sub">SD = ${fx(sd(fs))} &nbsp;/ 56</div></div>
+    <div class="kpi" style="--kpi-color:#e8401c"><div class="kpi-label">Avg burnout (EE)</div><div class="kpi-val">${fx(mean(mbi))}</div><div class="kpi-sub">SD = ${fx(sd(mbi))} &nbsp;/ 42</div></div>
+    <div class="kpi" style="--kpi-color:#c67c00"><div class="kpi-label">Avg social support</div><div class="kpi-val">${fx(mean(msp))}</div><div class="kpi-sub">SD = ${fx(sd(msp))} &nbsp;/ 84</div></div>
+    <div class="kpi" style="--kpi-color:#534AB7"><div class="kpi-label">Median MET-min/wk</div><div class="kpi-val">${fint(dm.median)}</div><div class="kpi-sub">mean ${fint(dm.mean)} · IPAQ-SF</div></div>`;
+}
+
+/* ── TAB: OVERVIEW ──────────────────────────────────────── */
+function renderOverview(rows){
+  const n=rows.length;
+  const ipaqF=freq(rows.map(r=>r.ipaqLevel)), fsF=freq(rows.map(r=>r.fsLevel)), mbiF=freq(rows.map(r=>r.mbiLevel)), mspF=freq(rows.map(r=>r.mspssLevel));
+  /* collection timeline uses every collected response */
+  const dated=state.rows.filter(r=>r.created).sort((a,b)=>a.created-b.created);
+  const dayKey=d=>d.toISOString().slice(0,10);
+  const perDay={}; dated.forEach(r=>{ const k=dayKey(r.created); perDay[k]=(perDay[k]||0)+1; });
+  let days=[], cum=[];
+  if(dated.length){
+    const start=new Date(dayKey(dated[0].created)), end=new Date(dayKey(new Date()>dated[dated.length-1].created?new Date():dated[dated.length-1].created));
+    let c=0; for(let d=new Date(start); d<=end; d.setUTCDate(d.getUTCDate()+1)){ const k=dayKey(d); c+=perDay[k]||0; days.push(k); cum.push(c); }
+  }
+  const last7=dated.filter(r=>Date.now()-r.created<7*86400000).length;
+  const elapsed=days.length||1, rate=dated.length/elapsed;
+  const remaining=Math.max(0,TARGET_N-state.rows.length);
+  const eta=remaining&&rate>0 ? new Date(Date.now()+remaining/Math.max(rate,last7/7||rate)*86400000) : null;
+
+  const vOpts=sel=>Object.entries(VARS).map(([k,v])=>`<option value="${k}"${k===sel?' selected':''}>${v.label}</option>`).join('');
+
+  document.getElementById('tab-overview').innerHTML=`
     <div class="chart-row">
-
-      <!-- IPAQ -->
-      <div class="card donut-card">
-        <div class="card-title">Physical activity level (IPAQ-SF)</div>
-        <div class="donut-area">
-          <div class="donut-wrap">
-            <canvas id="cIPAQ" width="120" height="120" role="img" aria-label="Doughnut: IPAQ physical activity levels">${ipaqF.High||0} High, ${ipaqF.Moderate||0} Moderate, ${ipaqF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
-          </div>
-          <div class="donut-legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High</div><div class="legend-n">${ipaqF.High||0}</div><div class="legend-pct">${pct(ipaqF.High||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate</div><div class="legend-n">${ipaqF.Moderate||0}</div><div class="legend-pct">${pct(ipaqF.Moderate||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low</div><div class="legend-n">${ipaqF.Low||0}</div><div class="legend-pct">${pct(ipaqF.Low||0,n)}%</div></div>
-          </div>
-        </div>
-        <p class="card-note">MET-min/wk: High ≥3000 (or vigorous ≥1500), Moderate 600–2999, Low &lt;600. Computed via IPAQ-SF scoring protocol (IPAQ Research Committee, 2005).</p>
-      </div>
-
-      <!-- FLOURISHING -->
-      <div class="card donut-card">
-        <div class="card-title">Flourishing Scale level (FS)</div>
-        <div class="donut-area">
-          <div class="donut-wrap">
-            <canvas id="cFS" width="120" height="120" role="img" aria-label="Doughnut: Flourishing Scale levels">${fsF.High||0} High, ${fsF.Moderate||0} Moderate, ${fsF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
-          </div>
-          <div class="donut-legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High ≥48</div><div class="legend-n">${fsF.High||0}</div><div class="legend-pct">${pct(fsF.High||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 33–47</div><div class="legend-n">${fsF.Moderate||0}</div><div class="legend-pct">${pct(fsF.Moderate||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low &lt;33</div><div class="legend-n">${fsF.Low||0}</div><div class="legend-pct">${pct(fsF.Low||0,n)}%</div></div>
-          </div>
-        </div>
-        <p class="card-note">Diener &amp; Biswas-Diener (2009) Flourishing Scale: 8 items, 1–7 Likert. Total range 8–56. High ≥48, Low &lt;33.</p>
-      </div>
-
+      ${donutCard('cIPAQ','Physical activity level (IPAQ-SF)',ipaqF,n,[{key:'High',label:'High',color:LVL_GOOD},{key:'Moderate',label:'Moderate',color:LVL_MID},{key:'Low',label:'Low',color:LVL_BAD}],
+        'Official IPAQ-SF categorical criteria (IPAQ Research Committee, 2005): High = vigorous ≥3 days & ≥1,500 MET-min/wk, or ≥7 days & ≥3,000; Moderate = ≥3 days vigorous ≥20 min, ≥5 days moderate/walking ≥30 min, or ≥5 days & ≥600; otherwise Low.')}
+      ${donutCard('cFS','Flourishing Scale level (FS)',fsF,n,[{key:'High',label:'High ≥48',color:LVL_GOOD},{key:'Moderate',label:'Moderate 33–47',color:LVL_MID},{key:'Low',label:'Low &lt;33',color:LVL_BAD}],
+        'Diener &amp; Biswas-Diener (2009) Flourishing Scale: 8 items, 1–7 Likert. Total range 8–56. High ≥48, Low &lt;33.')}
     </div>
     <div class="chart-row">
-
-      <!-- MBI -->
-      <div class="card donut-card">
-        <div class="card-title">Burnout — Emotional Exhaustion (MBI-EE)</div>
-        <div class="donut-area">
-          <div class="donut-wrap">
-            <canvas id="cMBI" width="120" height="120" role="img" aria-label="Doughnut: MBI burnout levels">${mbiF.Low||0} Low, ${mbiF.Moderate||0} Moderate, ${mbiF.High||0} High</canvas>
-            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
-          </div>
-          <div class="donut-legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">Low ≤16</div><div class="legend-n">${mbiF.Low||0}</div><div class="legend-pct">${pct(mbiF.Low||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 17–26</div><div class="legend-n">${mbiF.Moderate||0}</div><div class="legend-pct">${pct(mbiF.Moderate||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">High ≥27</div><div class="legend-n">${mbiF.High||0}</div><div class="legend-pct">${pct(mbiF.High||0,n)}%</div></div>
-          </div>
-        </div>
-        <p class="card-note">Maslach Burnout Inventory (Maslach &amp; Jackson, 1981) — 7 EE items, 0–6 frequency scale. Total range 0–42. Low ≤16, High ≥27.</p>
-      </div>
-
-      <!-- MSPSS -->
-      <div class="card donut-card">
-        <div class="card-title">Perceived Social Support (MSPSS)</div>
-        <div class="donut-area">
-          <div class="donut-wrap">
-            <canvas id="cMSPSS" width="120" height="120" role="img" aria-label="Doughnut: MSPSS social support levels">${mspssF.High||0} High, ${mspssF.Moderate||0} Moderate, ${mspssF.Low||0} Low</canvas>
-            <div class="donut-center"><div class="donut-center-val">${n}</div><div class="donut-center-lbl">total</div></div>
-          </div>
-          <div class="donut-legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#1a8c6b"></div><div class="legend-lbl">High avg ≥5.5</div><div class="legend-n">${mspssF.High||0}</div><div class="legend-pct">${pct(mspssF.High||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#c67c00"></div><div class="legend-lbl">Moderate 2.95–5.49</div><div class="legend-n">${mspssF.Moderate||0}</div><div class="legend-pct">${pct(mspssF.Moderate||0,n)}%</div></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#e8401c"></div><div class="legend-lbl">Low &lt;2.95</div><div class="legend-n">${mspssF.Low||0}</div><div class="legend-pct">${pct(mspssF.Low||0,n)}%</div></div>
-          </div>
-        </div>
-        <p class="card-note">MSPSS (Zimet et al., 1988) — 12 items across Family, Friends, and Significant Other subscales. Item avg classified by Dahlem et al. (1991) cutoffs.</p>
-      </div>
+      ${donutCard('cMBI','Burnout — Emotional Exhaustion (MBI-EE)',mbiF,n,[{key:'Low',label:'Low ≤16',color:LVL_GOOD},{key:'Moderate',label:'Moderate 17–26',color:LVL_MID},{key:'High',label:'High ≥27',color:LVL_BAD}],
+        'Maslach Burnout Inventory (Maslach &amp; Jackson, 1981) — 7 EE items, 0–6 frequency scale. Total range 0–42. Low ≤16, High ≥27.')}
+      ${donutCard('cMSPSS','Perceived Social Support (MSPSS)',mspF,n,[{key:'High',label:'High avg ≥5.5',color:LVL_GOOD},{key:'Moderate',label:'Moderate 2.95–5.49',color:LVL_MID},{key:'Low',label:'Low &lt;2.95',color:LVL_BAD}],
+        'MSPSS (Zimet et al., 1988) — 12 items across Family, Friends, and Significant Other subscales. Item avg classified by Dahlem et al. (1991) cutoffs.')}
     </div>
 
-    <!-- PA vs FLOURISHING SCATTER -->
     <div class="card">
-      <div class="card-title">Physical activity vs. flourishing — individual data points</div>
-      <div style="position:relative;height:280px"><canvas id="cScatter" role="img" aria-label="Scatter plot of IPAQ MET-minutes per week vs Flourishing Scale total score">Scatter of physical activity (MET-min/wk) against FS total score for all respondents.</canvas></div>
-      <p class="card-note">Each point = one respondent. x = total MET-min/wk (IPAQ-SF scoring). y = Flourishing Scale total (8–56). Pearson r = <strong>${rMETvsFS}</strong> — ${corrStrength(rMETvsFS).toLowerCase()} ${rMETvsFS>=0?'positive':'negative'} linear association.</p>
-    </div>
-
-    <!-- MEANS BY WORK ARRANGEMENT -->
-    <div class="card">
-      <div class="card-title">Mean scale scores by work arrangement</div>
-      <div class="dtable-wrap">
-        <table class="dtable">
-          <thead><tr><th>Work arrangement</th><th>n</th><th>Mean FS</th><th>Mean MBI-EE</th><th>Mean MSPSS</th><th>Mean MET-min/wk</th></tr></thead>
-          <tbody>${workTableRows||'<tr><td colspan="6" style="color:var(--text3)">No data</td></tr>'}</tbody>
-        </table>
+      <div class="card-head">
+        <div class="card-title">Relationship explorer</div>
+        <div class="ctl-row">
+          <label class="inline-ctl">X <select id="scX" onchange="state.scatterX=this.value;drawScatter()">${vOpts(state.scatterX)}</select></label>
+          <label class="inline-ctl">Y <select id="scY" onchange="state.scatterY=this.value;drawScatter()">${vOpts(state.scatterY)}</select></label>
+        </div>
       </div>
-      <p class="card-note">Higher FS and lower MBI indicate better psychological well-being. Differences across work arrangements may inform group comparisons in moderated mediation analysis.</p>
+      <div style="position:relative;height:300px"><canvas id="cScatter" role="img" aria-label="Scatter plot of the selected variables"></canvas></div>
+      <p class="card-note" id="scatterNote"></p>
     </div>
-  </div>
 
-  <!-- ═══ TAB: SCALE DISTRIBUTIONS ═══ -->
-  <div id="tab-scales" class="tab-pane">
+    <div class="card">
+      <div class="card-title">Data collection progress</div>
+      <div class="stat-inline">
+        <div>Collected<strong>${state.rows.length} / ${TARGET_N}</strong></div>
+        <div>Last 7 days<strong>${last7}</strong></div>
+        <div>Avg per day<strong>${fx(rate,1)}</strong></div>
+        <div>Remaining<strong>${remaining}</strong></div>
+        <div>Projected finish<strong>${remaining===0?'Target met':eta?eta.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'—'}</strong></div>
+      </div>
+      ${days.length?`<div style="position:relative;height:200px"><canvas id="cTimeline" role="img" aria-label="Cumulative responses collected over time">${state.rows.length} responses collected</canvas></div>`:'<p class="card-note">Submission timestamps are not available.</p>'}
+      <p class="card-note">Based on Airtable submission time of all collected responses (not affected by filters). Projection uses the last-7-day pace (or the overall average if no recent responses).</p>
+    </div>`;
+
+  return ()=>{
+    makeDonut('cIPAQ',[ipaqF.High||0,ipaqF.Moderate||0,ipaqF.Low||0],[LVL_GOOD,LVL_MID,LVL_BAD],['High','Moderate','Low']);
+    makeDonut('cFS',[fsF.High||0,fsF.Moderate||0,fsF.Low||0],[LVL_GOOD,LVL_MID,LVL_BAD],['High','Moderate','Low']);
+    makeDonut('cMBI',[mbiF.Low||0,mbiF.Moderate||0,mbiF.High||0],[LVL_GOOD,LVL_MID,LVL_BAD],['Low','Moderate','High']);
+    makeDonut('cMSPSS',[mspF.High||0,mspF.Moderate||0,mspF.Low||0],[LVL_GOOD,LVL_MID,LVL_BAD],['High','Moderate','Low']);
+    drawScatter();
+    if(days.length) newChart('cTimeline',{type:'line',
+      data:{labels:days,datasets:[
+        {label:'Collected',data:cum,borderColor:'#2d5a9e',backgroundColor:'rgba(45,90,158,.08)',fill:true,borderWidth:2,pointRadius:0,pointHitRadius:10,tension:.15},
+        {label:'Target',data:days.map(()=>TARGET_N),borderColor:'#9e9890',borderWidth:1,borderDash:[4,4],pointRadius:0,pointHitRadius:0,fill:false}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:11}}},tooltip:{filter:c=>c.datasetIndex===0,callbacks:{label:c=>` ${c.raw} collected (+${perDay[c.label]||0} that day)`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:8,maxRotation:0}},y:{beginAtZero:true,suggestedMax:TARGET_N,grid:{color:GRID},ticks:{font:{size:10}}}}}});
+  };
+}
+function drawScatter(){
+  const rows=activeRows(), X=VARS[state.scatterX], Y=VARS[state.scatterY];
+  const t=corrTest(rows,X.get,Y.get,'pearson');
+  const pts=t.xs.map((x,i)=>({x,y:t.ys[i]}));
+  let line=null, slope=NaN;
+  if(t.n>=3){ const fit=olsBeta(t.ys,[t.xs]); if(fit){ const [b0,b1]=fit.beta; slope=b1; const mn=Math.min(...t.xs), mx=Math.max(...t.xs); line=[{x:mn,y:b0+b1*mn},{x:mx,y:b0+b1*mx}]; } }
+  makeScatter('cScatter',pts,line,X.label,Y.label,X.short,Y.short);
+  const note=document.getElementById('scatterNote');
+  if(note) note.innerHTML = t.n<3 ? 'Not enough paired observations.' :
+    `Each point = one respondent (n = ${t.n}). Line = least-squares fit (slope = ${fb(slope,4)}). Pearson <em>r</em> = <strong>${fr(t.r)}</strong>, <em>p</em> ${fp(t.p).startsWith('<')?fp(t.p):'= '+fp(t.p)} — ${corrStrength(t.r).toLowerCase()} ${t.r>=0?'positive':'negative'} association${t.p<.05?' (significant at .05)':' (not significant at .05)'}.`;
+}
+
+/* ── TAB: SCALE DISTRIBUTIONS ───────────────────────────── */
+function renderScales(rows){
+  const defs=[
+    {id:'hFS',  sc:SCALES.fs,   get:r=>r.fs,     level:fsLevel, inv:false},
+    {id:'hMBI', sc:SCALES.mbi,  get:r=>r.mbi,    level:mbiLevel, inv:true},
+    {id:'hMSP', sc:SCALES.mspss,get:r=>r.mspssT, level:t=>mspssLevel(t/12), inv:false},
+  ];
+  const lc=(lvl,inv)=>lvl==='Moderate'?LVL_MID:(lvl==='High')!==inv?LVL_GOOD:LVL_BAD;
+  const itemMeans=(key,k)=>Array.from({length:k},(_,i)=>mean(rows.map(r=>r[key][i]).filter(isNum)));
+  const stats=d=>{ const s=describe(vals(rows,d.get)); return `<div class="stat-inline">
+      <div>n<strong>${s.n}</strong></div><div>Mean<strong>${fx(s.mean)}</strong></div><div>SD<strong>${fx(s.sd)}</strong></div>
+      <div>Median<strong>${fx(s.median)}</strong></div><div>Range<strong>${s.n?s.min+'–'+s.max:'—'}</strong></div>
+      <div>Skew<strong>${fx(s.skew,2)}</strong></div><div>Kurtosis<strong>${fx(s.kurt,2)}</strong></div></div>`; };
+  const legend=inv=>`<div class="donut-legend" style="flex-direction:row;gap:14px;margin-top:8px">${levelOrder(inv).map(l=>`<div class="legend-item"><div class="legend-swatch" style="background:${l.color}"></div><div class="legend-lbl">${l.key}</div></div>`).join('')}</div>`;
+  const met=describe(vals(rows,r=>r.met));
+  const metBins=[...Array(12).keys()].map(i=>i*500);
+  const metCounts=metBins.map((b,i)=>vals(rows,r=>r.met).filter(v=>i===11?v>=b:(v>=b&&v<b+500)).length);
+  const sub=k=>describe(vals(rows,r=>r[k]));
+  const items={fs:itemMeans('fsItems',8), mbi:itemMeans('mbiItems',7), mspss:itemMeans('mspssItems',12)};
+
+  document.getElementById('tab-scales').innerHTML=`
+    ${defs.map(d=>`<div class="card">
+      <div class="card-title">${d.sc.name} — total score distribution</div>
+      ${stats(d)}
+      <div style="position:relative;height:200px"><canvas id="${d.id}" role="img" aria-label="Histogram of ${d.sc.abbr} total scores"></canvas></div>
+      ${legend(d.inv)}
+      <p class="card-note">Bars are coloured by the classification each total score falls into. Skewness and excess kurtosis within ±2 and ±7 are generally acceptable for regression-based analyses (West, Finch &amp; Curran, 1995).</p>
+    </div>`).join('')}
+
+    <div class="card">
+      <div class="card-title">Physical activity (IPAQ-SF) — MET-min/wk distribution</div>
+      <div class="stat-inline">
+        <div>n<strong>${met.n}</strong></div><div>Mean<strong>${fint(met.mean)}</strong></div><div>SD<strong>${fint(met.sd)}</strong></div>
+        <div>Median<strong>${fint(met.median)}</strong></div><div>IQR<strong>${fint(met.q1)}–${fint(met.q3)}</strong></div>
+        <div>Skew<strong>${fx(met.skew,2)}</strong></div><div>Kurtosis<strong>${fx(met.kurt,2)}</strong></div></div>
+      <div style="position:relative;height:200px"><canvas id="hMET" role="img" aria-label="Histogram of MET-minutes per week"></canvas></div>
+      <p class="card-note">Bins of 500 MET-min/wk; the last bar collects all values ≥ 5,500. IPAQ data are typically right-skewed — the IPAQ committee recommends reporting medians and IQRs. Consider a log transform for regression (available in the Moderated mediation tab).</p>
+    </div>
 
     <div class="card">
       <div class="card-title">Flourishing Scale — mean item scores (1–7)</div>
-      ${scaleItemBars(fsMeans,fsLabels,7,'#1a8c6b')}
-      <p class="card-note">FS items rated 1 (strongly disagree) – 7 (strongly agree). Bar length proportional to max = 7. Higher = greater flourishing on that dimension.</p>
+      ${scaleItemBars(items.fs,FS_LABELS,7,'#1a8c6b')}
+      <p class="card-note">FS items rated 1 (strongly disagree) – 7 (strongly agree). Higher = greater flourishing on that dimension.</p>
     </div>
-
     <div class="card">
       <div class="card-title">MBI Emotional Exhaustion — mean item scores (0–6)</div>
-      ${scaleItemBars(mbiMeans,mbiLabels,6,'#e8401c')}
-      <p class="card-note">MBI-EE items rated 0 (never) – 6 (every day). Bar length proportional to max = 6. Higher = greater emotional exhaustion.</p>
+      ${scaleItemBars(items.mbi,MBI_LABELS,6,'#e8401c')}
+      <p class="card-note">MBI-EE items rated 0 (never) – 6 (every day). Higher = greater emotional exhaustion.</p>
     </div>
-
     <div class="card">
-      <div class="card-title">MSPSS — mean item scores (1–7)</div>
-      ${scaleItemBars(mpssMeans,mspssLabels,7,'#2d5a9e')}
-      <p class="card-note">MSPSS items rated 1 (very strongly disagree) – 7 (very strongly agree). Subscales: Items 1,2,5,10 = Significant Other; Items 3,4,8,11 = Family; Items 6,7,9,12 = Friends.</p>
-    </div>
-  </div>
-
-  <!-- ═══ TAB: DEMOGRAPHICS ═══ -->
-  <div id="tab-demo" class="tab-pane">
-    <div class="chart-row">
-      <div class="card"><div class="card-title">Sex</div>${freqBars(sexF,n,'#534AB7')}</div>
-      <div class="card"><div class="card-title">Civil status</div>${freqBars(civilF,n,'#534AB7')}</div>
-    </div>
-    <div class="chart-row">
-      <div class="card"><div class="card-title">Work arrangement</div>${freqBars(workF,n,'#2d5a9e')}</div>
-      <div class="card"><div class="card-title">Work schedule</div>${freqBars(schedF,n,'#2d5a9e')}</div>
-    </div>
-    <div class="chart-row">
-      <div class="card"><div class="card-title">Tenure in current organization</div>${freqBars(tenureF,n,'#1a8c6b')}</div>
-      <div class="card"><div class="card-title">Job position level</div>${freqBars(posF,n,'#1a8c6b')}</div>
-    </div>
-    <div class="chart-row">
-      <div class="card"><div class="card-title">Employment sector</div>${freqBars(sectorF,n,'#c67c00')}</div>
-      <div class="card"><div class="card-title">Self-reported PA level</div>${freqBars(paF,n,'#c67c00')}</div>
-    </div>
-    <div class="card"><div class="card-title">Job type</div>${freqBars(jobF,n,'#e8401c',true)}</div>
-  </div>
-
-  <!-- ═══ TAB: INDIVIDUAL SCORES ═══ -->
-  <div id="tab-individual" class="tab-pane">
-    <div class="card">
-      <div class="card-title">Individual respondent scores — all four instruments</div>
-      <div class="ind-toolbar">
-        <input class="ind-search" id="indSearch" type="search" placeholder="Search by name, sex, position, sector…" oninput="filterIndTable()">
-        <select class="ind-filter" id="indFilterIPAQ" onchange="filterIndTable()">
-          <option value="">All PA levels</option>
-          <option>High</option><option>Moderate</option><option>Low</option>
-        </select>
-        <select class="ind-filter" id="indFilterFS" onchange="filterIndTable()">
-          <option value="">All FS levels</option>
-          <option>High</option><option>Moderate</option><option>Low</option>
-        </select>
-        <select class="ind-filter" id="indFilterMBI" onchange="filterIndTable()">
-          <option value="">All burnout levels</option>
-          <option>High</option><option>Moderate</option><option>Low</option>
-        </select>
-        <select class="ind-filter" id="indFilterMSPSS" onchange="filterIndTable()">
-          <option value="">All support levels</option>
-          <option>High</option><option>Moderate</option><option>Low</option>
-        </select>
-        <span class="ind-count" id="indCount"></span>
+      <div class="card-title">MSPSS — mean item scores (1–7) and subscales</div>
+      <div class="stat-inline">
+        <div>Significant other<strong>${fx(sub('so').mean,2)}</strong></div>
+        <div>Family<strong>${fx(sub('fam').mean,2)}</strong></div>
+        <div>Friends<strong>${fx(sub('fri').mean,2)}</strong></div>
       </div>
-      <div class="ind-table-wrap">
-        <table class="ind-table" id="indTable">
-          <thead>
-            <tr>
-              <th onclick="sortIndTable(0)" title="Sort by name">#&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(1)" title="Sort by name">Name&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(2)">Age&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(3)">Sex</th>
-              <th onclick="sortIndTable(4)" title="Sort by MET">PA — MET-min/wk&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(5)">PA Level</th>
-              <th onclick="sortIndTable(6)" title="Sort by FS score">FS Score&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(7)">FS Level</th>
-              <th onclick="sortIndTable(8)" title="Sort by MBI score">MBI-EE Score&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(9)">Burnout Level</th>
-              <th onclick="sortIndTable(10)" title="Sort by MSPSS score">MSPSS Score&nbsp;<span class="sort-icon">↕</span></th>
-              <th onclick="sortIndTable(11)">Support Level</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="indTbody"></tbody>
-        </table>
-      </div>
-      <p class="card-note">Click any row to expand detailed score breakdown per instrument. Scores computed per official scoring protocols: IPAQ-SF MET-min/wk (8.0 / 4.0 / 3.3 coefficients), FS total 8–56, MBI-EE total 0–42, MSPSS total 12–84 with item average for classification.</p>
-    </div>
-  </div>
+      ${scaleItemBars(items.mspss,MSPSS_LABELS,7,'#2d5a9e')}
+      <p class="card-note">MSPSS items rated 1 (very strongly disagree) – 7 (very strongly agree). Subscales (item averages): Significant Other = items 1, 2, 5, 10; Family = 3, 4, 8, 11; Friends = 6, 7, 9, 12.</p>
+    </div>`;
 
-  <!-- ═══ TAB: CORRELATIONS & STATS ═══ -->
-  <div id="tab-corr" class="tab-pane">
+  return ()=>{
+    defs.forEach(d=>{
+      const labels=[], data=[], colors=[];
+      const v=vals(rows,d.get);
+      for(let s=d.sc.totMin;s<=d.sc.totMax;s++){ labels.push(String(s)); data.push(v.filter(x=>x===s).length); colors.push(lc(d.level(s),d.inv)); }
+      makeHist(d.id,labels,data,colors,'Total score',l=>`Score ${l} · ${d.level(+l)}`);
+    });
+    makeHist('hMET',metBins.map((b,i)=>i===11?'5,500+':b.toLocaleString()),metCounts,metBins.map(()=>'#534AB7'),'MET-min/wk (bin start)',l=>l.includes('+')?l+' MET-min/wk':`${l}–${(+l.replace(/,/g,'')+499).toLocaleString()} MET-min/wk`);
+  };
+}
 
+/* ── TAB: RELIABILITY ───────────────────────────────────── */
+function renderReliability(rows){
+  const complete=key=>rows.map(r=>r[key]).filter(a=>a.every(isNum));
+  const subset=(key,idx)=>rows.map(r=>idx.map(i=>r[key][i-1])).filter(a=>a.every(isNum));
+  const sets=[
+    {name:'Flourishing Scale (FS)',k:8, res:cronbach(complete('fsItems')), labels:FS_LABELS, items:true},
+    {name:'MBI — Emotional Exhaustion',k:7, res:cronbach(complete('mbiItems')), labels:MBI_LABELS, items:true},
+    {name:'MSPSS — total',k:12, res:cronbach(complete('mspssItems')), labels:MSPSS_LABELS, items:true},
+    {name:'MSPSS — Significant other',k:4, res:cronbach(subset('mspssItems',MSPSS_SUB.so)), sub:true},
+    {name:'MSPSS — Family',k:4, res:cronbach(subset('mspssItems',MSPSS_SUB.fam)), sub:true},
+    {name:'MSPSS — Friends',k:4, res:cronbach(subset('mspssItems',MSPSS_SUB.fri)), sub:true},
+  ];
+  const aBadge=a=>!isNum(a)?'':`<span class="badge ${a>=.7?'badge-green':a>=.6?'badge-amber':'badge-red'}">${alphaLabel(a)}</span>`;
+  const itemTable=s=>{
+    if(!s.res) return '<p class="card-note">Not enough complete responses.</p>';
+    return `<div class="dtable-wrap"><table class="dtable">
+      <thead><tr><th>#</th><th>Item</th><th class="num">Mean</th><th class="num">SD</th><th class="num">Corrected item–total r</th><th class="num">α if item deleted</th></tr></thead>
+      <tbody>${s.res.items.map((it,i)=>`<tr>
+        <td style="color:var(--text3)">${i+1}</td><td>${s.labels[i]}</td>
+        <td class="num">${fx(it.mean,2)}</td><td class="num">${fx(it.sd,2)}</td>
+        <td class="num">${fr(it.rit)} ${isNum(it.rit)&&it.rit<.3?'<span class="badge badge-amber">&lt; .30</span>':''}</td>
+        <td class="num">${fr(it.aDel)} ${isNum(it.aDel)&&it.aDel>s.res.alpha+.005?'<span class="badge badge-amber">↑ α</span>':''}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+  };
+  document.getElementById('tab-reliability').innerHTML=`
     <div class="card">
-      <div class="card-title">Bivariate Pearson correlations (r)</div>
-      <div class="corr-grid">
-        ${[[rMETvsFS,'PA (MET-min/wk)','Flourishing (FS total)'],[rMBIvsFS,'Burnout (MBI-EE)','Flourishing (FS total)'],[rMSPSSvsFS,'Social support (MSPSS)','Flourishing (FS total)'],[rMETvsMBI,'PA (MET-min/wk)','Burnout (MBI-EE)'],[rMBIvsMSP,'Burnout (MBI-EE)','Social support (MSPSS)']].map(([r,x,y])=>`
-        <div class="corr-cell" style="--corr-color:${corrColor(r)}">
-          <div class="corr-r" style="color:${corrColor(r)}">${r}</div>
-          <div class="corr-pairs">${x} ↔ ${y}</div>
-          <div class="corr-interp" style="color:${corrColor(r)}">${corrStrength(r)} ${r>=0?'positive':'negative'}</div>
+      <div class="card-title">Internal consistency — Cronbach's α</div>
+      <div class="dtable-wrap"><table class="dtable">
+        <thead><tr><th>Scale</th><th class="num">Items</th><th class="num">n (complete)</th><th class="num">α</th><th>Interpretation</th></tr></thead>
+        <tbody>${sets.map(s=>`<tr><td>${s.sub?'&nbsp;&nbsp;&nbsp;':''}${s.name}</td><td class="num">${s.k}</td><td class="num">${s.res?s.res.n:'—'}</td><td class="num"><strong>${fr(s.res?.alpha)}</strong></td><td>${aBadge(s.res?.alpha)}</td></tr>`).join('')}</tbody>
+      </table></div>
+      <p class="card-note">George &amp; Mallery (2003): α ≥ .9 excellent, ≥ .8 good, ≥ .7 acceptable, ≥ .6 questionable, ≥ .5 poor. Computed on respondents who answered every item of the scale. Report these values in the Instruments / Results section alongside the published reliabilities.</p>
+    </div>
+    ${sets.filter(s=>s.items).map(s=>`<div class="card">
+      <div class="card-title">${s.name} — item analysis</div>
+      ${itemTable(s)}
+      <p class="card-note">Corrected item–total r below .30 suggests an item measures something different from the rest of the scale. "↑ α" marks items whose removal would raise α.</p>
+    </div>`).join('')}`;
+  return null;
+}
+
+/* ── TAB: DEMOGRAPHICS ──────────────────────────────────── */
+function renderDemo(rows){
+  const n=rows.length, F=k=>freq(rows.map(r=>r.demo[k]));
+  const ages=describe(vals(rows,r=>r.age));
+  document.getElementById('tab-demo').innerHTML=`
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Age group</div>
+        <div class="stat-inline"><div>Mean<strong>${fx(ages.mean,1)}</strong></div><div>SD<strong>${fx(ages.sd,1)}</strong></div><div>Range<strong>${ages.n?ages.min+'–'+ages.max:'—'}</strong></div></div>
+        ${freqBars(F('ageBand'),n,'#534AB7',false,ORDER.ageBand)}</div>
+      <div class="card"><div class="card-title">Sex</div>${freqBars(F('Sex'),n,'#534AB7')}
+        <div class="card-title" style="margin-top:18px">Civil status</div>${freqBars(F('Civil_Status'),n,'#534AB7')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Work arrangement</div>${freqBars(F('Work_Arrangement'),n,'#2d5a9e')}</div>
+      <div class="card"><div class="card-title">Work schedule</div>${freqBars(F('Work_Schedule'),n,'#2d5a9e')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Tenure in current organization</div>${freqBars(F('Tenure'),n,'#1a8c6b')}</div>
+      <div class="card"><div class="card-title">Job position level</div>${freqBars(F('Job_Position'),n,'#1a8c6b')}</div>
+    </div>
+    <div class="chart-row">
+      <div class="card"><div class="card-title">Employment sector</div>${freqBars(F('Sector'),n,'#c67c00')}</div>
+      <div class="card"><div class="card-title">Self-reported PA level vs. IPAQ level</div>${freqBars(F('Physical_Activity_Level'),n,'#c67c00')}
+        <div class="card-title" style="margin-top:18px">IPAQ-SF computed level</div>${freqBars(F('ipaqLevel'),n,'#c67c00',false,ORDER.ipaqLevel)}</div>
+    </div>
+    <div class="card"><div class="card-title">Job type</div>${freqBars(F('Job_Type'),n,'#e8401c',true)}</div>
+    <p class="card-note">Percentages use the ${n} responses currently included. Use “Group comparisons” to test whether scale scores differ between these groups.</p>`;
+  return null;
+}
+
+/* ── TAB: GROUP COMPARISONS ─────────────────────────────── */
+const OUTCOMES={
+  fs:{label:'Flourishing (FS)',get:r=>r.fs,min:8,max:56,d:1},
+  mbi:{label:'Burnout (MBI-EE)',get:r=>r.mbi,min:0,max:42,d:1},
+  mspss:{label:'Social support (MSPSS)',get:r=>r.mspssT,min:12,max:84,d:1},
+  met:{label:'Physical activity (MET-min/wk)',get:r=>r.met,min:0,max:null,d:0},
+};
+function groupsOf(rows,key){
+  const g={}; rows.forEach(r=>{ const v=r.demo[key]; if(v) (g[v]=g[v]||[]).push(r); });
+  const order=ORDER[key];
+  return Object.entries(g).sort(order?((a,b)=>order.indexOf(a[0])-order.indexOf(b[0])):((a,b)=>b[1].length-a[1].length));
+}
+function renderGroups(rows){
+  const key=state.groupBy, groups=groupsOf(rows,key);
+  const outs=Object.entries(OUTCOMES);
+  const tests=outs.map(([k,o])=>anova(groups.map(([,g])=>vals(g,o.get))));
+  const fmtMSD=(g,o)=>{ const v=vals(g,o.get); return v.length?`${o.d?fx(mean(v),o.d):fint(mean(v))} <span style="color:var(--text3)">(${o.d?fx(sd(v),o.d):fint(sd(v))})</span>`:'—'; };
+  const sel=OUTCOMES[state.groupOutcome];
+  const ci=groups.map(([lbl,g])=>{ const v=vals(g,sel.get), m=mean(v), h=v.length>1?tCrit(v.length-1)*sd(v)/Math.sqrt(v.length):0; return {lbl,n:v.length,m,lo:m-h,hi:m+h}; }).filter(c=>c.n);
+  const lo=sel.min, hi=sel.max ?? Math.max(...ci.map(c=>c.hi),1)*1.05;
+  const pos=v=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100));
+  document.getElementById('tab-groups').innerHTML=`
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Mean scale scores by group</div>
+        <label class="inline-ctl">Group by <select onchange="state.groupBy=this.value;rerenderGroups()">${DEMO.map(d=>`<option value="${d.key}"${d.key===key?' selected':''}>${d.label}</option>`).join('')}</select></label>
+      </div>
+      <div class="dtable-wrap"><table class="dtable">
+        <thead><tr><th>${esc(DEMO.find(d=>d.key===key).label)}</th><th class="num">n</th>${outs.map(([,o])=>`<th class="num">${o.label}<br><span style="text-transform:none;letter-spacing:0">M (SD)</span></th>`).join('')}</tr></thead>
+        <tbody>${groups.map(([lbl,g])=>`<tr><td><strong>${esc(lbl)}</strong></td><td class="num">${g.length}</td>${outs.map(([,o])=>`<td class="num">${fmtMSD(g,o)}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${outs.length+2}" style="color:var(--text3)">No data</td></tr>`}
+        <tr class="foot"><td>One-way ANOVA</td><td></td>${tests.map(t=>`<td class="num">${t?`<em>F</em>(${t.df1}, ${t.df2}) = ${fx(t.F,2)}<br><em>p</em> ${fp(t.p).startsWith('<')?fp(t.p):'= '+fp(t.p)}${stars(t.p)?' <strong>'+stars(t.p)+'</strong>':''} · η² = ${fr(t.eta2)}`:'—'}</td>`).join('')}</tr></tbody>
+      </table></div>
+      <p class="card-note">One-way ANOVA across groups (η² ≈ .01 small, .06 medium, .14 large; Cohen, 1988). Groups with very small n give unstable estimates — interpret with caution, and follow significant results with post-hoc tests in SPSS. MET-min/wk is skewed; a Kruskal–Wallis test may be more appropriate for it. * p &lt; .05, ** p &lt; .01, *** p &lt; .001.</p>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Group means with 95% confidence intervals</div>
+        <label class="inline-ctl">Outcome <select onchange="state.groupOutcome=this.value;rerenderGroups()">${outs.map(([k,o])=>`<option value="${k}"${k===state.groupOutcome?' selected':''}>${o.label}</option>`).join('')}</select></label>
+      </div>
+      ${ci.length?`<div class="ci-list">${ci.map(c=>`<div class="ci-row">
+        <div class="ci-lbl" title="${esc(c.lbl)}">${esc(c.lbl)} <span style="color:var(--text3)">(n=${c.n})</span></div>
+        <div class="ci-track" title="${esc(c.lbl)}: M = ${sel.d?fx(c.m,1):fint(c.m)}, 95% CI [${sel.d?fx(c.lo,1):fint(c.lo)}, ${sel.d?fx(c.hi,1):fint(c.hi)}]">
+          <div class="ci-whisker" style="left:${pos(c.lo)}%;width:${pos(c.hi)-pos(c.lo)}%"></div>
+          <div class="ci-dot" style="left:${pos(c.m)}%"></div></div>
+        <div class="ci-val">${sel.d?fx(c.m,1):fint(c.m)} [${sel.d?fx(c.lo,1):fint(c.lo)}, ${sel.d?fx(c.hi,1):fint(c.hi)}]</div>
+      </div>`).join('')}</div>
+      <div class="ci-axis" style="margin-top:6px"><div></div><div><span>${fint(lo)}</span><span>${fint(hi)}</span></div><div></div></div>`:'<p class="card-note">No data.</p>'}
+      <p class="card-note">Dot = group mean; line = 95% CI (t-based). Axis spans the scale's possible range. Non-overlapping intervals suggest a real difference.</p>
+    </div>`;
+  return null;
+}
+function rerenderGroups(){ renderGroups(activeRows()); }
+
+/* ── TAB: CORRELATIONS & STATS ──────────────────────────── */
+function renderCorr(rows){
+  const n=rows.length, keys=Object.keys(VARS), m=state.corrMethod;
+  const cell=(a,b)=>{
+    if(a===b) return '<td class="diag">—</td>';
+    const t=corrTest(rows,VARS[a].get,VARS[b].get,m);
+    const al=isNum(t.r)?Math.min(.6,Math.abs(t.r)*.75):0;
+    const bg=!isNum(t.r)?'transparent':t.r>=0?`rgba(45,90,158,${al})`:`rgba(232,64,28,${al})`;
+    return `<td style="background:${bg}" title="${VARS[a].short} × ${VARS[b].short}: r = ${fr(t.r)}, p ${fp(t.p)}, n = ${t.n}">${fr(t.r)}<span class="sig">${stars(t.p)}</span></td>`;
+  };
+  const key=[['met','fs','PA','Flourishing'],['mbi','fs','Burnout','Flourishing'],['mspss','fs','Social support','Flourishing'],['met','mbi','PA','Burnout'],['mbi','mspss','Burnout','Social support']]
+    .map(([a,b,x,y])=>({...corrTest(rows,VARS[a].get,VARS[b].get,m),x,y}));
+  const ipaqF=freq(rows.map(r=>r.ipaqLevel)), fsF=freq(rows.map(r=>r.fsLevel)), mbiF=freq(rows.map(r=>r.mbiLevel)), mspF=freq(rows.map(r=>r.mspssLevel));
+  const lvlRow=(name,F)=>{ const t=(F.Low||0)+(F.Moderate||0)+(F.High||0); return `<tr><td>${name}</td>${['Low','Moderate','High'].map(l=>`<td>${F[l]||0} (${pct(F[l]||0,t)}%)</td>`).join('')}</tr>`; };
+  const desc=[
+    ['Flourishing Scale (FS total)',r=>r.fs,'8–56',1],['Burnout / EE (MBI total)',r=>r.mbi,'0–42',1],['Social Support (MSPSS total)',r=>r.mspssT,'12–84',1],
+    ['Physical Activity (MET-min/wk)',r=>r.met,'IPAQ-SF',0],['Sitting time (min/day)',r=>r.sitMin,'—',0],['Age (years)',r=>r.age,'—',1],
+  ].map(([lbl,g,rng,d])=>{ const s=describe(vals(rows,g)); const f=v=>d?fx(v,d):fint(v), fm=v=>Number.isInteger(v)?v.toLocaleString():f(v);
+    return `<tr><td>${lbl}</td><td class="num">${s.n}</td><td class="num">${s.n?fm(s.min):'—'}</td><td class="num">${s.n?fm(s.max):'—'}</td><td class="num">${f(s.mean)}</td><td class="num">${f(s.sd)}</td><td class="num">${f(s.median)}</td><td class="num">${fx(s.skew,2)}</td><td class="num">${fx(s.kurt,2)}</td><td>${rng}</td></tr>`; }).join('');
+
+  document.getElementById('tab-corr').innerHTML=`
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Key bivariate correlations (${m==='spearman'?'Spearman ρ':'Pearson r'})</div>
+        <label class="inline-ctl">Method <select onchange="state.corrMethod=this.value;renderCorr(activeRows())"><option value="pearson"${m==='pearson'?' selected':''}>Pearson r</option><option value="spearman"${m==='spearman'?' selected':''}>Spearman ρ</option></select></label>
+      </div>
+      <div class="corr-grid">${key.map(t=>`
+        <div class="corr-cell" style="--corr-color:${corrColor(t.r)}">
+          <div class="corr-r" style="color:${corrColor(t.r)}">${fr(t.r)}<span class="sig" style="font-size:14px">${stars(t.p)}</span></div>
+          <div class="corr-pairs">${t.x} ↔ ${t.y}</div>
+          <div class="corr-interp" style="color:${corrColor(t.r)}">${corrStrength(t.r)} ${t.r>=0?'positive':'negative'}</div>
+          <div class="corr-pairs"><em>p</em> ${fp(t.p).startsWith('<')?fp(t.p):'= '+fp(t.p)} · n = ${t.n}</div>
         </div>`).join('')}
       </div>
-      <p class="card-note">⚠ Preliminary bivariate Pearson r only. Final hypothesis testing (H1–H4) requires PROCESS Macro Model 14 with 5,000 bootstrap resamples in SPSS v29 as specified in Chapter 3. Strength: |r| ≥.5 Strong, .3–.49 Moderate, .1–.29 Weak.</p>
+      <p class="card-note">Strength: |r| ≥ .5 strong, .3–.49 moderate, .1–.29 weak. Two-tailed p-values. Spearman ρ is robust to the skew typical of MET-min/wk.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Correlation matrix</div>
+      <div class="dtable-wrap"><table class="matrix">
+        <thead><tr><th></th>${keys.map(k=>`<th>${VARS[k].short}</th>`).join('')}</tr></thead>
+        <tbody>${keys.map(a=>`<tr><th class="rowh">${VARS[a].short}</th>${keys.map(b=>cell(a,b)).join('')}</tr>`).join('')}</tbody>
+      </table></div>
+      <div class="scale-legend"><span>−1</span><div class="grad"></div><span>+1</span><span style="margin-left:12px">* p &lt; .05 · ** p &lt; .01 · *** p &lt; .001 · pairwise n (hover a cell for details)</span></div>
     </div>
 
     <div class="card">
       <div class="card-title">Descriptive statistics</div>
-      <div class="dtable-wrap">
-        <table class="dtable">
-          <thead><tr><th>Variable</th><th>n</th><th>Min</th><th>Max</th><th>Mean</th><th>SD</th><th>Possible range</th></tr></thead>
-          <tbody>${descRows}</tbody>
-        </table>
-      </div>
+      <div class="dtable-wrap"><table class="dtable">
+        <thead><tr><th>Variable</th><th class="num">n</th><th class="num">Min</th><th class="num">Max</th><th class="num">Mean</th><th class="num">SD</th><th class="num">Median</th><th class="num">Skew</th><th class="num">Kurtosis</th><th>Possible range</th></tr></thead>
+        <tbody>${desc}</tbody>
+      </table></div>
     </div>
 
     <div class="card">
       <div class="card-title">Level classification summary</div>
-      <div class="dtable-wrap">
-        <table class="dtable">
-          <thead><tr><th>Scale</th><th>Low</th><th>Moderate</th><th>High</th></tr></thead>
-          <tbody>
-            <tr><td>Physical activity (IPAQ-SF)</td><td>${ipaqF.Low||0} (${pct(ipaqF.Low||0,n)}%)</td><td>${ipaqF.Moderate||0} (${pct(ipaqF.Moderate||0,n)}%)</td><td>${ipaqF.High||0} (${pct(ipaqF.High||0,n)}%)</td></tr>
-            <tr><td>Flourishing Scale (FS)</td><td>${fsF.Low||0} (${pct(fsF.Low||0,n)}%)</td><td>${fsF.Moderate||0} (${pct(fsF.Moderate||0,n)}%)</td><td>${fsF.High||0} (${pct(fsF.High||0,n)}%)</td></tr>
-            <tr><td>Burnout / EE (MBI)</td><td>${mbiF.Low||0} (${pct(mbiF.Low||0,n)}%)</td><td>${mbiF.Moderate||0} (${pct(mbiF.Moderate||0,n)}%)</td><td>${mbiF.High||0} (${pct(mbiF.High||0,n)}%)</td></tr>
-            <tr><td>Social support (MSPSS)</td><td>${mspssF.Low||0} (${pct(mspssF.Low||0,n)}%)</td><td>${mspssF.Moderate||0} (${pct(mspssF.Moderate||0,n)}%)</td><td>${mspssF.High||0} (${pct(mspssF.High||0,n)}%)</td></tr>
-          </tbody>
-        </table>
+      <div class="dtable-wrap"><table class="dtable">
+        <thead><tr><th>Scale</th><th>Low</th><th>Moderate</th><th>High</th></tr></thead>
+        <tbody>${lvlRow('Physical activity (IPAQ-SF)',ipaqF)}${lvlRow('Flourishing Scale (FS)',fsF)}${lvlRow('Burnout / EE (MBI)',mbiF)}${lvlRow('Social support (MSPSS)',mspF)}</tbody>
+      </table></div>
+      <p class="card-note">Percentages are of respondents with a scorable result on each instrument (n = ${n} included).</p>
+    </div>`;
+  return null;
+}
+
+/* ── TAB: MODERATED MEDIATION (PROCESS Model 14) ────────── */
+function modelData(){
+  const tx=state.model.xMetric==='ln' ? v=>Math.log(v+1) : v=>v/1000;
+  const d=activeRows().filter(r=>isNum(r.met)&&isNum(r.mbi)&&isNum(r.mspssT)&&isNum(r.fs));
+  return {X:d.map(r=>tx(r.met)), M:d.map(r=>r.mbi), W:d.map(r=>r.mspssT), Y:d.map(r=>r.fs), ids:d.map(r=>r.id)};
+}
+function renderModelPane(){
+  const md=state.model;
+  document.getElementById('tab-model').innerHTML=`
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Moderated mediation — PROCESS Model 14 (preview)</div>
+        <div class="ctl-row">
+          <label class="inline-ctl">X metric <select onchange="state.model.xMetric=this.value;ensureModel(true)">
+            <option value="k"${md.xMetric==='k'?' selected':''}>MET-min/wk ÷ 1,000</option>
+            <option value="ln"${md.xMetric==='ln'?' selected':''}>ln(MET-min/wk + 1)</option></select></label>
+          <label class="inline-ctl">Bootstrap <select onchange="state.model.boots=+this.value;ensureModel(true)">
+            ${[1000,5000,10000].map(b=>`<option value="${b}"${md.boots===b?' selected':''}>${b.toLocaleString()} samples</option>`).join('')}</select></label>
+        </div>
+      </div>
+      <p class="card-note" style="margin-top:0">X = physical activity (IPAQ-SF), M = burnout (MBI-EE), W = perceived social support (MSPSS total, moderating the M → Y path), Y = flourishing (FS). Listwise deletion; M and W mean-centred before forming the interaction; percentile bootstrap confidence intervals (seed fixed for reproducibility).</p>
+      <div id="modelBody"><div class="boot-status"><div class="mini-spin"></div>Preparing model…</div></div>
+    </div>`;
+}
+function ensureModel(force){
+  const pane=document.getElementById('modelBody'); if(!pane) return;
+  const d=modelData();
+  const key=d.ids.join(',')+'|'+state.model.xMetric+'|'+state.model.boots;
+  if(!force && state.model.key===key && state.model.result){ drawModel(state.model.result); return; }
+  if(state.model.running && state.model.key===key) return;
+  state.model.key=key; state.model.result=null; state.model.running=true;
+  const token=++state.model.token;
+  runModel(d,state.model.boots,p=>{ if(token!==state.model.token) return false;
+      const el=document.getElementById('modelBody'); if(el) el.innerHTML=`<div class="boot-status"><div class="mini-spin"></div>Bootstrapping… ${Math.round(p*100)}%</div>`; return true; })
+    .then(res=>{ if(token!==state.model.token) return; state.model.running=false; state.model.result=res; drawModel(res); });
+}
+function runModel(d,B,progress){
+  return new Promise(resolve=>{
+    const n=d.X.length;
+    if(n<20){ resolve({error:`At least 20 complete cases are needed (currently ${n}).`}); return; }
+    const mM=mean(d.M), mW=mean(d.W), sdW=sd(d.W), mX=mean(d.X);
+    const Mc=d.M.map(v=>v-mM), Wc=d.W.map(v=>v-mW), MW=Mc.map((v,i)=>v*Wc[i]);
+    const mModel=ols(d.M,[d.X]);
+    const yModel=ols(d.Y,[d.X,Mc,Wc,MW]);
+    const yNoInt=ols(d.Y,[d.X,Mc,Wc]);
+    const total=ols(d.Y,[d.X]);
+    if(!mModel||!yModel||!total){ resolve({error:'Model could not be estimated (singular design — check for constant variables).'}); return; }
+    const a=mModel.coefs[1].b, b1=yModel.coefs[2].b, b3=yModel.coefs[4].b;
+    const wMin=Math.min(...d.W), wMax=Math.max(...d.W);
+    const wVals=[mW-sdW,mW,mW+sdW].map(w=>Math.max(wMin,Math.min(wMax,w)));
+    const ind=w=>a*(b1+b3*(w-mW));
+    /* conditional effect of M on Y (b1 + b3·wc) with analytic SE */
+    const cov=yModel.cov, df=yModel.df2;
+    const condB=wVals.map(w=>{ const wc=w-mW, e=b1+b3*wc, se=Math.sqrt(cov[2][2]+wc*wc*cov[4][4]+2*wc*cov[2][4]), t=e/se; return {w,e,se,t,p:pT(t,df),lo:e-tCrit(df)*se,hi:e+tCrit(df)*se}; });
+    const dR2=yModel.R2-(yNoInt?yNoInt.R2:NaN), Fint=yModel.coefs[4].t**2;
+    const rng=mulberry32(20260501), boot={ind:wVals.map(()=>[]),index:[]};
+    const idx=new Array(n); let done=0;
+    const step=()=>{
+      const end=Math.min(B,done+250);
+      for(;done<end;done++){
+        for(let i=0;i<n;i++) idx[i]=Math.floor(rng()*n);
+        const fm=olsBeta(d.M,[d.X],idx), fy=olsBeta(d.Y,[d.X,Mc,Wc,MW],idx);
+        if(!fm||!fy) continue;
+        const ab=fm.beta[1], bb1=fy.beta[2], bb3=fy.beta[4];
+        wVals.forEach((w,j)=>boot.ind[j].push(ab*(bb1+bb3*(w-mW))));
+        boot.index.push(ab*bb3);
+      }
+      if(done<B){ if(progress(done/B)===false) return; setTimeout(step,0); return; }
+      const ci=arr=>{ const s=[...arr].sort((x,y)=>x-y); return {lo:quantile(s,.025),hi:quantile(s,.975),se:sd(arr)}; };
+      resolve({n,B,mM,mW,sdW,mX,a,b1,b3,mModel,yModel,total,condB,dR2,Fint,pInt:pF(Fint,1,df),df,
+        cond:wVals.map((w,j)=>({w,eff:ind(w),...ci(boot.ind[j])})), index:{eff:a*b3,...ci(boot.index)}, wMin, wMax,
+        xLabel:state.model.xMetric==='ln'?'ln(MET+1)':'MET ÷ 1,000'});
+    };
+    setTimeout(step,0);
+  });
+}
+function drawModel(R){
+  const el=document.getElementById('modelBody'); if(!el) return;
+  if(R.error){ el.innerHTML=`<div class="empty-card">${esc(R.error)}</div>`; return; }
+  const sig=(lo,hi)=>lo>0||hi<0;
+  const pTxt=p=>fp(p).startsWith('<')?fp(p):'= '+fp(p);
+  const coefRows=(m,names)=>m.coefs.map((c,i)=>`<tr><td>${names[i]}</td><td class="num">${fb(c.b)}</td><td class="num">${fb(c.se)}</td><td class="num">${fx(c.t,2)}</td><td class="num">${fp(c.p)}${stars(c.p)?' '+stars(c.p):''}</td><td class="num">[${fb(c.lo)}, ${fb(c.hi)}]</td></tr>`).join('');
+  const coefTable=(title,m,names,extra)=>`<div class="card-title" style="margin-top:18px">${title}</div>
+    <div class="dtable-wrap"><table class="dtable"><thead><tr><th>Predictor</th><th class="num">b</th><th class="num">SE</th><th class="num">t</th><th class="num">p</th><th class="num">95% CI</th></tr></thead>
+    <tbody>${coefRows(m,names)}<tr class="foot"><td colspan="6">R² = ${fr(m.R2)}, <em>F</em>(${m.df1}, ${m.df2}) = ${fx(m.F,2)}, <em>p</em> ${pTxt(m.pF)}${extra||''}</td></tr></tbody></table></div>`;
+  const c=R.total.coefs[1], cp=R.yModel.coefs[1], aC=R.mModel.coefs[1], b1C=R.yModel.coefs[2], b3C=R.yModel.coefs[4];
+  const lab=(v,p)=>`${fb(v,3)}${stars(p)}`;
+  const wLbl=['Low (−1 SD)','Mean','High (+1 SD)'];
+  el.innerHTML=`
+    <svg class="path-svg" viewBox="0 0 660 230" role="img" aria-label="Conceptual path diagram with estimated coefficients">
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:#6b6660;stroke:none"/></marker></defs>
+      <rect x="10" y="150" width="160" height="54" rx="8"/><text class="box-t" x="90" y="174" text-anchor="middle">Physical activity</text><text class="box-s" x="90" y="191" text-anchor="middle">X · IPAQ-SF</text>
+      <rect x="250" y="20" width="160" height="54" rx="8"/><text class="box-t" x="330" y="44" text-anchor="middle">Burnout</text><text class="box-s" x="330" y="61" text-anchor="middle">M · MBI-EE</text>
+      <rect x="490" y="150" width="160" height="54" rx="8"/><text class="box-t" x="570" y="174" text-anchor="middle">Flourishing</text><text class="box-s" x="570" y="191" text-anchor="middle">Y · FS</text>
+      <rect x="490" y="6" width="160" height="46" rx="8"/><text class="box-t" x="570" y="27" text-anchor="middle">Social support</text><text class="box-s" x="570" y="43" text-anchor="middle">W · MSPSS</text>
+      <line x1="100" y1="150" x2="248" y2="56" marker-end="url(#arr)"/>
+      <line x1="412" y1="56" x2="560" y2="148" marker-end="url(#arr)"/>
+      <line x1="172" y1="177" x2="488" y2="177" marker-end="url(#arr)"/>
+      <line x1="570" y1="52" x2="490" y2="103" marker-end="url(#arr)"/>
+      <text class="coef" x="150" y="92" text-anchor="end">a = ${lab(aC.b,aC.p)}</text>
+      <text class="coef" x="440" y="118" text-anchor="end">b₁ = ${lab(b1C.b,b1C.p)}</text>
+      <text class="coef" x="604" y="76" text-anchor="middle">b₃ = ${fb(b3C.b,4)}${stars(b3C.p)}</text>
+      <text class="coef-s" x="604" y="90" text-anchor="middle">M × W interaction</text>
+      <text class="coef" x="330" y="170" text-anchor="middle">c′ = ${lab(cp.b,cp.p)}</text>
+      <text class="coef-s" x="330" y="222" text-anchor="middle">total effect c = ${lab(c.b,c.p)} · n = ${R.n} · X in ${R.xLabel}</text>
+    </svg>
+
+    <div class="card-title" style="margin-top:14px">Summary</div>
+    <div class="verdict"><div class="vi ${aC.p<.05?'yes':'no'}">${aC.p<.05?'✓':'–'}</div><div><strong>X → M (a path):</strong> physical activity ${aC.p<.05?'significantly predicts':'does not significantly predict'} burnout, b = ${fb(aC.b)}, <em>p</em> ${pTxt(aC.p)}.</div></div>
+    <div class="verdict"><div class="vi ${b1C.p<.05?'yes':'no'}">${b1C.p<.05?'✓':'–'}</div><div><strong>M → Y at mean support (b₁):</strong> burnout ${b1C.p<.05?'significantly predicts':'does not significantly predict'} flourishing, b = ${fb(b1C.b)}, <em>p</em> ${pTxt(b1C.p)}.</div></div>
+    <div class="verdict"><div class="vi ${b3C.p<.05?'yes':'no'}">${b3C.p<.05?'✓':'–'}</div><div><strong>M × W interaction (b₃):</strong> social support ${b3C.p<.05?'significantly moderates':'does not significantly moderate'} the burnout → flourishing link, b = ${fb(b3C.b,4)}, <em>p</em> ${pTxt(b3C.p)}, ΔR² = ${fx(R.dR2,3)}.</div></div>
+    <div class="verdict"><div class="vi ${cp.p<.05?'yes':'no'}">${cp.p<.05?'✓':'–'}</div><div><strong>Direct effect (c′):</strong> controlling for burnout and support, physical activity ${cp.p<.05?'still significantly predicts':'does not significantly predict'} flourishing, b = ${fb(cp.b)}, <em>p</em> ${pTxt(cp.p)}.</div></div>
+    <div class="verdict"><div class="vi ${sig(R.index.lo,R.index.hi)?'yes':'no'}">${sig(R.index.lo,R.index.hi)?'✓':'–'}</div><div><strong>Index of moderated mediation:</strong> ${fb(R.index.eff,4)}, 95% boot CI [${fb(R.index.lo,4)}, ${fb(R.index.hi,4)}] — the CI ${sig(R.index.lo,R.index.hi)?'excludes zero: the indirect effect depends on social support (moderated mediation supported).':'includes zero: no evidence that the indirect effect depends on social support.'}</div></div>
+
+    <div class="card-title" style="margin-top:18px">Conditional indirect effect of X on Y through M (a × (b₁ + b₃W))</div>
+    <div class="dtable-wrap"><table class="dtable"><thead><tr><th>Social support (W)</th><th class="num">MSPSS</th><th class="num">Effect</th><th class="num">Boot SE</th><th class="num">95% boot CI</th><th>Significant?</th></tr></thead>
+    <tbody>${R.cond.map((c,i)=>`<tr><td>${wLbl[i]}</td><td class="num">${fx(c.w,2)}</td><td class="num">${fb(c.eff,4)}</td><td class="num">${fb(c.se,4)}</td><td class="num">[${fb(c.lo,4)}, ${fb(c.hi,4)}]</td><td>${sig(c.lo,c.hi)?'<span class="badge badge-green">Yes</span>':'<span class="badge" style="background:var(--surface2);color:var(--text3)">No</span>'}</td></tr>`).join('')}
+    <tr class="foot"><td>Index of moderated mediation</td><td></td><td class="num">${fb(R.index.eff,4)}</td><td class="num">${fb(R.index.se,4)}</td><td class="num">[${fb(R.index.lo,4)}, ${fb(R.index.hi,4)}]</td><td>${sig(R.index.lo,R.index.hi)?'<span class="badge badge-green">Yes</span>':'<span class="badge" style="background:var(--surface2);color:var(--text3)">No</span>'}</td></tr></tbody></table></div>
+    <p class="card-note">${R.B.toLocaleString()} percentile bootstrap resamples. An effect is significant when its CI does not include zero. Values of W are the mean and ±1 SD (clipped to the observed range ${R.wMin}–${R.wMax}).</p>
+
+    <div class="chart-row" style="margin-top:16px;margin-bottom:0">
+      <div>
+        <div class="card-title">Simple slopes — burnout → flourishing by support level</div>
+        <div style="position:relative;height:260px"><canvas id="cSlopes" role="img" aria-label="Predicted flourishing across burnout at low, mean and high social support"></canvas></div>
+      </div>
+      <div>
+        <div class="card-title">Conditional effect of burnout on flourishing (b₁ + b₃W)</div>
+        <div class="dtable-wrap"><table class="dtable"><thead><tr><th>Support</th><th class="num">Effect</th><th class="num">SE</th><th class="num">p</th><th class="num">95% CI</th></tr></thead>
+        <tbody>${R.condB.map((c,i)=>`<tr><td>${wLbl[i]}</td><td class="num">${fb(c.e)}</td><td class="num">${fb(c.se)}</td><td class="num">${fp(c.p)}${stars(c.p)?' '+stars(c.p):''}</td><td class="num">[${fb(c.lo)}, ${fb(c.hi)}]</td></tr>`).join('')}</tbody></table></div>
+        <p class="card-note">Lines show model-predicted FS at the mean of X. Diverging slopes indicate that social support buffers (or amplifies) the impact of burnout on flourishing.</p>
       </div>
     </div>
 
-  </div>
-  `;
+    ${coefTable('Model 1 — outcome: Burnout (M)',R.mModel,['Constant','Physical activity (X)'])}
+    ${coefTable('Model 2 — outcome: Flourishing (Y)',R.yModel,['Constant','Physical activity (X)','Burnout (M, centred)','Social support (W, centred)','Burnout × Support (M×W)'],
+      `<br>Test of highest-order interaction: ΔR² = ${fx(R.dR2,4)}, <em>F</em>(1, ${R.df}) = ${fx(R.Fint,2)}, <em>p</em> ${pTxt(R.pInt)}`)}
+    ${coefTable('Total effect model — outcome: Flourishing (Y)',R.total,['Constant','Physical activity (X)'])}
 
-  /* ── Build individual scores table data ─────────────── */
-  window._indData = fields.map((f,idx)=>{
-    const met   = calcMET(f);
-    const vig   = (()=>{ const vD=+(f.IPAQ_Q1_Vigorous_Days||0),vDK=f.IPAQ_Q2_DK,vMin=(!vDK&&vD>0)?(+(f.IPAQ_Q2_Vigorous_Hours||0)*60 + +(f.IPAQ_Q2_Vigorous_Minutes||0)):0; return 8.0*vMin*vD; })();
-    const fs    = calcFS(f);
-    const mbi   = calcMBI(f);
-    const mspssT= calcMSPSS(f);
-    const mspssA= mspssT/12;
+    <p class="card-note" style="margin-top:14px">⚠ This in-browser estimate follows the logic of Hayes' PROCESS Model 14 (OLS + percentile bootstrap) for monitoring purposes. Coefficients should closely match PROCESS output, but bootstrap CIs vary slightly with the random seed. Final hypothesis testing (H1–H4) should be reported from PROCESS v4 in SPSS v29 as specified in Chapter 3. * p &lt; .05, ** p &lt; .01, *** p &lt; .001.</p>`;
 
-    // MSPSS subscales: SO=items 1,2,5,10 | Family=3,4,8,11 | Friends=6,7,9,12
-    const mspsSO  = ([1,2,5,10].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
-    const mspaFam = ([3,4,8,11].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
-    const mspaFri = ([6,7,9,12].reduce((s,i)=>s+(+(f['MSPSS_Q'+i]||0)),0)/4).toFixed(2);
+  /* simple slopes chart — ordinal blue ramp (validated: monotone L, single hue) */
+  const ramp=['#8fb0e0','#4f7fc4','#1d3d73'];
+  const yM=R.yModel.coefs.map(c=>c.b), mLo=Math.min(...modelData().M), mHi=Math.max(...modelData().M);
+  const pred=(m,w)=>yM[0]+yM[1]*R.mX+yM[2]*(m-R.mM)+yM[3]*(w-R.mW)+yM[4]*(m-R.mM)*(w-R.mW);
+  newChart('cSlopes',{type:'scatter',
+    data:{datasets:R.cond.map((c,i)=>({label:`${wLbl[i]} support (${fx(c.w,1)})`,data:[{x:mLo,y:pred(mLo,c.w)},{x:mHi,y:pred(mHi,c.w)}],showLine:true,borderColor:ramp[i],backgroundColor:ramp[i],borderWidth:2,pointRadius:4,pointHoverRadius:6}))},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:11},usePointStyle:true}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: burnout ${c.raw.x} → FS ${c.raw.y.toFixed(1)}`}}},
+      scales:{x:{title:{display:true,text:'Burnout (MBI-EE total)',font:{size:11}},grid:{color:GRID},ticks:{font:{size:10}}},
+              y:{title:{display:true,text:'Predicted flourishing (FS)',font:{size:11}},grid:{color:GRID},ticks:{font:{size:10}}}}}});
+}
 
-    // IPAQ component MET scores
-    const mDays=+(f.IPAQ_Q3_Moderate_Days||0),mDK=f.IPAQ_Q4_DK,mMin=(!mDK&&mDays>0)?(+(f.IPAQ_Q4_Moderate_Hours||0)*60 + +(f.IPAQ_Q4_Moderate_Minutes||0)):0;
-    const wDays=+(f.IPAQ_Q5_Walking_Days||0),wDK=f.IPAQ_Q6_DK,wMin=(!wDK&&wDays>0)?(+(f.IPAQ_Q6_Walking_Hours||0)*60 + +(f.IPAQ_Q6_Walking_Minutes||0)):0;
-    const vigMETv = Math.round(vig);
-    const modMETv = Math.round(4.0*mMin*mDays);
-    const walkMETv= Math.round(3.3*wMin*wDays);
-    const sitMin  = +(f.IPAQ_Q7_Sitting_Hours||0)*60 + +(f.IPAQ_Q7_Sitting_Minutes||0);
+/* ── TAB: DATA QUALITY ──────────────────────────────────── */
+function renderQuality(){
+  const all=state.rows, N=all.length;
+  const bad=all.filter(r=>r.invalid.length), warn=all.filter(r=>r.warn.length);
+  const trunc=all.filter(r=>r.ipaq.truncated).length, bout=all.filter(r=>r.ipaq.shortBout).length;
+  const flagged=all.filter(r=>r.invalid.length||r.warn.length);
+  const incl=r=>included(r);
+  document.getElementById('tab-quality').innerHTML=`
+    <div class="kpi-strip">
+      <div class="kpi" style="--kpi-color:#2d5a9e"><div class="kpi-label">Collected</div><div class="kpi-val">${N}</div><div class="kpi-sub">all responses</div></div>
+      <div class="kpi" style="--kpi-color:#1a8c6b"><div class="kpi-label">Valid</div><div class="kpi-val">${N-bad.length}</div><div class="kpi-sub">${pct(N-bad.length,N)}% usable</div></div>
+      <div class="kpi" style="--kpi-color:#e8401c"><div class="kpi-label">Invalid</div><div class="kpi-val">${bad.length}</div><div class="kpi-sub">cannot be fully scored</div></div>
+      <div class="kpi" style="--kpi-color:#c67c00"><div class="kpi-label">Suspicious</div><div class="kpi-val">${warn.length}</div><div class="kpi-sub">review manually</div></div>
+      <div class="kpi" style="--kpi-color:#534AB7"><div class="kpi-label">IPAQ recodes</div><div class="kpi-val">${trunc+bout}</div><div class="kpi-sub">${trunc} truncated · ${bout} short bouts</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Screening rules</div>
+      <ul class="rule-list">
+        <li><span class="flag bad">Invalid</span> <strong>Unanswered or out-of-range items</strong> on FS, MBI-EE or MSPSS — totals cannot be computed (previously these were silently scored as 0).</li>
+        <li><span class="flag bad">Invalid</span> <strong>IPAQ “don't know” / missing duration</strong> on an active domain, or <strong>walking + moderate + vigorous time &gt; 960 min/day</strong> — excluded per IPAQ guidelines (2005).</li>
+        <li><span class="flag warn">Suspicious</span> <strong>Straight-lining</strong> — identical answer on every FS, MBI and MSPSS item (contradictory, since MBI runs opposite to FS/MSPSS).</li>
+        <li><span class="flag warn">Suspicious</span> <strong>Possible duplicate</strong> — the same name submitted more than once; <strong>age missing</strong> or outside 18–70.</li>
+        <li><strong>IPAQ recodes</strong> (kept in analysis): durations &gt; 180 min/day truncated to 180; bouts &lt; 10 min recoded to 0.</li>
+      </ul>
+      <p class="card-note">Use the “Responses” filter above to choose which responses enter the analysis. “Valid only” mirrors the listwise deletion PROCESS applies.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Flagged responses (${flagged.length})</div>
+      ${flagged.length?`<div class="dtable-wrap"><table class="dtable">
+        <thead><tr><th>#</th><th>Respondent</th><th>Submitted</th><th>Issues</th><th>In analysis?</th></tr></thead>
+        <tbody>${flagged.map(r=>`<tr><td style="color:var(--text3)">${r.idx+1}</td><td><strong>${esc(r.name)}</strong></td>
+          <td>${r.created?r.created.toLocaleDateString():'—'}</td>
+          <td>${r.invalid.map(s=>`<span class="flag bad">${esc(s)}</span>`).join('')}${r.warn.map(s=>`<span class="flag warn">${esc(s)}</span>`).join('')}</td>
+          <td>${incl(r)?'<span class="badge badge-amber">Included</span>':'<span class="badge" style="background:var(--surface2);color:var(--text3)">Excluded</span>'}</td></tr>`).join('')}</tbody>
+      </table></div>`:'<p class="card-note">No issues detected — all responses passed screening.</p>'}
+    </div>`;
+}
 
-    return {
-      idx, f,
-      name: f.Full_Name || f.Consent_Name || ('Respondent '+(idx+1)),
-      age:  f.Age||'—', sex: f.Sex||'—',
-      workArr: f.Work_Arrangement||'—', sector: f.Sector||'—',
-      position: f.Job_Position||'—', tenure: f.Tenure||'—',
-      palevel: f.Physical_Activity_Level||'—',
-      met, ipaqLevel: metLevel(met,vig),
-      vigMETv, modMETv, walkMETv, sitMin,
-      fs, fsLevel: fsLevel(fs),
-      mbi, mbiLevel: mbiLevel(mbi),
-      mspssT, mspssA: mspssA.toFixed(2), mspssLevel: mspssLevel(mspssA),
-      mspsSO, mspaFam, mspaFri,
-      // item arrays for sparkline detail
-      fsItems: Array.from({length:8},(_,i)=>+(f['FS_Q'+(i+1)]||0)),
-      mbiItems: Array.from({length:7},(_,i)=>+(f['MBI_Q'+(i+1)]||0)),
-      mspssItems: Array.from({length:12},(_,i)=>+(f['MSPSS_Q'+(i+1)]||0)),
-    };
+/* ── TAB: INDIVIDUAL SCORES ─────────────────────────────── */
+function renderIndividualPane(){
+  const s=state.ind;
+  const sel=(id,label,cur)=>`<select class="ind-filter" id="${id}" onchange="readIndFilters()"><option value="">${label}</option>${['High','Moderate','Low'].map(l=>`<option${cur===l?' selected':''}>${l}</option>`).join('')}</select>`;
+  const th=(key,label)=>`<th onclick="sortIndTable('${key}')" class="${s.sortKey===key?'sorted':''}">${label}&nbsp;<span class="sort-icon">${s.sortKey===key?(s.asc?'↑':'↓'):'↕'}</span></th>`;
+  document.getElementById('tab-individual').innerHTML=`
+    <div class="card">
+      <div class="card-title">Individual respondent scores — all four instruments</div>
+      <div class="ind-toolbar">
+        <input class="ind-search" id="indSearch" type="search" placeholder="Search by name, sex, position, sector…" value="${esc(s.q)}" oninput="readIndFilters()">
+        ${sel('indFilterIPAQ','All PA levels',s.pa)}${sel('indFilterFS','All FS levels',s.fs)}${sel('indFilterMBI','All burnout levels',s.mbi)}${sel('indFilterMSPSS','All support levels',s.msp)}
+        <span class="ind-count" id="indCount"></span>
+        <label class="inline-ctl"><input type="checkbox" id="expNames"> include names</label>
+        <button class="btn" onclick="exportCSV('table')">Export CSV</button>
+      </div>
+      <div class="ind-table-wrap">
+        <table class="ind-table" id="indTable">
+          <thead><tr>
+            ${th('idx','#')}${th('name','Name')}${th('age','Age')}${th('sex','Sex')}
+            ${th('met','PA — MET-min/wk')}${th('ipaqLevel','PA Level')}${th('fs','FS Score')}${th('fsLevel','FS Level')}
+            ${th('mbi','MBI-EE Score')}${th('mbiLevel','Burnout Level')}${th('mspssT','MSPSS Score')}${th('mspssLevel','Support Level')}<th></th>
+          </tr></thead>
+          <tbody id="indTbody"></tbody>
+        </table>
+      </div>
+      <p class="card-note">Click any row to expand the detailed score breakdown. Scores follow the official scoring protocols: IPAQ-SF MET-min/wk (8.0 / 4.0 / 3.3 coefficients, with 10-min bout, 180-min truncation and 960-min exclusion rules), FS total 8–56, MBI-EE total 0–42, MSPSS total 12–84 with item average for classification. ⚑ marks responses flagged in Data quality. Export downloads the rows currently shown (names excluded unless ticked).</p>
+    </div>`;
+  filterIndTable();
+}
+function readIndFilters(){
+  const s=state.ind;
+  s.q=document.getElementById('indSearch').value; s.pa=document.getElementById('indFilterIPAQ').value;
+  s.fs=document.getElementById('indFilterFS').value; s.mbi=document.getElementById('indFilterMBI').value; s.msp=document.getElementById('indFilterMSPSS').value;
+  filterIndTable();
+}
+const LVL_RANK={Low:0,Moderate:1,High:2};
+function indRows(){
+  const s=state.ind, q=s.q.toLowerCase();
+  let data=activeRows().filter(d=>{
+    const txt=[d.name,d.demo.Sex,d.demo.Work_Arrangement,d.demo.Sector,d.demo.Job_Position,d.demo.Tenure,d.demo.Physical_Activity_Level].join(' ').toLowerCase();
+    return (!q||txt.includes(q)) && (!s.pa||d.ipaqLevel===s.pa) && (!s.fs||d.fsLevel===s.fs) && (!s.mbi||d.mbiLevel===s.mbi) && (!s.msp||d.mspssLevel===s.msp);
   });
-  window._indSort = {col:-1, asc:true};
-  buildIndTable(window._indData);
-
-  /* ── Draw charts after DOM settles ────────────────────── */
-  requestAnimationFrame(()=>{
-    makeDonut('cIPAQ',[ipaqF.High||0,ipaqF.Moderate||0,ipaqF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
-    makeDonut('cFS',[fsF.High||0,fsF.Moderate||0,fsF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
-    makeDonut('cMBI',[mbiF.Low||0,mbiF.Moderate||0,mbiF.High||0],['#1a8c6b','#c67c00','#e8401c'],['Low','Moderate','High']);
-    makeDonut('cMSPSS',[mspssF.High||0,mspssF.Moderate||0,mspssF.Low||0],['#1a8c6b','#c67c00','#e8401c'],['High','Moderate','Low']);
-    makeScatter('cScatter',scatterPts,'MET-min / week (physical activity)','Flourishing Scale total score');
-  });
-}
-
-/* ── INDIVIDUAL TABLE ────────────────────────────────────── */
-function badgeCls(level, invert){
-  // invert=true means High is bad (burnout)
-  if(invert){ return level==='High'?'badge-red':level==='Low'?'badge-green':'badge-amber'; }
-  return level==='High'?'badge-green':level==='Low'?'badge-red':'badge-amber';
-}
-function levelBadge(level, invert){
-  return `<span class="badge ${badgeCls(level,invert)}">${level}</span>`;
-}
-
-function buildIndTable(data){
-  const tbody = document.getElementById('indTbody');
-  if(!tbody) return;
-  const count = document.getElementById('indCount');
-  if(count) count.textContent = data.length + ' respondents';
-
-  if(data.length===0){
-    tbody.innerHTML=`<tr><td colspan="13" class="no-results">No matching respondents.</td></tr>`;
-    return;
+  if(s.sortKey){
+    const k=s.sortKey;
+    const get=d=>k==='name'?d.name.toLowerCase():k==='sex'?(d.demo.Sex||'').toLowerCase():k.endsWith('Level')?(LVL_RANK[d[k]]??-1):(d[k]??-Infinity);
+    data=[...data].sort((a,b)=>{ const av=get(a), bv=get(b); return av<bv?(s.asc?-1:1):av>bv?(s.asc?1:-1):0; });
   }
-
-  const fsItemLbls=['Purposeful life','Supportive rels.','Engaged & interested','Contributes to others','Competent & capable','Good person/life','Optimistic','Respected'];
-  const mbiItemLbls=['Emotionally drained','People require effort','Work breaking me down','Frustrated by work','Work too hard','Stressed by contact','End of rope'];
-  const mspssItemLbls=['Special person-need','Share joys/sorrows','Family helps','Family emotional support','Person-comfort','Friends help','Count on friends','Talk problems-family','Friends-share joys','Special person cares','Family-decisions','Talk problems-friends'];
-
-  tbody.innerHTML = data.map((d,i)=>{
-    const detailId = 'detail-'+d.idx;
-    const rowId    = 'row-'+d.idx;
-
-    // FS item bars
-    const fsBarRows = d.fsItems.map((v,ii)=>`
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${fsItemLbls[ii]}">${fsItemLbls[ii]}</div>
-        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/7*100)}%;background:#1a8c6b;border-radius:3px"></div></div>
-        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
-      </div>`).join('');
-
-    const mbiBarRows = d.mbiItems.map((v,ii)=>`
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${mbiItemLbls[ii]}">${mbiItemLbls[ii]}</div>
-        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/6*100)}%;background:#e8401c;border-radius:3px"></div></div>
-        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
-      </div>`).join('');
-
-    const mspssBarRows = d.mspssItems.map((v,ii)=>`
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-        <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${mspssItemLbls[ii]}">${mspssItemLbls[ii]}</div>
-        <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.round(v/7*100)}%;background:#2d5a9e;border-radius:3px"></div></div>
-        <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${v}</div>
-      </div>`).join('');
-
-    const detailHTML = `
-    <tr class="detail-row" id="${detailId}">
-      <td class="detail-cell" colspan="13">
-        <div class="detail-grid">
-
-          <!-- IPAQ Detail -->
-          <div class="detail-card">
-            <div class="detail-card-title">&#128202; IPAQ-SF &#8212; Physical Activity</div>
-            <div class="detail-score-row"><span class="detail-score-lbl">Total MET-min/wk</span><span class="detail-score-val">${d.met.toLocaleString()}</span></div>
-            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.min(100,Math.round(d.met/6000*100))}%;background:#1a8c6b"></div></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:11px;color:var(--text2);margin-bottom:6px">
-              <span>Vigorous MET:</span><span style="font-weight:600;color:var(--text)">${d.vigMETv.toLocaleString()}</span>
-              <span>Moderate MET:</span><span style="font-weight:600;color:var(--text)">${d.modMETv.toLocaleString()}</span>
-              <span>Walking MET:</span><span style="font-weight:600;color:var(--text)">${d.walkMETv.toLocaleString()}</span>
-              <span>Sitting time:</span><span style="font-weight:600;color:var(--text)">${d.sitMin ? d.sitMin+' min/day' : '—'}</span>
-            </div>
-            <div class="detail-meta">Classification: ${levelBadge(d.ipaqLevel,false)}<br>High ≥3,000 MET-min/wk (or vig ≥1,500) · Moderate 600–2,999 · Low &lt;600</div>
-          </div>
-
-          <!-- FS Detail -->
-          <div class="detail-card">
-            <div class="detail-card-title">&#127807; Flourishing Scale (FS)</div>
-            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.fs} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 56</span></span></div>
-            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.fs/56*100)}%;background:#1a8c6b"></div></div>
-            ${fsBarRows}
-            <div class="detail-meta">Classification: ${levelBadge(d.fsLevel,false)}<br>High ≥48 · Moderate 33–47 · Low &lt;33</div>
-          </div>
-
-          <!-- MBI Detail -->
-          <div class="detail-card">
-            <div class="detail-card-title">&#128293; MBI &#8212; Emotional Exhaustion</div>
-            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.mbi} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 42</span></span></div>
-            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.mbi/42*100)}%;background:#e8401c"></div></div>
-            ${mbiBarRows}
-            <div class="detail-meta">Classification: ${levelBadge(d.mbiLevel,true)}<br>Low ≤16 (healthy) · Moderate 17–26 · High ≥27 (severe burnout)</div>
-          </div>
-
-          <!-- MSPSS Detail -->
-          <div class="detail-card">
-            <div class="detail-card-title">&#129309; MSPSS &#8212; Social Support</div>
-            <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${d.mspssT} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 84</span></span></div>
-            <div class="detail-bar-wrap"><div class="detail-bar" style="width:${Math.round(d.mspssT/84*100)}%;background:#2d5a9e"></div></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 8px;font-size:11px;color:var(--text2);margin-bottom:8px">
-              <span>Sig. Other avg:</span><span style="font-weight:600;color:var(--text)">${d.mspsSO}</span><span></span>
-              <span>Family avg:</span><span style="font-weight:600;color:var(--text)">${d.mspaFam}</span><span></span>
-              <span>Friends avg:</span><span style="font-weight:600;color:var(--text)">${d.mspaFri}</span><span></span>
-              <span>Overall item avg:</span><span style="font-weight:600;color:var(--text)">${d.mspssA}</span><span></span>
-            </div>
-            ${mspssBarRows}
-            <div class="detail-meta">Classification: ${levelBadge(d.mspssLevel,false)}<br>High avg ≥5.5 · Moderate 2.95–5.49 · Low &lt;2.95 (Dahlem et al., 1991)</div>
-          </div>
-
-          <!-- Respondent Profile -->
-          <div class="detail-card" style="grid-column:span 4">
-            <div class="detail-card-title">&#128100; Respondent profile</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px 16px;font-size:11px;color:var(--text2)">
-              <span>Age: <strong style="color:var(--text)">${d.age}</strong></span>
-              <span>Sex: <strong style="color:var(--text)">${d.sex}</strong></span>
-              <span>Work arrangement: <strong style="color:var(--text)">${d.workArr}</strong></span>
-              <span>Sector: <strong style="color:var(--text)">${d.sector}</strong></span>
-              <span>Position: <strong style="color:var(--text)">${d.position}</strong></span>
-              <span>Tenure: <strong style="color:var(--text)">${d.tenure}</strong></span>
-              <span>Self-reported PA: <strong style="color:var(--text)">${d.palevel}</strong></span>
-            </div>
-          </div>
-
+  return data;
+}
+function filterIndTable(){ buildIndTable(indRows()); }
+function sortIndTable(key){
+  const s=state.ind;
+  if(s.sortKey===key) s.asc=!s.asc; else { s.sortKey=key; s.asc=true; }
+  document.querySelectorAll('#indTable th').forEach(th=>{
+    const m=(th.getAttribute('onclick')||'').match(/'(\w+)'/); if(!m) return;
+    th.classList.toggle('sorted',m[1]===key);
+    const ic=th.querySelector('.sort-icon'); if(ic) ic.textContent=m[1]===key?(s.asc?'↑':'↓'):'↕';
+  });
+  filterIndTable();
+}
+function itemBars(items,labels,max,color){
+  return items.map((v,i)=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+    <div style="font-size:10px;color:var(--text3);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${labels[i]}">${labels[i]}</div>
+    <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${isNum(v)?Math.round(v/max*100):0}%;background:${color};border-radius:3px"></div></div>
+    <div style="font-size:10px;font-weight:600;min-width:14px;text-align:right">${isNum(v)?v:'—'}</div></div>`).join('');
+}
+function buildIndTable(data){
+  const tbody=document.getElementById('indTbody'); if(!tbody) return;
+  const count=document.getElementById('indCount'); if(count) count.textContent=data.length+' respondents';
+  if(!data.length){ tbody.innerHTML='<tr><td colspan="13" class="no-results">No matching respondents.</td></tr>'; return; }
+  const open=state.ind.open;
+  const v=x=>isNum(x)?x.toLocaleString():'—';
+  tbody.innerHTML=data.map((d,i)=>{
+    const ip=d.ipaq, isOpen=open===d.idx;
+    const flags=[...d.invalid,...d.warn];
+    const detail=`<tr class="detail-row${isOpen?' open':''}" id="detail-${d.idx}"><td class="detail-cell" colspan="13"><div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-title">&#128202; IPAQ-SF &#8212; Physical Activity</div>
+        <div class="detail-score-row"><span class="detail-score-lbl">Total MET-min/wk</span><span class="detail-score-val">${v(d.met)}</span></div>
+        <div class="detail-bar-wrap"><div class="detail-bar" style="width:${isNum(d.met)?Math.min(100,Math.round(d.met/6000*100)):0}%;background:#1a8c6b"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:11px;color:var(--text2);margin-bottom:6px">
+          <span>Vigorous:</span><span style="font-weight:600;color:var(--text)">${ip.v.days} d × ${ip.v.min} min = ${ip.vigMET.toLocaleString()}</span>
+          <span>Moderate:</span><span style="font-weight:600;color:var(--text)">${ip.m.days} d × ${ip.m.min} min = ${ip.modMET.toLocaleString()}</span>
+          <span>Walking:</span><span style="font-weight:600;color:var(--text)">${ip.w.days} d × ${ip.w.min} min = ${ip.walkMET.toLocaleString()}</span>
+          <span>Sitting time:</span><span style="font-weight:600;color:var(--text)">${isNum(d.sitMin)?d.sitMin+' min/day':'—'}</span>
         </div>
-      </td>
-    </tr>`;
-
-    return `
-    <tr id="${rowId}" onclick="toggleDetail(${d.idx})" style="cursor:pointer">
-      <td style="color:var(--text3)">${i+1}</td>
-      <td><strong>${d.name}</strong></td>
-      <td>${d.age}</td>
-      <td>${d.sex}</td>
-      <td><span class="score-num">${d.met.toLocaleString()}</span></td>
-      <td>${levelBadge(d.ipaqLevel,false)}</td>
-      <td><span class="score-num">${d.fs}</span><span style="font-size:10px;color:var(--text3)"> /56</span></td>
-      <td>${levelBadge(d.fsLevel,false)}</td>
-      <td><span class="score-num">${d.mbi}</span><span style="font-size:10px;color:var(--text3)"> /42</span></td>
-      <td>${levelBadge(d.mbiLevel,true)}</td>
-      <td><span class="score-num">${d.mspssT}</span><span style="font-size:10px;color:var(--text3)"> /84</span></td>
-      <td>${levelBadge(d.mspssLevel,false)}</td>
-      <td style="color:var(--text3);font-size:11px" id="chevron-${d.idx}">▶</td>
-    </tr>
-    ${detailHTML}`;
+        <div class="detail-meta">Classification: ${levelBadge(d.ipaqLevel,false)}${ip.truncated?' · 180-min truncation applied':''}${ip.shortBout?' · &lt;10-min bout recoded':''}<br>High ≥3,000 MET-min/wk over 7 days (or vigorous ≥3 days &amp; ≥1,500) · Moderate ≥600 · Low otherwise</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">&#127807; Flourishing Scale (FS)</div>
+        <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${v(d.fs)} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 56</span></span></div>
+        <div class="detail-bar-wrap"><div class="detail-bar" style="width:${isNum(d.fs)?Math.round(d.fs/56*100):0}%;background:#1a8c6b"></div></div>
+        ${itemBars(d.fsItems,FS_LABELS,7,'#1a8c6b')}
+        <div class="detail-meta">Classification: ${levelBadge(d.fsLevel,false)}<br>High ≥48 · Moderate 33–47 · Low &lt;33</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">&#128293; MBI &#8212; Emotional Exhaustion</div>
+        <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${v(d.mbi)} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 42</span></span></div>
+        <div class="detail-bar-wrap"><div class="detail-bar" style="width:${isNum(d.mbi)?Math.round(d.mbi/42*100):0}%;background:#e8401c"></div></div>
+        ${itemBars(d.mbiItems,MBI_LABELS,6,'#e8401c')}
+        <div class="detail-meta">Classification: ${levelBadge(d.mbiLevel,true)}<br>Low ≤16 (healthy) · Moderate 17–26 · High ≥27 (severe burnout)</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">&#129309; MSPSS &#8212; Social Support</div>
+        <div class="detail-score-row"><span class="detail-score-lbl">Total score</span><span class="detail-score-val">${v(d.mspssT)} <span style="font-size:11px;font-weight:400;color:var(--text3)">/ 84</span></span></div>
+        <div class="detail-bar-wrap"><div class="detail-bar" style="width:${isNum(d.mspssT)?Math.round(d.mspssT/84*100):0}%;background:#2d5a9e"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;font-size:11px;color:var(--text2);margin-bottom:8px">
+          <span>Sig. other avg:</span><span style="font-weight:600;color:var(--text)">${fx(d.so,2)}</span>
+          <span>Family avg:</span><span style="font-weight:600;color:var(--text)">${fx(d.fam,2)}</span>
+          <span>Friends avg:</span><span style="font-weight:600;color:var(--text)">${fx(d.fri,2)}</span>
+          <span>Overall item avg:</span><span style="font-weight:600;color:var(--text)">${fx(d.mspssA,2)}</span>
+        </div>
+        ${itemBars(d.mspssItems,MSPSS_LABELS,7,'#2d5a9e')}
+        <div class="detail-meta">Classification: ${levelBadge(d.mspssLevel,false)}<br>High avg ≥5.5 · Moderate 2.95–5.49 · Low &lt;2.95 (Dahlem et al., 1991)</div>
+      </div>
+      <div class="detail-card" style="grid-column:1/-1">
+        <div class="detail-card-title">&#128100; Respondent profile</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px 16px;font-size:11px;color:var(--text2)">
+          ${[['Age',d.age],['Sex',d.demo.Sex],['Civil status',d.demo.Civil_Status],['Work arrangement',d.demo.Work_Arrangement],['Work schedule',d.demo.Work_Schedule],['Sector',d.demo.Sector],['Position',d.demo.Job_Position],['Job type',d.demo.Job_Type],['Tenure',d.demo.Tenure],['Self-reported PA',d.demo.Physical_Activity_Level],['Submitted',d.created?d.created.toLocaleString():null]]
+            .map(([k,val])=>`<span>${k}: <strong style="color:var(--text)">${esc(val??'—')}</strong></span>`).join('')}
+        </div>
+        ${flags.length?`<div class="detail-meta">${d.invalid.map(s=>`<span class="flag bad">${esc(s)}</span>`).join('')}${d.warn.map(s=>`<span class="flag warn">${esc(s)}</span>`).join('')}</div>`:''}
+      </div>
+    </div></td></tr>`;
+    return `<tr id="row-${d.idx}" class="${isOpen?'expanded-row':''}" onclick="toggleDetail(${d.idx})" style="cursor:pointer">
+      <td style="color:var(--text3)">${d.idx+1}</td>
+      <td><strong>${esc(d.name)}</strong>${flags.length?`<span class="flag-dot${d.invalid.length?' bad':''}" title="${esc(flags.join('; '))}">⚑</span>`:''}</td>
+      <td>${d.age??'—'}</td><td>${esc(d.demo.Sex??'—')}</td>
+      <td><span class="score-num">${v(d.met)}</span></td><td>${levelBadge(d.ipaqLevel,false)}</td>
+      <td><span class="score-num">${v(d.fs)}</span><span style="font-size:10px;color:var(--text3)"> /56</span></td><td>${levelBadge(d.fsLevel,false)}</td>
+      <td><span class="score-num">${v(d.mbi)}</span><span style="font-size:10px;color:var(--text3)"> /42</span></td><td>${levelBadge(d.mbiLevel,true)}</td>
+      <td><span class="score-num">${v(d.mspssT)}</span><span style="font-size:10px;color:var(--text3)"> /84</span></td><td>${levelBadge(d.mspssLevel,false)}</td>
+      <td style="color:var(--text3);font-size:11px">${isOpen?'▼':'▶'}</td>
+    </tr>${detail}`;
   }).join('');
 }
-
 function toggleDetail(idx){
-  const dr = document.getElementById('detail-'+idx);
-  const ch = document.getElementById('chevron-'+idx);
-  if(!dr) return;
-  const isOpen = dr.classList.contains('open');
-  // Close all others
-  document.querySelectorAll('.detail-row.open').forEach(r=>r.classList.remove('open'));
-  document.querySelectorAll('[id^="chevron-"]').forEach(c=>c.textContent='▶');
-  if(!isOpen){ dr.classList.add('open'); if(ch) ch.textContent='▼'; }
+  state.ind.open = state.ind.open===idx ? null : idx;
+  document.querySelectorAll('#indTbody .detail-row').forEach(r=>r.classList.toggle('open',r.id==='detail-'+state.ind.open));
+  document.querySelectorAll('#indTbody tr[id^="row-"]').forEach(r=>{
+    const on=r.id==='row-'+state.ind.open; r.classList.toggle('expanded-row',on); r.lastElementChild.textContent=on?'▼':'▶';
+  });
 }
 
-function filterIndTable(){
-  const q    = (document.getElementById('indSearch')?.value||'').toLowerCase();
-  const fPA  = document.getElementById('indFilterIPAQ')?.value||'';
-  const fFS  = document.getElementById('indFilterFS')?.value||'';
-  const fMBI = document.getElementById('indFilterMBI')?.value||'';
-  const fMSP = document.getElementById('indFilterMSPSS')?.value||'';
-  const data = window._indData||[];
-  const filtered = data.filter(d=>{
-    const txt = [d.name,d.sex,d.workArr,d.sector,d.position,d.tenure,d.palevel].join(' ').toLowerCase();
-    return (!q||txt.includes(q))
-      && (!fPA ||d.ipaqLevel===fPA)
-      && (!fFS ||d.fsLevel===fFS)
-      && (!fMBI||d.mbiLevel===fMBI)
-      && (!fMSP||d.mspssLevel===fMSP);
-  });
-  buildIndTable(filtered);
-}
-
-let _sortAsc = true, _sortCol = -1;
-function sortIndTable(col){
-  const data = window._indData||[];
-  // Close all open details
-  document.querySelectorAll('.detail-row.open').forEach(r=>r.classList.remove('open'));
-
-  if(_sortCol===col){ _sortAsc=!_sortAsc; } else { _sortAsc=true; _sortCol=col; }
-
-  const getVal = (d,c) => {
-    switch(c){
-      case 0: return d.idx;
-      case 1: return d.name.toLowerCase();
-      case 2: return +(d.age)||0;
-      case 3: return d.sex.toLowerCase();
-      case 4: return d.met;
-      case 5: return d.ipaqLevel;
-      case 6: return d.fs;
-      case 7: return d.fsLevel;
-      case 8: return d.mbi;
-      case 9: return d.mbiLevel;
-      case 10: return d.mspssT;
-      case 11: return d.mspssLevel;
-      default: return 0;
-    }
-  };
-  data.sort((a,b)=>{
-    const av=getVal(a,col), bv=getVal(b,col);
-    if(av<bv) return _sortAsc?-1:1;
-    if(av>bv) return _sortAsc?1:-1;
-    return 0;
-  });
-
-  // Update header indicators
-  document.querySelectorAll('table.ind-table th').forEach((th,i)=>{
-    th.classList.toggle('sorted',i===col);
-    const ic=th.querySelector('.sort-icon');
-    if(ic) ic.textContent = i===col ? (_sortAsc?'↑':'↓') : '↕';
-  });
-
-  filterIndTable(); // re-render with current filters applied
-}
-
-/* ── TAB SWITCHER ────────────────────────────────────────── */
-function switchTab(name){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  const btn=document.querySelector(`.tab[onclick*="${name}"]`);
-  if(btn) btn.classList.add('active');
-  const pane=document.getElementById('tab-'+name);
-  if(pane) pane.classList.add('active');
+/* ── CSV EXPORT (SPSS / Excel ready) ────────────────────── */
+function exportCSV(scope){
+  const rows = scope==='table' ? indRows() : activeRows();
+  if(!rows.length){ alert('No rows to export.'); return; }
+  const names = scope==='table' && document.getElementById('expNames')?.checked;
+  const cols=[
+    ['Respondent',r=>r.idx+1],['Airtable_ID',r=>r.id],['Submitted',r=>r.created?r.created.toISOString():''],
+    ...(names?[['Name',r=>r.realName]]:[]),
+    ['Age',r=>r.age],...DEMO.filter(d=>!['ageBand','ipaqLevel'].includes(d.key)).map(d=>[d.key,r=>r.demo[d.key]]),
+    ['IPAQ_Vig_Days',r=>r.ipaq.v.days],['IPAQ_Vig_Min',r=>r.ipaq.v.min],['IPAQ_Mod_Days',r=>r.ipaq.m.days],['IPAQ_Mod_Min',r=>r.ipaq.m.min],
+    ['IPAQ_Walk_Days',r=>r.ipaq.w.days],['IPAQ_Walk_Min',r=>r.ipaq.w.min],
+    ['MET_Vigorous',r=>r.ipaq.valid?r.ipaq.vigMET:''],['MET_Moderate',r=>r.ipaq.valid?r.ipaq.modMET:''],['MET_Walking',r=>r.ipaq.valid?r.ipaq.walkMET:''],
+    ['MET_Total',r=>r.met],['IPAQ_Level',r=>r.ipaqLevel],['Sitting_Min_Day',r=>r.sitMin],
+    ...FS_LABELS.map((_,i)=>['FS_Q'+(i+1),r=>r.fsItems[i]]),['FS_Total',r=>r.fs],['FS_Level',r=>r.fsLevel],
+    ...MBI_LABELS.map((_,i)=>['MBI_Q'+(i+1),r=>r.mbiItems[i]]),['MBI_EE_Total',r=>r.mbi],['MBI_Level',r=>r.mbiLevel],
+    ...MSPSS_LABELS.map((_,i)=>['MSPSS_Q'+(i+1),r=>r.mspssItems[i]]),['MSPSS_Total',r=>r.mspssT],['MSPSS_Avg',r=>isNum(r.mspssA)?+r.mspssA.toFixed(4):''],
+    ['MSPSS_SigOther',r=>isNum(r.so)?+r.so.toFixed(4):''],['MSPSS_Family',r=>isNum(r.fam)?+r.fam.toFixed(4):''],['MSPSS_Friends',r=>isNum(r.fri)?+r.fri.toFixed(4):''],['MSPSS_Level',r=>r.mspssLevel],
+    ['Flags',r=>[...r.invalid,...r.warn].join('; ')],
+  ];
+  const cellv=v=>{ if(v===null||v===undefined) return ''; const s=String(v); return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+  const csv=[cols.map(c=>c[0]).join(','),...rows.map(r=>cols.map(c=>cellv(c[1](r))).join(','))].join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`pptf-scores-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
 }
 
 /* ── LOAD ────────────────────────────────────────────────── */
@@ -998,17 +1499,22 @@ async function loadData(){
   dot.className='status-dot loading';
   stxt.textContent='Fetching responses from Airtable…';
   stime.textContent='';
+  destroyAll();
   document.getElementById('mainArea').innerHTML=`<div class="loading-state"><div class="spinner"></div><div class="loading-label">Loading survey data…</div></div>`;
   try {
     const records=await fetchAll();
+    if(!window.Chart) throw new Error('Chart library failed to load — check your internet connection.');
+    state.rows=records.map(buildRow);
+    markDuplicates(state.rows);
+    state.model.result=null; state.model.key=null; state.ind.open=null;
     dot.className='status-dot';
-    stxt.textContent=`${records.length} responses loaded`;
     stime.textContent='Last updated: '+new Date().toLocaleTimeString();
-    renderDashboard(records);
+    renderShell();
+    renderContent();
   } catch(e){
     dot.className='status-dot error';
     stxt.textContent='Error: '+e.message;
-    document.getElementById('mainArea').innerHTML=`<div class="error-state"><div class="err-ico">⚠</div><div style="font-size:15px;color:var(--text)">Could not load data</div><p>${e.message}</p></div>`;
+    document.getElementById('mainArea').innerHTML=`<div class="error-state"><div class="err-ico">⚠</div><div style="font-size:15px;color:var(--text)">Could not load data</div><p>${esc(e.message)}</p></div>`;
   }
 }
 
